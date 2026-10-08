@@ -35,6 +35,7 @@
   box-sizing: border-box;
 }
 html {
+  color-scheme: dark;
   background: var(--bg);
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
@@ -343,7 +344,7 @@ main {
   z-index: 200;
   background: #050506;
   display: grid;
-  grid-template-rows: auto 1fr auto auto;
+  grid-template-rows: auto 1fr auto auto auto;
   padding: var(--gutter);
   gap: 18px;
   font-family: var(--f-mono);
@@ -478,4 +479,171 @@ main {
   height: 0.48em;
   fill: #c9ced6;
   opacity: 0.9;
+}
+
+/* NFS-style title prompt at the end of the boot */
+.boot__start {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  font-family: var(--f-race);
+  font-style: italic;
+  font-size: clamp(1.3rem, 3.2vw, 2.8rem);
+  letter-spacing: 0.12em;
+  color: var(--ink);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  text-shadow: 0 0 24px rgba(255, 255, 255, 0.25);
+}
+.boot__start.is-on {
+  animation: startPulse 1.3s ease-in-out infinite;
+}
+.boot__start.is-go {
+  animation: startGo 0.35s steps(2) 3;
+}
+@keyframes startPulse {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 1; }
+}
+@keyframes startGo {
+  0% { opacity: 1; color: var(--red); }
+  100% { opacity: 0.2; }
+}
+
+/* ─── INTRO TRANSMISSION ───────────────────────────────────────────────── */
+.tx {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  pointer-events: none;
+  display: none;
+  --tx-red: #ff2d3a;
+  --tx-blue: #2f6bff;
+}
+.tx.is-on {
+  display: block;
+}
+.tx__dim {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(70% 60% at 50% 50%, rgba(5, 5, 6, 0.25), rgba(5, 5, 6, 0.75));
+}
+.tx__scan {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.32) 0 1px, transparent 1px 4px);
+  mix-blend-mode: multiply;
+}
+.tx__frame {
+  position: absolute;
+  inset: 18px;
+  border: 1px solid rgba(201, 206, 214, 0.28);
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: var(--ink-2);
+}
+.tx__frame span {
+  position: absolute;
+  padding: 10px 14px;
+}
+.tx__frame .tl { top: 0; left: 0; }
+.tx__frame .tr { top: 0; right: 0; }
+.tx__frame .bl { bottom: 0; left: 0; }
+.tx__frame .br { bottom: 0; right: 0; }
+.tx__frame b {
+  font-family: var(--f-nav);
+  font-weight: 400;
+  font-size: 15px;
+  color: var(--ink);
+}
+.tx__frame i {
+  font-style: normal;
+  color: var(--tx-red);
+  animation: heatBlink 0.9s steps(2) infinite;
+}
+.tx__ghost {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -52%;
+  font-family: 'Bruno Ace SC', var(--f-jp), 'Noto Sans', 'Noto Sans KR', 'Noto Sans SC', sans-serif;
+  font-weight: 900;
+  font-size: 78vh;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(233, 231, 225, 0.09);
+  white-space: nowrap;
+}
+.tx__stage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 18px;
+}
+.tx__lang {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: var(--ink-2);
+}
+.tx__word {
+  height: 1.35em;
+  display: flex;
+  align-items: center;
+  font-family: 'Bruno Ace SC', var(--f-jp), 'Noto Sans', 'Noto Sans KR', 'Noto Sans TC', 'Noto Sans SC', 'Noto Sans Arabic', 'Noto Sans Hebrew',
+    'Noto Sans Thai', 'Noto Sans Georgian', 'Noto Sans Armenian', 'Noto Sans Ethiopic', 'Noto Sans Lao', 'Noto Sans Myanmar', 'Noto Sans Sinhala',
+    'Noto Sans Khmer', sans-serif;
+  font-weight: 800;
+  font-size: clamp(3.4rem, 13vw, 12.5rem);
+  line-height: 1.25;
+  white-space: nowrap;
+  color: var(--ink);
+  transform: skewX(-8deg);
+  text-shadow: calc(var(--ca, 6px) * -1) 0 rgba(255, 45, 58, 0.75), var(--ca, 6px) 0 rgba(47, 107, 255, 0.75);
+  will-change: transform, filter, clip-path;
+}
+.tx__slash {
+  position: absolute;
+  left: -5vw;
+  right: -5vw;
+  top: 50%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--tx-red) 20%, #fff 50%, var(--tx-red) 80%, transparent);
+  box-shadow: 0 0 14px var(--tx-red);
+  transform-origin: left center;
+  opacity: 0;
+}
+.tx__bar {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 18px;
+  height: 2px;
+  background: rgba(233, 231, 225, 0.08);
+}
+.tx__bar i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--tx-blue), #fff, var(--tx-red));
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 0.12s linear;
+}
+.tx__flash {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  opacity: 0;
+  mix-blend-mode: overlay;
+}
+/* before the landing, the hero copy stays hidden under the transmission */
+.pre-intro .hero > *,
+.pre-intro .nav__utils,
+.pre-intro .hud {
+  visibility: hidden;
 }

@@ -1,5 +1,8 @@
 /** Game-style boot screen. Resolves once fonts + WebGL are ready (min ~1.5s). */
 import gsap from 'gsap';
+import { unlockAudio } from '../ui/sound.js';
+
+const AUTO_START_MS = 6000;
 
 const LOG = [
   'MOUNTING DISTRICT 01 — DOCKS',
@@ -42,7 +45,7 @@ export function runBoot(ready) {
       new Promise((resolve) => {
         fill.kill();
         gsap
-          .timeline({ onComplete: () => (el.remove(), resolve()) })
+          .timeline()
           .to(prog, {
             v: 1,
             duration: 0.35,
@@ -52,8 +55,28 @@ export function runBoot(ready) {
               pct.textContent = `${String(Math.round(prog.v * 100)).padStart(3, '0')}%`;
             },
           })
-          .to(el, { clipPath: 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)', duration: 0.9, ease: 'expo.inOut' }, '+=0.1')
-          .add(() => document.body.classList.remove('is-booting'), '-=0.6');
+          .add(() => {
+            // NFS-style title prompt. A key / tap unlocks audio (browsers require a gesture);
+            // if nobody touches anything the intro starts silently after a few seconds.
+            const start = document.getElementById('bootStart');
+            start.textContent = document.documentElement.classList.contains('is-touch') ? 'TAP ANYWHERE TO START' : 'PRESS ANY KEY';
+            start.classList.add('is-on');
+            let done = false;
+            const go = () => {
+              if (done) return;
+              done = true;
+              unlockAudio();
+              ['keydown', 'pointerup', 'touchend'].forEach((ev) => window.removeEventListener(ev, go, true));
+              clearTimeout(timer);
+              start.classList.add('is-go');
+              gsap
+                .timeline({ onComplete: () => (el.remove(), resolve()) })
+                .to(el, { clipPath: 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)', duration: 0.8, ease: 'expo.inOut' }, 0.15)
+                .add(() => document.body.classList.remove('is-booting'), 0.5);
+            };
+            ['keydown', 'pointerup', 'touchend'].forEach((ev) => window.addEventListener(ev, go, true));
+            const timer = setTimeout(go, reduced ? 300 : AUTO_START_MS);
+          });
       }),
   );
 }

@@ -23,6 +23,8 @@ import { magnetize } from './ui/magnetic.js';
 import { toast } from './ui/toast.js';
 
 import { runBoot } from './sections/boot.js';
+import { renderTransmission, runTransmission, TRANSMISSION_TEXT } from './sections/transmission.js';
+import { loadScriptFonts } from './styles/scriptFonts.js';
 import { renderHero, buildHero, playIntro } from './sections/hero.js';
 import { renderManifesto, buildManifesto } from './sections/manifesto.js';
 import { renderCategories, buildCategory } from './sections/category.js';
@@ -38,6 +40,8 @@ window.scrollTo(0, 0);
 const stage = new Stage($('#gl'));
 
 /* ── render sections from data ─────────────────────────────────────────── */
+document.documentElement.classList.add('pre-intro');
+renderTransmission($('#tx'));
 renderHero($('#intro'));
 renderManifesto($('#collection'));
 renderCategories($('#categories'), CATEGORIES);
@@ -62,6 +66,7 @@ const index = initIndexOverlay({
 });
 const nav = initNav({ onIndex: () => index.open(), onBag: () => bag.open() });
 if (lenis) lenis.stop();
+else document.documentElement.classList.add('no-scroll');
 
 /* ── scroll choreography (top → bottom) ────────────────────────────────── */
 buildHero($('#intro'), { onReveal: (on) => nav.setRevealed(on) });
@@ -78,6 +83,7 @@ buildStatement($('#statement'));
 const footer = buildFooter($('#footer'), {
   onIndex: () => index.open(),
   onTerms: () => toast('TERMS — ALL SALES FINAL AFTER MIDNIGHT. (PLACEHOLDER COPY)'),
+  onContact: () => toast('CONTACT — HELLO@YAKUZA.EXAMPLE (PLACEHOLDER)'),
 });
 magnetize(document);
 
@@ -117,12 +123,20 @@ gsap.ticker.add((time, deltaMS) => {
 
 /* ── boot ──────────────────────────────────────────────────────────────── */
 const ready = Promise.race([Promise.all([document.fonts.ready, stage.buildLogo()]), new Promise((r) => setTimeout(r, 3500))]);
-runBoot(ready).then(() => {
-  import('@fontsource/noto-sans-jp/700.css');
-  ScrollTrigger.refresh();
-  if (lenis) lenis.start();
-  playIntro($('#intro'));
-});
+// Japanese + the 22 intro scripts: one tiny Google Fonts request subset to the exact glyphs used
+loadScriptFonts(document.body.textContent + TRANSMISSION_TEXT);
+
+runBoot(ready)
+  .then(() => {
+    ScrollTrigger.refresh();
+    // sakura grows in behind the name while the transmission plays
+    gsap.to(state.hero, { bloom: 1, duration: 3.4, ease: 'power2.inOut' });
+    return runTransmission($('#tx'), { onLand: () => playIntro($('#intro')) });
+  })
+  .then(() => {
+    if (lenis) lenis.start();
+    else document.documentElement.classList.remove('no-scroll');
+  });
 
 window.addEventListener('load', () => ScrollTrigger.refresh());
 // Expose for debugging / QA in the console.

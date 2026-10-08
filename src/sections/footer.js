@@ -7,7 +7,7 @@ import { scrollTo } from '../core/scroll.js';
 const LINKS = [
   { label: 'SHOP', action: 'index' },
   { label: 'INSTAGRAM', href: 'https://instagram.com/' },
-  { label: 'CONTACT', href: 'mailto:hello@yakuza.example' },
+  { label: 'CONTACT', action: 'contact' },
   { label: 'TERMS', action: 'terms' },
 ];
 
@@ -24,13 +24,14 @@ export function renderFooter(el) {
     </div>`;
 }
 
-export function buildFooter(el, { onIndex, onTerms }) {
+export function buildFooter(el, { onIndex, onTerms, onContact }) {
   el.addEventListener('click', (e) => {
     const a = e.target.closest('[data-action]');
     if (a) {
       e.preventDefault();
       if (a.dataset.action === 'index') onIndex();
       if (a.dataset.action === 'terms') onTerms();
+      if (a.dataset.action === 'contact') onContact();
     }
     if (e.target.closest('.fo__top')) scrollTo(0, { duration: 3 });
   });

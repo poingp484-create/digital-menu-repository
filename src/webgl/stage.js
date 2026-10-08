@@ -14,6 +14,7 @@ import { buildLogoAtlas } from './logoAtlas.js';
 import { LOGO_FAMILY } from '../brand/logo.js';
 import logoFontUrl from '@fontsource/bruno-ace-sc/files/bruno-ace-sc-latin-400-normal.woff2?url';
 import * as S from './shaders.js';
+import { Sakura } from './sakura.js';
 
 const QUALITY = {
   high: { dpr: 1.75, bg: 0.5, oct: 5, atlas: 2.2 },
@@ -112,6 +113,9 @@ export class Stage {
 
     this.logo = new THREE.Group();
     this.scene.add(this.logo);
+
+    // sakura set behind the logo
+    this.sakura = new Sakura(this.scene, device.tier);
 
     // glyph meshes are built once the logo font has loaded (buildLogo)
     this.glyphs = [];
@@ -258,6 +262,7 @@ export class Stage {
     this.visH = visH;
     this.visW = visW;
     this.#layoutLogo(visW, visH);
+    this.sakura.resize(visW, visH, dpr);
 
     if (this.pieceAspect) {
       const ph = visH * 0.86;
@@ -377,6 +382,7 @@ export class Stage {
     this.logo.visible = heroVisible;
     if (heroVisible) this.#updateLogo(t, P, I, glitch);
     this.#updatePiece(t, P);
+    this.sakura.update(t, state.hero.bloom, smooth(0.06, 0.4, P), state.mouse);
 
     const r = this.renderer;
     r.setRenderTarget(this.rt);
@@ -384,7 +390,7 @@ export class Stage {
     r.setRenderTarget(null);
     r.clear();
     r.render(this.compScene, this.flatCam);
-    if (heroVisible || this.piece.material.uniforms.uOpacity.value > 0.001) r.render(this.scene, this.camera);
+    if (heroVisible || this.sakura.visible || this.piece.material.uniforms.uOpacity.value > 0.001) r.render(this.scene, this.camera);
   }
 
   #updateLogo(t, P, I, glitch) {

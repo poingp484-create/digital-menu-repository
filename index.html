@@ -1,11 +1,13 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#07080a" />
     <meta name="description" content="YAKUZA — underground Y2K streetwear. Built after midnight. Worn at full speed." />
-    <title>YAKUZA — Drop 01 / The Blacklist</title>
+    <title>YAKUZA Drop 01</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2307080a'/%3E%3Cpath d='M8 12 36 24 50 46 64 24 92 12 60 58 60 92 40 98 40 58Z' fill='%23d8dde4'/%3E%3C/svg%3E" />
   </head>
   <body class="is-booting">
@@ -17,8 +19,12 @@
       <div class="boot__top"><span>YKZ-OS v2.0.0.0</span><span class="boot__clock" data-clock>--:--:--</span></div>
       <div class="boot__log" id="bootLog"></div>
       <div class="boot__bar"><i id="bootBar"></i></div>
+      <div class="boot__start" id="bootStart" aria-live="polite"></div>
       <div class="boot__meta"><span id="bootPct">000%</span><span class="boot__tip">TIP — The city reacts to speed. Scroll fast.</span></div>
     </div>
+
+    <!-- Intro transmission (name in 22 scripts) -->
+    <div class="tx" id="tx" aria-hidden="true"></div>
 
     <!-- Cursor -->
     <div class="cursor" id="cursor" aria-hidden="true">

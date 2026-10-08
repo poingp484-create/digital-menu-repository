@@ -15,6 +15,8 @@ export function renderHero(el) {
     <div class="hero__hud hero__hud--tl"><span>TOKYO / 35.6762° N 139.6503° E</span><span>LOCAL <b data-clock>--:--:--</b></span></div>
     <div class="hero__hud hero__hud--tr"><span>DROP 01 — THE BLACKLIST</span><span>SEASON 2026 // 17 PIECES</span></div>
     <div class="hero__hud hero__hud--bl"><span>ヤクザ</span><span>UNDERGROUND STREETWEAR — EST. 2000</span></div>
+    <div class="hero__seal" aria-hidden="true"><span>極</span></div>
+    <div class="hero__tagline">ONE NAME <i>·</i> EVERY LANGUAGE <i>·</i> DROP 01</div>
     <div class="hero__scroll" aria-hidden="true"><span>SCROLL TO ENTER</span><i></i></div>
     <div class="hero__target" aria-hidden="true">
       <i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
@@ -25,7 +27,7 @@ export function renderHero(el) {
 }
 
 export function buildHero(el, { onReveal }) {
-  const hud = el.querySelectorAll('.hero__hud, .hero__scroll');
+  const hud = el.querySelectorAll('.hero__hud, .hero__scroll, .hero__seal, .hero__tagline');
   const target = el.querySelector('.hero__target');
   const enter = el.querySelector('.hero__enter');
 
@@ -60,8 +62,13 @@ export function buildHero(el, { onReveal }) {
 
 /** Intro choreography after boot: drives state.hero.intro for the WebGL logo. */
 export function playIntro(el) {
+  // the chrome mark slams in (this is the landing beat of the transmission)
+  document.documentElement.classList.remove('pre-intro');
   const tl = gsap.timeline();
-  tl.to(state.hero, { intro: 1, duration: 2.6, ease: 'power2.out' }, 0)
+  tl.to(state.hero, { intro: 1, duration: 1.5, ease: 'power3.out' }, 0)
+    .fromTo(el.querySelector('.hero__seal'), { opacity: 0, scale: 2.6, rotation: -24 }, { opacity: 1, scale: 1, rotation: -8, duration: 0.42, ease: 'power4.in' }, 0.55)
+    .fromTo(el.querySelector('.hero__seal span'), { filter: 'blur(4px)' }, { filter: 'blur(0px)', duration: 0.3 }, 0.9)
+    .fromTo(el.querySelector('.hero__tagline'), { opacity: 0, y: 14, letterSpacing: '0.9em' }, { opacity: 1, y: 0, letterSpacing: window.innerWidth < 760 ? '0.16em' : '0.42em', duration: 1.2, ease: 'power3.out' }, 1.0)
     .from(el.querySelectorAll('.hero__hud span'), { opacity: 0, y: 12, duration: 0.8, stagger: 0.06, ease: 'power3.out' }, 1.2)
     .from(el.querySelector('.hero__scroll'), { opacity: 0, y: 20, duration: 0.8 }, 1.8)
     .from(el.querySelector('.hero__fallback'), { opacity: 0, scale: 1.4, filter: 'blur(20px)', duration: 1.6, ease: 'expo.out' }, 0);
