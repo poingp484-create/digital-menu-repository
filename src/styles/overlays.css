@@ -50,6 +50,10 @@
   width: min(56vw, 90vh);
   aspect-ratio: 1000 / 680;
 }
+.piece-overlay[data-type='kicks'] .po__media {
+  aspect-ratio: 1 / 1;
+  width: min(48vw, 76vh);
+}
 .piece-overlay[data-type='cap'] .po__media {
   aspect-ratio: 1.08 / 1;
   width: min(48vw, 74vh);
@@ -414,7 +418,7 @@
   display: flex;
   align-items: baseline;
   gap: 18px;
-  padding: calc(var(--gutter) + 6px) var(--gutter) 18px calc(var(--gutter) + 120px);
+  padding: calc(var(--gutter) + 6px) var(--gutter) 18px calc(var(--gutter) + 44px);
   border-bottom: 1px solid var(--line);
 }
 .ix__head span {
@@ -439,7 +443,7 @@
 .ix__list {
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 10px var(--gutter) 60px calc(var(--gutter) + 120px);
+  padding: 10px var(--gutter) 60px calc(var(--gutter) + 44px);
 }
 .ix__row {
   width: 100%;

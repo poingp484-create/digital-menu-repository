@@ -35,11 +35,73 @@
   filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.35));
 }
 
+/* side index: tucked behind the left edge; slides out when the cursor
+   reaches the edge zone (or a link gets keyboard focus) */
 .nav__index {
   position: absolute;
-  left: var(--gutter);
+  left: 0;
+  top: 18vh;
+  bottom: 18vh;
+  width: 34px;
+  display: flex;
+  align-items: center;
+}
+.nav__index:hover,
+.nav__index:focus-within {
+  width: 300px;
+}
+.nav__tab {
+  position: absolute;
+  left: 0;
   top: 50%;
-  transform: translateY(-50%);
+  translate: 0 -50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 9px 14px 8px;
+  border: 1px solid var(--line);
+  border-left: 0;
+  background: rgba(8, 8, 10, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  clip-path: polygon(0 0, 100% 8px, 100% calc(100% - 8px), 0 100%);
+  opacity: 0;
+  transition: opacity 0.6s, transform 0.5s var(--ease-out);
+}
+.nav.is-revealed .nav__tab {
+  opacity: 1;
+}
+.nav__tab i {
+  width: 6px;
+  height: 6px;
+  background: var(--red);
+  transform: rotate(45deg);
+  box-shadow: 0 0 8px var(--red);
+}
+.nav__tab span {
+  writing-mode: vertical-rl;
+  font-family: var(--f-nav);
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  color: var(--ink-2);
+}
+.nav__index:hover .nav__tab,
+.nav__index:focus-within .nav__tab {
+  transform: translateX(-110%);
+}
+.nav__panel {
+  position: relative;
+  padding: 26px 34px 26px calc(var(--gutter) + 14px);
+  background: linear-gradient(90deg, rgba(6, 6, 8, 0.92) 0%, rgba(6, 6, 8, 0.75) 70%, rgba(6, 6, 8, 0) 100%);
+  transform: translateX(-104%);
+  transition: transform 0.55s var(--ease-out);
+  pointer-events: none;
+}
+.nav__index:hover .nav__panel,
+.nav__index:focus-within .nav__panel {
+  transform: none;
+  pointer-events: auto;
 }
 .nav__index ol {
   display: grid;
@@ -104,7 +166,7 @@
 .nav__index a.is-active::before {
   content: '';
   position: absolute;
-  left: -14px;
+  left: -16px;
   top: 50%;
   width: 6px;
   height: 6px;

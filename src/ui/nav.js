@@ -39,13 +39,14 @@ export function initNav({ onIndex, onBag }) {
   nav.innerHTML = `
     <a class="nav__logo" href="#intro" data-cursor="link" aria-label="YAKUZA — back to start">${logoHTML()}</a>
     <nav class="nav__index" aria-label="Primary">
-      <ol>
+      <div class="nav__tab" aria-hidden="true"><i></i><span id="navTabLabel">INDEX</span></div>
+      <div class="nav__panel"><ol>
         ${NAV_ITEMS.map(
           (it, i) => `<li><a href="${it.href || '#'}" data-key="${it.key}" ${it.action ? `data-action="${it.action}"` : ''} data-cursor="link">
             <span class="nav__num">0${i + 1}</span><span class="nav__br">[</span><span class="nav__txt" data-text="${it.label}">${it.label}</span><span class="nav__br">]</span>
           </a></li>`,
         ).join('')}
-      </ol>
+      </ol></div>
     </nav>
     <div class="nav__utils">
       <div class="nav__cur" role="group" aria-label="Currency">
@@ -117,6 +118,8 @@ export function initNav({ onIndex, onBag }) {
   return {
     setActive(key) {
       nav.querySelectorAll('[data-key]').forEach((a) => a.classList.toggle('is-active', a.dataset.key === key));
+      const it = NAV_ITEMS.find((n) => n.key === key);
+      nav.querySelector('#navTabLabel').textContent = it ? it.label : 'INDEX';
     },
     setRevealed(on) {
       nav.classList.toggle('is-revealed', on);

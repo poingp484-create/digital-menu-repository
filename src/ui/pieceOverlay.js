@@ -14,6 +14,7 @@ const SIZES = {
   jacket: ['S', 'M', 'L', 'XL', 'XXL'],
   tee: ['S', 'M', 'L', 'XL', 'XXL'],
   pants: ['28', '30', '32', '34', '36'],
+  kicks: ['UK 5', 'UK 6', 'UK 7', 'UK 8', 'UK 9', 'UK 10'],
   cap: ['ONE SIZE — ADJUSTABLE'],
   hat: ['S / M', 'L / XL'],
   shades: ['ONE SIZE'],

@@ -11,7 +11,7 @@ import { productVisual } from '../art/renders.js';
 import { formatPrice } from '../ui/store.js';
 import { ENTER, EXIT, TEXT_IN, textOut, metaIn, metaOut, hold } from './choreo.js';
 
-const TILT = { jacket: 7, tee: 6, pants: 8, shoe: 16, cap: 14, hat: 10, shades: 18, jewelry: 20 };
+const TILT = { jacket: 7, tee: 6, pants: 8, shoe: 16, kicks: 14, cap: 14, hat: 10, shades: 18, jewelry: 20 };
 const FX = { lightSweep: 'sheen', drift: 'speed' };
 
 function pieceHTML(p, i, n) {

@@ -132,7 +132,7 @@
   pointer-events: none;
   --media-x: 50%;
   --media-y: 50%;
-  --media-w: min(44vw, 68vh);
+  --media-w: min(48vw, 74vh);
   --ratio: 4 / 5;
 }
 .piece.is-active .piece__media,
@@ -146,6 +146,10 @@
 .piece--pants {
   --ratio: 7 / 10;
   --media-w: min(38vw, 64vh);
+}
+.piece--kicks {
+  --ratio: 1 / 1;
+  --media-w: min(50vw, 78vh);
 }
 .piece--cap {
   --ratio: 1.08 / 1;
@@ -372,10 +376,10 @@
 
 /* compositions */
 .layout-left {
-  --media-x: 63%;
+  --media-x: 62%;
 }
 .layout-left .piece__info {
-  left: calc(var(--gutter) + 120px);
+  left: calc(var(--gutter) + 44px);
   top: 50%;
   translate: 0 -50%;
   max-width: 38vw;
@@ -384,7 +388,7 @@
   --media-x: 37%;
 }
 .layout-right .piece__info {
-  right: calc(var(--gutter) + 90px);
+  right: calc(var(--gutter) + 44px);
   top: 50%;
   translate: 0 -50%;
   max-width: 36vw;
@@ -396,7 +400,7 @@
 }
 .layout-right .piece__jp {
   right: auto;
-  left: calc(var(--gutter) + 120px);
+  left: calc(var(--gutter) + 44px);
 }
 .layout-split {
   --media-y: 57%;
@@ -407,7 +411,7 @@
   --media-w: min(48vw, 84vh);
 }
 .layout-split .piece__info {
-  inset: calc(var(--gutter) + 80px) calc(var(--gutter) + 90px) calc(var(--gutter) + 86px) calc(var(--gutter) + 120px);
+  inset: calc(var(--gutter) + 80px) calc(var(--gutter) + 44px) calc(var(--gutter) + 86px) calc(var(--gutter) + 44px);
   grid-template-columns: 1fr auto;
   grid-template-rows: auto auto 1fr auto auto;
   align-items: start;
@@ -420,7 +424,7 @@
 .layout-split .piece__cta { grid-column: 2; grid-row: 5; justify-self: end; }
 .layout-split .piece__jp {
   right: auto;
-  left: calc(var(--gutter) + 120px);
+  left: calc(var(--gutter) + 44px);
   top: auto;
   bottom: calc(var(--gutter) + 40px);
   translate: none;
@@ -437,8 +441,8 @@
   --media-w: min(52vw, 86vh);
 }
 .layout-bottom .piece__info {
-  left: calc(var(--gutter) + 120px);
-  right: calc(var(--gutter) + 90px);
+  left: calc(var(--gutter) + 44px);
+  right: calc(var(--gutter) + 44px);
   bottom: calc(var(--gutter) + 86px);
   grid-template-columns: auto 1fr auto auto;
   grid-template-rows: auto auto;

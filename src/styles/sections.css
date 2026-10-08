@@ -27,7 +27,7 @@
   display: grid;
   grid-template-columns: 1.25fr 0.75fr;
   grid-template-rows: auto 1fr auto;
-  padding: calc(var(--gutter) + 90px) calc(var(--gutter) + 40px) calc(var(--gutter) + 70px) calc(var(--gutter) + 120px);
+  padding: calc(var(--gutter) + 44px) calc(var(--gutter) + 40px) calc(var(--gutter) + 70px) calc(var(--gutter) + 44px);
   column-gap: 5vw;
 }
 .mf__label {
@@ -250,7 +250,7 @@
 }
 .ft__bounty {
   position: absolute;
-  left: calc(var(--gutter) + 120px);
+  left: calc(var(--gutter) + 44px);
   bottom: calc(var(--gutter) + 50px);
   z-index: 4;
   display: grid;

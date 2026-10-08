@@ -25,6 +25,9 @@ JOBS = [
     ('17.jpg', 'grave-stud-zip-jacket', [], 0.06, [[(285, 0), (565, 0), (565, 40), (548, 102), (500, 86), (450, 80), (400, 82), (350, 90), (304, 110), (285, 70)]]),  # hanger
     ('18.jpg', 'oxblood-fur-collar-jacket', []),
     ('19.jpg', 'recon-cargo-leather-jacket', []),
+    ('20.jpg', 'parade-white-leather-jacket', []),
+    ('21.jpg', 'blood-script-skate-shoe', [(0, 0, 260, 60)]),          # watermark
+    ('22.jpg', 'night-bat-skate-shoe', [(330, 1420, 870, 1500)]),     # watermark
 ]
 only = sys.argv[1:]
 session = new_session('birefnet-general')
