@@ -274,11 +274,12 @@ varying vec2 vScreen;
 void main(){
   vec2 uv = vUv;
   vec2 off = (uv - 0.5) * uAberr;
+  // texture is premultiplied (clean filtering at transparent edges)
   vec4 c = texture2D(uMap, uv);
-  float r = texture2D(uMap, uv + off).r;
-  float b = texture2D(uMap, uv - off).b;
-  vec3 col = vec3(r, c.g, b) * uBright;
-  gl_FragColor = vec4(col * c.a, c.a) * uOpacity;
+  vec4 cr = texture2D(uMap, uv + off);
+  vec4 cb = texture2D(uMap, uv - off);
+  vec3 col = vec3(cr.r, c.g, cb.b) * uBright;
+  gl_FragColor = vec4(col, c.a) * uOpacity;
 }
 `;
 
@@ -323,7 +324,7 @@ void main(){
 
   vec4 tx = texture2D(uMap, a);
   float alpha = tx.a;
-  vec3 col = tx.rgb;
+  vec3 col = tx.rgb / max(alpha, 1e-4);   // texture is premultiplied
   float lum = dot(col, vec3(0.333));
 
   // tint (finishes) — keep highlights white-hot

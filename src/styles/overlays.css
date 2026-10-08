@@ -62,8 +62,8 @@
   aspect-ratio: 0.77 / 1;
 }
 .piece-overlay[data-type='shades'] .po__media {
-  aspect-ratio: 2.4 / 1;
-  width: min(54vw, 120vh);
+  aspect-ratio: 736 / 594;
+  width: min(50vw, 86vh);
 }
 .piece-overlay[data-type='jewelry'] .po__media {
   aspect-ratio: 1;
@@ -75,7 +75,7 @@
   transform-style: preserve-3d;
 }
 .po__tilt .render {
-  filter: drop-shadow(0 50px 70px rgba(0, 0, 0, 0.7));
+  /* no filter: keeps the tilt smooth */
 }
 .po__info {
   position: absolute;

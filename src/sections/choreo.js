@@ -133,6 +133,20 @@ export const ENTER = {
     tl.fromTo(e.img, { xPercent: -140 }, { xPercent: 0, duration: D, ease: 'power1.out' }, at);
     tl.fromTo(e.img, { yPercent: 140, rotation: -220 }, { yPercent: 0, rotation: 0, duration: D, ease: 'back.out(1.6)' }, at);
   },
+  // shades: sweep in at an angle like a visor snapping down, turn into place,
+  // then a chrome glint races across the frame and the lens flashes
+  visor(tl, e, at, D) {
+    tl.fromTo(
+      e.img,
+      { xPercent: 120, yPercent: -18, rotationY: -75, rotation: 9, scale: 0.78, filter: 'blur(10px) brightness(0.5)' },
+      { xPercent: 0, yPercent: 0, rotationY: 0, rotation: 0, scale: 1, filter: 'blur(0px) brightness(1)', duration: D * 0.7, ease: 'expo.out' },
+      at,
+    );
+    tl.fromTo(e.fx, { xPercent: -130, opacity: 1 }, { xPercent: 130, opacity: 1, duration: D * 0.45, ease: 'power2.inOut' }, at + D * 0.5);
+    tl.fromTo(e.img, { filter: 'brightness(1)' }, { filter: 'brightness(1.45)', duration: D * 0.12, ease: 'power2.out', yoyo: true, repeat: 1, immediateRender: false }, at + D * 0.72);
+    tl.set(e.img, { filter: 'none' }, at + D);
+    tl.set(e.fx, { opacity: 0 }, at + D);
+  },
   fadeIn(tl, e, at, D) {
     tl.fromTo(e.img, { opacity: 0 }, { opacity: 1, duration: D }, at);
   },
@@ -202,6 +216,9 @@ export const EXIT = {
     ft(tl, e.img, { xPercent: 0 }, { xPercent: 150, duration: D, ease: 'power1.in' }, at);
     ft(tl, e.img, { yPercent: 0, rotation: 0 }, { yPercent: -140, rotation: 240, duration: D, ease: 'power3.in' }, at);
   },
+  visorOut(tl, e, at, D) {
+    ft(tl, e.img, { xPercent: 0, rotationY: 0, filter: 'brightness(1)' }, { xPercent: -140, yPercent: 10, rotationY: 70, rotation: -8, scale: 0.8, filter: 'brightness(2.2)', duration: D, ease: 'power3.in' }, at);
+  },
   fadeOut(tl, e, at, D) {
     ft(tl, e.img, { opacity: 1 }, { opacity: 0, duration: D }, at);
   },
@@ -210,7 +227,9 @@ export const EXIT = {
 /* ─── HOLD — never fully static while on stage ──────────────────────────── */
 
 export function hold(tl, e, at, D, type) {
-  if (type === 'shoe') {
+  if (type === 'shades') {
+    ft(tl, e.img, { rotationY: 0, rotation: 0, y: 0 }, { rotationY: -14, rotation: 2, y: -14, duration: D, ease: 'sine.inOut' }, at);
+  } else if (type === 'shoe') {
     ft(tl, e.img, { rotationY: 0, rotation: 0, y: 0 }, { rotationY: -16, rotation: -3, y: -18, duration: D, ease: 'sine.inOut' }, at);
   } else if (type === 'jewelry') {
     ft(tl, e.img, { rotationY: 0, y: 0 }, { rotationY: 22, y: -14, duration: D, ease: 'sine.inOut' }, at);

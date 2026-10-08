@@ -12,7 +12,7 @@ import { formatPrice } from '../ui/store.js';
 import { ENTER, EXIT, TEXT_IN, textOut, metaIn, metaOut, hold } from './choreo.js';
 
 const TILT = { jacket: 7, tee: 6, pants: 8, shoe: 16, kicks: 14, cap: 14, hat: 10, shades: 18, jewelry: 20 };
-const FX = { lightSweep: 'sheen', drift: 'speed' };
+const FX = { lightSweep: 'sheen', visor: 'sheen', drift: 'speed' };
 
 function pieceHTML(p, i, n) {
   const num = String(i + 1).padStart(2, '0');
@@ -188,7 +188,7 @@ export function buildCategory(section, cat, { onPiece }) {
       active = idx;
       pieces.forEach((pc, i) => pc.classList.toggle('is-active', i === idx));
       ticks.forEach((tk, i) => tk.classList.toggle('on', i === idx));
-      if (idx < 0) els.forEach((e) => ((e.vel.style.transform = ''), (e.vel.style.filter = '')));
+      if (idx < 0) els.forEach((e) => (e.vel.style.transform = ''));
       onPiece?.(idx >= 0 ? cat.products[idx] : null, idx, cat);
     }
   });
@@ -207,10 +207,8 @@ export function buildCategory(section, cat, { onPiece }) {
     section.style.setProperty('--my', my.toFixed(4));
     if (active >= 0 && device.tier !== 'low') {
       const v = Math.max(-1, Math.min(1, state.scroll.velocity / 60));
-      const b = Math.max(0, Math.abs(v) - 0.25) * 6;
-      const vel = els[active].vel;
-      vel.style.transform = `skewY(${(v * -3).toFixed(2)}deg)`;
-      vel.style.filter = b > 0.3 ? `blur(${b.toFixed(1)}px)` : '';
+      // skew only: a per-frame blur filter on a large photo is too expensive
+      els[active].vel.style.transform = `skewY(${(v * -3).toFixed(2)}deg)`;
     }
   };
 

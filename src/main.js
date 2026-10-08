@@ -127,6 +127,26 @@ gsap.ticker.add((time, deltaMS) => {
   }
 });
 
+/* Decode every product photo during idle time, in page order, so none of them
+   decodes (and stutters) mid-animation the first time it appears. */
+function warmImages() {
+  const imgs = [...document.querySelectorAll('.piece img, .ft__img img')];
+  const idle = window.requestIdleCallback || ((fn) => setTimeout(() => fn({ timeRemaining: () => 8 }), 60));
+  const next = () =>
+    idle(async () => {
+      const img = imgs.shift();
+      if (!img) return;
+      img.loading = 'eager';
+      try {
+        await img.decode();
+      } catch {
+        /* decode errors are non-fatal */
+      }
+      next();
+    });
+  setTimeout(next, 1500);
+}
+
 /* ── boot ──────────────────────────────────────────────────────────────── */
 const ready = Promise.race([Promise.all([document.fonts.ready, stage.buildLogo()]), new Promise((r) => setTimeout(r, 3500))]);
 // Japanese + the 22 intro scripts: one tiny Google Fonts request subset to the exact glyphs used
@@ -139,6 +159,7 @@ runBoot(ready)
     // straight onto YAKUZA: the chrome logo lands while the sakura grows in behind it
     gsap.to(state.hero, { bloom: 1, duration: 2.8, ease: 'power2.inOut' });
     playIntro($('#intro'));
+    warmImages();
     if (lenis) lenis.start();
     else document.documentElement.classList.remove('no-scroll');
   });

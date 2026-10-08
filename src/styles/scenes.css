@@ -160,9 +160,10 @@
   --media-w: min(36vw, 60vh);
 }
 .piece--shades {
-  --ratio: 2.4 / 1;
-  --media-w: min(62vw, 120vh);
+  --ratio: 736 / 594;
+  --media-w: min(44vw, 76vh);
 }
+
 .piece--jewelry {
   --media-w: min(44vw, 66vh);
   --ratio: 1 / 1;
@@ -244,10 +245,20 @@
   will-change: transform;
 }
 .piece--shoe .piece__img {
-  -webkit-box-reflect: below -14% linear-gradient(transparent 62%, rgba(255, 255, 255, 0.16));
+
 }
-.piece__img .render {
-  filter: drop-shadow(0 40px 60px rgba(0, 0, 0, 0.55));
+/* contact shadow: a gradient under the product instead of a drop-shadow
+   filter (filters on large images are re-rasterised every animated frame) */
+.piece__media::before {
+  content: '';
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: -5%;
+  height: 16%;
+  background: radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0) 70%);
+  pointer-events: none;
+  z-index: -1;
 }
 .piece__floor {
   position: absolute;
@@ -433,10 +444,7 @@
   --media-y: 44%;
   --media-w: min(40vw, 58vh);
 }
-.layout-bottom.piece--shades {
-  --media-w: min(64vw, 112vh);
-  --media-y: 42%;
-}
+
 .layout-bottom.piece--shoe {
   --media-w: min(52vw, 86vh);
 }

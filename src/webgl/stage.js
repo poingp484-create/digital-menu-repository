@@ -163,6 +163,7 @@ export class Stage {
       return;
     }
     tex.colorSpace = THREE.NoColorSpace;
+    tex.premultiplyAlpha = true;
     tex.minFilter = THREE.LinearMipmapLinearFilter;
     tex.magFilter = THREE.LinearFilter;
     tex.anisotropy = Math.min(8, this.renderer.capabilities.getMaxAnisotropy());
@@ -265,7 +266,9 @@ export class Stage {
         tex = new THREE.CanvasTexture(c);
       }
       tex.colorSpace = THREE.NoColorSpace;
+      tex.premultiplyAlpha = true;
       tex.minFilter = THREE.LinearFilter;
+      tex.needsUpdate = true;
       this.pieceUniforms.uMap.value = tex;
       const img = tex.image;
       this.pieceAspect = img.width / img.height;
@@ -398,8 +401,14 @@ export class Stage {
     this.sakura.update(t, state.hero.bloom, smooth(0.06, 0.4, P), state.mouse);
 
     const r = this.renderer;
-    r.setRenderTarget(this.rt);
-    r.render(this.bgScene, this.flatCam);
+    // a full-screen overlay hides the canvas: skip all GPU work
+    if (document.documentElement.classList.contains('overlay-open')) return;
+    // the fog moves slowly: on mid/low tiers redraw it every other frame (composite every frame)
+    this.bgFrame = (this.bgFrame || 0) + 1;
+    if (device.tier === 'high' || this.bgFrame % 2 === 0 || P < 0.99) {
+      r.setRenderTarget(this.rt);
+      r.render(this.bgScene, this.flatCam);
+    }
     r.setRenderTarget(null);
     r.clear();
     r.render(this.compScene, this.flatCam);
