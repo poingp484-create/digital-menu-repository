@@ -11,7 +11,7 @@ import { productVisual } from '../art/renders.js';
 import { formatPrice } from '../ui/store.js';
 import { ENTER, EXIT, TEXT_IN, textOut, metaIn, metaOut, hold } from './choreo.js';
 
-const TILT = { jacket: 7, tee: 6, pants: 8, shoe: 16, jewelry: 20 };
+const TILT = { jacket: 7, tee: 6, pants: 8, shoe: 16, cap: 14, hat: 10, shades: 18, jewelry: 20 };
 const FX = { lightSweep: 'sheen', drift: 'speed' };
 
 function pieceHTML(p, i, n) {
@@ -85,9 +85,11 @@ const TITLE_IN = {
   tees: () => ({ from: { x: () => gsap.utils.random(-120, 120), skewX: 40, opacity: 0 }, to: { x: 0, skewX: 0, opacity: 1, stagger: { each: 0.03, from: 'random' }, ease: 'steps(6)' } }),
   shoes: () => ({ from: { xPercent: 420, scaleX: 3.2, opacity: 0 }, to: { xPercent: 0, scaleX: 1, opacity: 1, stagger: 0.035, ease: 'expo.out' } }),
   denim: () => ({ from: { yPercent: -170, rotation: () => gsap.utils.random(-24, 24), opacity: 0 }, to: { yPercent: 0, rotation: 0, opacity: 1, stagger: 0.05, ease: 'back.out(1.6)' } }),
+  headgear: () => ({ from: { yPercent: 130, scaleY: 0.2, opacity: 0, transformOrigin: '50% 100%' }, to: { yPercent: 0, scaleY: 1, opacity: 1, stagger: { each: 0.04, from: 'center' }, ease: 'expo.out' } }),
   jewelry: () => ({ from: { opacity: 0, filter: 'blur(20px)', letterSpacing: '0.5em', y: 30 }, to: { opacity: 1, filter: 'blur(0px)', letterSpacing: '0em', y: 0, stagger: 0.03, ease: 'power2.out' } }),
 };
 const TITLE_OUT = {
+  headgear: { yPercent: -140, scaleY: 2.2, opacity: 0, stagger: { each: 0.03, from: 'edges' }, ease: 'power3.in' },
   denim: { y: () => window.innerHeight * 0.9, rotation: () => gsap.utils.random(-30, 30), opacity: 0, stagger: { each: 0.03, from: 'random' }, ease: 'power2.in' },
   jackets: { y: (i) => (i % 2 ? -1 : 1) * window.innerHeight, rotation: (i) => (i % 2 ? -18 : 18), opacity: 0, stagger: 0.02, ease: 'power2.in' },
   tees: { x: () => gsap.utils.random(-300, 300), skewX: -40, opacity: 0, stagger: { each: 0.02, from: 'random' }, ease: 'steps(7)' },

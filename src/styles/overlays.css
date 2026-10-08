@@ -50,6 +50,17 @@
   width: min(56vw, 90vh);
   aspect-ratio: 1000 / 680;
 }
+.piece-overlay[data-type='cap'] .po__media {
+  aspect-ratio: 1.08 / 1;
+  width: min(48vw, 74vh);
+}
+.piece-overlay[data-type='hat'] .po__media {
+  aspect-ratio: 0.77 / 1;
+}
+.piece-overlay[data-type='shades'] .po__media {
+  aspect-ratio: 2.4 / 1;
+  width: min(54vw, 120vh);
+}
 .piece-overlay[data-type='jewelry'] .po__media {
   aspect-ratio: 1;
   width: min(46vw, 72vh);

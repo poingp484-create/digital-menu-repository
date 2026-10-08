@@ -17,6 +17,7 @@ export const THEMES = {
   tees:      { base: [0.03, 0.045, 0.09], fog: [0.1, 0.16, 0.3], accent: [0.35, 0.6, 1.0], heat: 0.0, streaks: 0.3, sky: 0.7, bright: 0 },
   denim:     { base: [0.06, 0.045, 0.035], fog: [0.27, 0.19, 0.13], accent: [1.0, 0.56, 0.26], heat: 0.0, streaks: 0.55, sky: 0.8, bright: 0.02 },
   shoes:     { base: [0.07, 0.075, 0.085], fog: [0.3, 0.32, 0.36], accent: [0.9, 0.93, 1.0], heat: 0.0, streaks: 1, sky: 0.55, bright: 0.04 },
+  headgear:  { base: [0.045, 0.035, 0.055], fog: [0.21, 0.16, 0.25], accent: [0.86, 0.6, 1.0], heat: 0.0, streaks: 0.45, sky: 0.85, bright: 0.02 },
   jewelry:   { base: [0.02, 0.02, 0.025], fog: [0.17, 0.17, 0.19], accent: [1.0, 1.0, 1.0], heat: 0.0, streaks: 0.15, sky: 0.25, bright: 0 },
   pursuit:   { base: [0.035, 0.03, 0.045], fog: [0.16, 0.12, 0.2], accent: [1.0, 0.2, 0.25], heat: 1.0, streaks: 0.8, sky: 0.8, bright: 0 },
   statement: { base: [0.03, 0.03, 0.03], fog: [0.14, 0.14, 0.13], accent: [0.7, 0.66, 0.58], heat: 0.0, streaks: 0.1, sky: 0.4, bright: 0 },
@@ -24,7 +25,7 @@ export const THEMES = {
 };
 
 /** Heat level shown in the HUD for each theme (0–5 bars). */
-export const HEAT = { hero: 1, manifesto: 1, jackets: 2, tees: 2, denim: 2, shoes: 3, jewelry: 3, pursuit: 5, statement: 0, footer: 0 };
+export const HEAT = { hero: 1, manifesto: 1, jackets: 2, tees: 2, denim: 2, shoes: 3, headgear: 3, jewelry: 3, pursuit: 5, statement: 0, footer: 0 };
 
 /**
  * Background moods — the overall colour of the city. Visitors can cycle them

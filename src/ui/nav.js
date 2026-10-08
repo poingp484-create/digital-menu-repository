@@ -17,6 +17,7 @@ export const NAV_ITEMS = [
   { label: 'TEES', href: '#cat-tees', key: 'tees' },
   { label: 'DENIM', href: '#cat-denim', key: 'denim' },
   { label: 'SHOES', href: '#cat-shoes', key: 'shoes' },
+  { label: 'HEADGEAR', href: '#cat-headgear', key: 'headgear' },
   { label: 'JEWELRY', href: '#cat-jewelry', key: 'jewelry' },
 ];
 

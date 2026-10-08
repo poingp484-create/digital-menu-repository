@@ -147,6 +147,18 @@
   --ratio: 7 / 10;
   --media-w: min(38vw, 64vh);
 }
+.piece--cap {
+  --ratio: 1.08 / 1;
+  --media-w: min(44vw, 70vh);
+}
+.piece--hat {
+  --ratio: 0.77 / 1;
+  --media-w: min(36vw, 60vh);
+}
+.piece--shades {
+  --ratio: 2.4 / 1;
+  --media-w: min(62vw, 120vh);
+}
 .piece--jewelry {
   --media-w: min(44vw, 66vh);
   --ratio: 1 / 1;
@@ -416,6 +428,10 @@
 .layout-bottom {
   --media-y: 44%;
   --media-w: min(40vw, 58vh);
+}
+.layout-bottom.piece--shades {
+  --media-w: min(64vw, 112vh);
+  --media-y: 42%;
 }
 .layout-bottom.piece--shoe {
   --media-w: min(52vw, 86vh);

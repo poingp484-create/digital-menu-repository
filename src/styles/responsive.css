@@ -219,8 +219,13 @@
     --media-w: 94vw;
     --media-y: 38%;
   }
-  .piece--jewelry {
+  .piece--jewelry,
+  .piece--cap {
     --media-w: min(78vw, 42vh);
+  }
+  .piece--shades,
+  .layout-bottom.piece--shades {
+    --media-w: 94vw;
   }
   .piece__ghost {
     font-size: 78vw;
