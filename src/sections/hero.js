@@ -6,14 +6,14 @@
 import { gsap, ScrollTrigger } from '../core/scroll.js';
 import { state } from '../core/state.js';
 import { logoHTML } from '../brand/logo.js';
-import { FEATURED } from '../data/products.js';
+import { FEATURED, ALL_PRODUCTS } from '../data/products.js';
 
 export function renderHero(el) {
   el.innerHTML = `
     <div class="hero__fallback" aria-hidden="true">${logoHTML()}</div>
     <h1 class="sr-only">YAKUZA — underground Y2K streetwear</h1>
     <div class="hero__hud hero__hud--tl"><span>TOKYO / 35.6762° N 139.6503° E</span><span>LOCAL <b data-clock>--:--:--</b></span></div>
-    <div class="hero__hud hero__hud--tr"><span>DROP 01 — THE BLACKLIST</span><span>SEASON 2026 // 17 PIECES</span></div>
+    <div class="hero__hud hero__hud--tr"><span>DROP 01 — THE BLACKLIST</span><span>SEASON 2026 // ${ALL_PRODUCTS.length} PIECES</span></div>
     <div class="hero__hud hero__hud--bl"><span>ヤクザ</span><span>UNDERGROUND STREETWEAR — EST. 2000</span></div>
     <div class="hero__seal" aria-hidden="true"><span>極</span></div>
     <div class="hero__tagline">ONE NAME <i>·</i> EVERY LANGUAGE <i>·</i> DROP 01</div>

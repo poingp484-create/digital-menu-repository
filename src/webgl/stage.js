@@ -11,7 +11,7 @@ import { THEMES, MOODS, SIREN } from '../data/themes.js';
 import { FEATURED } from '../data/products.js';
 import { productSVGString } from '../art/renders.js';
 import { buildLogoAtlas } from './logoAtlas.js';
-import { LOGO_FAMILY, logoCanvasFont } from '../brand/logo.js';
+import { LOGO_FAMILY, LOGO_FINISH, LOGO_FINISHES, logoCanvasFont } from '../brand/logo.js';
 import logoFontUrl from '@fontsource-variable/archivo/files/archivo-latin-standard-italic.woff2?url';
 import * as S from './shaders.js';
 import { Sakura } from './sakura.js';
@@ -185,6 +185,10 @@ export class Stage {
           uRowY: { value: 0 },
           uCap: { value: 1 },
           uFlash: { value: 0 },
+          uTint: { value: new THREE.Vector3() },
+          uSpec: { value: new THREE.Vector3() },
+          uGloss: { value: 0 },
+          uIri: { value: 0 },
         },
         transparent: true,
         depthWrite: false,
@@ -198,7 +202,21 @@ export class Stage {
       return mesh;
     });
 
+    this.setLogoFinish(LOGO_FINISH);
     this.resize();
+  }
+
+  /** Switch the metal finish of the 3D logo (see LOGO_FINISHES in brand/logo.js). */
+  setLogoFinish(name) {
+    const f = LOGO_FINISHES[name] || LOGO_FINISHES.chrome;
+    this.glyphs.forEach((m) => {
+      const u = m.material.uniforms;
+      u.uTint.value.fromArray(f.tint);
+      u.uSpec.value.fromArray(f.spec);
+      u.uGloss.value = f.gloss;
+      u.uIri.value = f.iri;
+    });
+    document.documentElement.dataset.finish = name;
   }
 
   async #loadPieceTexture() {

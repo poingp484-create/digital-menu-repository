@@ -12,6 +12,8 @@
  *    lit from the left. Apparel ≈ 4:5 portrait, shoes ≈ 10:7 landscape,
  *    jewelry ≈ square.
  *
+ *  Photos live in public/products/ (cut out on transparent backgrounds).
+ *
  *  CHOREOGRAPHY (each piece moves differently — see src/sections/choreo.js)
  *  - enter / exit : image animation presets
  *  - text         : how the name animates  (split | slide | stretch | blur | scramble)
@@ -33,6 +35,21 @@ export const CATEGORIES = [
     district: 'DISTRICT 01 — DOCKS',
     blurb: 'Armour for the after-hours city.',
     products: [
+      {
+        id: 'thorn-crown-zip-hoodie',
+        name: ['THORN CROWN', 'ZIP HOODIE'],
+        jp: '茨の冠',
+        price: price(6900, 85, 12800),
+        specs: ['FAUX-FUR TRIM HOOD', 'HEAVY FLEECE / ACID GREY', 'THORN + CROSS PRINT'],
+        description:
+          'Heavy fleece washed to acid grey, a faux-fur trimmed hood and a crown of thorns printed across the chest. Zip it to the neck and disappear.',
+        image: 'products/thorn-crown-zip-hoodie.webp',
+        art: { type: 'jacket', variant: 'bomber' },
+        enter: 'ghostEcho',
+        exit: 'liftUp',
+        text: 'scramble',
+        layout: 'right',
+      },
       {
         id: 'kira-chrome-jacket',
         name: ['KIRA', 'CHROME JACKET'],
@@ -106,6 +123,21 @@ export const CATEGORIES = [
     blurb: 'Oversized. Overprinted. Over midnight.',
     products: [
       {
+        id: 'tora-ink-longsleeve',
+        name: ['TORA', 'INK LONGSLEEVE'],
+        jp: '猛虎',
+        price: price(4900, 59, 8900),
+        specs: ['HAND-INKED TIGER PRINT', '240 GSM WHITE JERSEY', 'CALLIGRAPHY + SEAL STAMPS'],
+        description:
+          'A tiger painted in one breath of ink, stalking across a white longsleeve and signed with red seal stamps. It looks ready to leave the shirt.',
+        image: 'products/tora-ink-longsleeve.webp',
+        art: { type: 'tee', variant: 'core' },
+        enter: 'slideRotate',
+        exit: 'slideOutLeft',
+        text: 'split',
+        layout: 'left',
+      },
+      {
         id: 'yakuza-core-tee',
         name: ['YAKUZA', 'CORE TEE'],
         jp: 'コア',
@@ -164,13 +196,67 @@ export const CATEGORIES = [
     ],
   },
   {
-    id: 'shoes',
+    id: 'denim',
     index: '05',
+    title: 'DENIM',
+    jp: 'デニム',
+    tag: 'raw',
+    theme: 'denim',
+    district: 'DISTRICT 03 — UNDERPASS',
+    blurb: 'Wide legs. Heavy wash. Built to drag on asphalt.',
+    products: [
+      {
+        id: 'blood-wing-denim',
+        name: ['BLOOD WING', 'DENIM'],
+        jp: '血の翼',
+        price: price(8900, 109, 16400),
+        specs: ['RHINESTONE WINGS, BACK', 'OXBLOOD WASH', 'BAGGY WIDE LEG'],
+        description: 'Oxblood denim with a pair of crystal wings set across the back pockets. Cut baggy, so the wings move when you do.',
+        image: 'products/blood-wing-denim.webp',
+        art: { type: 'pants', variant: 'red' },
+        enter: 'pendulum',
+        exit: 'drop',
+        text: 'blur',
+        layout: 'right',
+      },
+      {
+        id: 'tribal-blade-denim',
+        name: ['TRIBAL BLADE', 'DENIM'],
+        jp: '刃',
+        price: price(7900, 99, 14600),
+        specs: ['DISCHARGE TRIBAL PRINT', 'DISTRESSED BLACK WASH', 'RIPPED KNEES'],
+        description: 'Black denim scraped back to grey, with tribal blades running down both legs like a Y2K tattoo flash sheet.',
+        image: 'products/tribal-blade-denim.webp',
+        art: { type: 'pants', variant: 'black' },
+        enter: 'motionBlur',
+        exit: 'whoosh',
+        text: 'stretch',
+        layout: 'left',
+      },
+      {
+        id: 'union-relic-denim',
+        name: ['UNION RELIC', 'DENIM'],
+        jp: '遺物',
+        price: price(9500, 119, 17400),
+        specs: ['SUN-FADED UNION FLAG PRINT', 'CHAIN + CROSS GRAPHIC', 'RAW INDIGO, CONTRAST STITCH'],
+        description: 'Raw indigo printed with a sun-faded Union flag, script and a hanging chain of crosses. Half souvenir, half evidence.',
+        image: 'products/union-relic-denim.webp',
+        art: { type: 'pants', variant: 'indigo' },
+        enter: 'sliceReveal',
+        exit: 'sliceOut',
+        text: 'slide',
+        layout: 'bottom',
+      },
+    ],
+  },
+  {
+    id: 'shoes',
+    index: '06',
     title: 'SHOES',
     jp: 'シューズ',
     tag: 'traction',
     theme: 'shoes',
-    district: 'DISTRICT 03 — HIGHWAY',
+    district: 'DISTRICT 04 — HIGHWAY',
     blurb: 'Grip the asphalt. Leave the rest behind.',
     products: [
       {
@@ -233,12 +319,12 @@ export const CATEGORIES = [
   },
   {
     id: 'jewelry',
-    index: '06',
+    index: '07',
     title: 'JEWELRY',
     jp: 'ジュエリー',
     tag: 'sterling',
     theme: 'jewelry',
-    district: 'DISTRICT 04 — VAULT',
+    district: 'DISTRICT 05 — VAULT',
     blurb: 'Cold metal. Warm blood.',
     products: [
       {

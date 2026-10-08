@@ -88,7 +88,7 @@ const footer = buildFooter($('#footer'), {
 magnetize(document);
 
 /* Theme / nav / HUD per section — measured on pin spacers so pinned lengths count. */
-const NAV_KEY = { collection: 'collection', 'cat-jackets': 'jackets', 'cat-tees': 'tees', 'cat-shoes': 'shoes', 'cat-jewelry': 'jewelry' };
+const NAV_KEY = { collection: 'collection', 'cat-jackets': 'jackets', 'cat-tees': 'tees', 'cat-denim': 'denim', 'cat-shoes': 'shoes', 'cat-jewelry': 'jewelry' };
 document.querySelectorAll('main section, main footer').forEach((sec) => {
   const wrap = sec.parentElement.classList.contains('pin-spacer') ? sec.parentElement : sec;
   const activate = () => {

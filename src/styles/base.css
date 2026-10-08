@@ -15,9 +15,6 @@
   --f-nav: 'Michroma', 'Eurostile', sans-serif;
   --f-mono: 'JetBrains Mono', ui-monospace, monospace;
   --f-serif: 'Instrument Serif', 'Times New Roman', serif;
-  --f-race: 'Bruno Ace SC', 'Michroma', sans-serif;
-  --f-block: 'Rubik Mono One', 'Unbounded', sans-serif;
-  --f-cond: 'Saira Extra Condensed', 'Arial Narrow', sans-serif;
   --f-jp: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
 
   --gutter: clamp(16px, 2.6vw, 44px);
@@ -651,4 +648,29 @@ main {
 .pre-intro .nav__utils,
 .pre-intro .hud {
   visibility: hidden;
+}
+
+/* DOM logo follows the WebGL finish (LOGO_FINISH in src/brand/logo.js) */
+[data-finish='candy'] .logo-type__word {
+  background: linear-gradient(180deg, #ffd9d9 0%, #ff4d57 22%, #b3101c 46%, #3a0306 52%, #ff6a72 58%, #c4121f 78%, #ff9aa0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+[data-finish='candy'] .logo-type__swoosh {
+  fill: #d01c28;
+}
+[data-finish='black'] .logo-type__word {
+  background: linear-gradient(180deg, #d9dbe0 0%, #4a4c52 30%, #0d0e10 50%, #8b8e96 56%, #1b1c20 80%, #5d6068 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+[data-finish='gold'] .logo-type__word {
+  background: linear-gradient(180deg, #fff3cf 0%, #e8b452 26%, #6b4610 48%, #ffe4a0 55%, #b98525 78%, #f5d38a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+[data-finish='rose'] .logo-type__word {
+  background: linear-gradient(180deg, #fff0f3 0%, #f2a3b5 26%, #7a3443 48%, #ffd2dc 55%, #c66f84 78%, #f8c3cf 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
 }

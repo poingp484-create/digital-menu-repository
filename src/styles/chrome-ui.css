@@ -67,6 +67,7 @@
 .nav.is-revealed .nav__index li:nth-child(4) a { transition-delay: 0.12s; }
 .nav.is-revealed .nav__index li:nth-child(5) a { transition-delay: 0.16s; }
 .nav.is-revealed .nav__index li:nth-child(6) a { transition-delay: 0.2s; }
+.nav.is-revealed .nav__index li:nth-child(7) a { transition-delay: 0.24s; }
 .nav__num {
   font-family: var(--f-mono);
   font-size: 9px;

@@ -135,9 +135,12 @@
 .ft__word {
   position: absolute;
   left: 50%;
-  font-family: var(--f-race);
+  font-family: var(--f-logo);
+  font-weight: 900;
+  font-stretch: 125%;
   font-style: italic;
-  font-size: 21vw;
+  letter-spacing: -0.02em;
+  font-size: 15.5vw;
   line-height: 0.8;
   white-space: nowrap;
   background: var(--chrome);
@@ -349,7 +352,10 @@
   top: 50%;
   translate: -50% -50%;
   z-index: 6;
-  font-family: var(--f-race);
+  font-family: var(--f-logo);
+  font-weight: 900;
+  font-stretch: 125%;
+  font-style: italic;
   font-size: clamp(3rem, 10vw, 11rem);
   letter-spacing: 0.08em;
   color: transparent;

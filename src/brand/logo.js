@@ -7,6 +7,20 @@
  */
 
 export const WORD = 'YAKUZA';
+
+/**
+ * Metal finishes for the WebGL logo. Set LOGO_FINISH to pick one.
+ * tint = body colour, spec = highlight colour, gloss = clear-coat, iri = pearl.
+ */
+export const LOGO_FINISHES = {
+  chrome: { tint: [1, 1, 1], spec: [1, 0.97, 0.93], gloss: 0, iri: 0 },
+  candy: { tint: [1, 0.08, 0.11], spec: [1, 0.92, 0.9], gloss: 0.75, iri: 0 },
+  black: { tint: [0.2, 0.2, 0.23], spec: [1, 1, 1], gloss: 0.95, iri: 0 },
+  gold: { tint: [1, 0.74, 0.36], spec: [1, 0.95, 0.85], gloss: 0.25, iri: 0 },
+  rose: { tint: [1, 0.56, 0.66], spec: [1, 0.94, 0.95], gloss: 0.5, iri: 0 },
+  pearl: { tint: [0.96, 0.96, 1], spec: [1, 1, 1], gloss: 0.3, iri: 0.75 },
+};
+export const LOGO_FINISH = 'candy';
 export const LOGO_FAMILY = 'Archivo Variable';
 export const LOGO_FONT_STACK = `'${LOGO_FAMILY}', 'Archivo', 'Arial Black', sans-serif`;
 /** CSS font shorthand pieces for canvas: italic, black, expanded (wdth 125). */

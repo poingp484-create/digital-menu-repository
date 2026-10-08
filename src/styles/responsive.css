@@ -188,19 +188,7 @@
 
   /* categories */
   .ct__word {
-    font-size: 15vw;
-  }
-  .cat--jackets .ct__word {
-    font-size: 12.5vw;
-  }
-  .cat--tees .ct__word {
-    font-size: 14vw;
-  }
-  .cat--shoes .ct__word {
-    font-size: 36vw;
-  }
-  .cat--jewelry .ct__word {
-    font-size: 25vw;
+    font-size: 27vw;
   }
   .ct__jp {
     right: 10px;
@@ -296,7 +284,7 @@
 
   /* featured */
   .ft__word {
-    font-size: 30vw;
+    font-size: 22vw;
   }
   .ft__word--a {
     top: 11vh;

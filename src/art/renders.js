@@ -355,7 +355,7 @@ export function productVisual(product, { eager = false } = {}) {
     return `<img class="render render--photo render--${product.art.type}" src="${product.image}" alt="${alt}" ${eager ? '' : 'loading="lazy"'} decoding="async" draggable="false" />`;
   }
   const u = `r${(uidCounter++).toString(36)}`;
-  return RENDERERS[product.art.type](product.art.variant, u);
+  return (RENDERERS[product.art.type] || RENDERERS.jacket)(product.art.variant, u);
 }
 
 /** Rasterisable SVG string (no web fonts) for use as a WebGL texture. */

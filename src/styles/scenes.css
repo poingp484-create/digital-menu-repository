@@ -39,7 +39,7 @@
 }
 .ct__word {
   position: relative;
-  font-size: 13vw;
+  font-size: 21vw;
   line-height: 0.82;
   white-space: nowrap;
   perspective: 900px;
@@ -65,61 +65,27 @@
   color: var(--ink-2);
 }
 
-/* district identities */
-.cat--jackets .ct__word {
-  font-family: var(--f-race);
-  font-style: italic;
+/* one premium title system for every district: Archivo Condensed Black,
+   bone-white with a soft metallic falloff; the motion gives each its identity */
+.ct__word {
+  font-family: var(--f-display);
+  font-stretch: 62%;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.015em;
+  line-height: 0.8;
 }
-.cat--jackets .ct__word .ci {
-  background: var(--chrome);
+.ct__word .ci {
+  background: linear-gradient(180deg, #f4f2ec 0%, #e3e0d8 46%, #a9a7a2 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  filter: drop-shadow(0 8px 30px rgba(0, 0, 0, 0.6));
-  padding: 0 0.02em;
-}
-.cat--tees .ct__word {
-  font-family: var(--f-block);
-  font-size: 13vw;
-  color: var(--ink);
-  text-shadow: -0.03em 0 rgba(255, 0, 70, 0.75), 0.03em 0 rgba(0, 210, 255, 0.75);
-}
-.cat--tees .cat__title::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.35) 0 2px, transparent 2px 5px);
-  pointer-events: none;
-}
-.cat--shoes .ct__word {
-  font-family: var(--f-cond);
-  font-weight: 800;
-  font-style: italic;
-  font-size: 30vw;
-  line-height: 0.78;
-  transform: skewX(-12deg);
-  letter-spacing: -0.01em;
-}
-.cat--shoes .ct__word .ci {
-  background: repeating-linear-gradient(180deg, var(--ink) 0 0.05em, transparent 0.05em 0.085em);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-stroke: 1.5px var(--ink);
-}
-.cat--jewelry .ct__word {
-  font-family: var(--f-serif);
-  font-style: italic;
-  text-transform: lowercase;
-  font-size: 22vw;
-  line-height: 0.9;
+  padding: 0 0.01em;
 }
 .cat--jewelry .ct__word .ci {
   background: var(--chrome);
   -webkit-background-clip: text;
   background-clip: text;
-  color: transparent;
-  padding: 0 0.04em;
 }
 
 .cat__ticks {
@@ -176,6 +142,10 @@
 .piece--shoe {
   --media-w: min(54vw, 96vh);
   --ratio: 1000 / 680;
+}
+.piece--pants {
+  --ratio: 7 / 10;
+  --media-w: min(38vw, 64vh);
 }
 .piece--jewelry {
   --media-w: min(44vw, 66vh);

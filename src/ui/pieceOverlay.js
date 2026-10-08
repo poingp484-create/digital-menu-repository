@@ -13,6 +13,7 @@ import { play } from './sound.js';
 const SIZES = {
   jacket: ['S', 'M', 'L', 'XL', 'XXL'],
   tee: ['S', 'M', 'L', 'XL', 'XXL'],
+  pants: ['28', '30', '32', '34', '36'],
   shoe: ['UK 6', 'UK 7', 'UK 8', 'UK 9', 'UK 10', 'UK 11'],
   chain: ['50 CM', '60 CM'],
   cross: ['ONE SIZE'],

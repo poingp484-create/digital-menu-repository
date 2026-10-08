@@ -186,6 +186,10 @@ uniform vec2 uMouse;     // -1..1
 uniform float uRowY;
 uniform float uCap;
 uniform float uFlash;
+uniform vec3 uTint;     // body colour of the metal (1,1,1 = chrome)
+uniform vec3 uSpec;     // specular colour
+uniform float uGloss;   // clear-coat: keeps sky reflections bright on tinted paint
+uniform float uIri;     // pearl / iridescence amount
 varying vec2 vUv;
 varying vec3 vWorld;
 varying vec2 vScreen;
@@ -235,7 +239,14 @@ void main(){
   float spec = pow(max(dot(R, L), 0.0), 36.0) * 1.6;
   float fres = pow(1.0 - n.z, 2.5);
 
-  vec3 col = env + spec * vec3(1.0, 0.97, 0.93) + fres * 0.3 + uFlash;
+  vec3 body = env * uTint;
+  // pearl: hue drifts with the surface normal
+  vec3 iri = 0.55 + 0.45 * cos(6.2832 * (n.x * 0.7 + n.y * 0.5 + ry * 0.3 + vec3(0.0, 0.33, 0.67)));
+  body = mix(body, env * iri, uIri);
+  // clear-coat over coloured paint: bright sky streaks stay near-white
+  vec3 coat = max(env - 0.62, 0.0) / 0.38;
+  body += coat * coat * 0.75 * uGloss;
+  vec3 col = body + spec * uSpec + fres * 0.3 * mix(vec3(1.0), uTint, 0.6) + uFlash;
   col *= mix(0.35, 1.0, smoothstep(0.0, 0.25, tx.g)); // darken the extreme edge
 
   // RGB split on glitch

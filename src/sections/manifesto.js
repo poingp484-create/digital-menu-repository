@@ -1,7 +1,7 @@
 /** 02 — COLLECTION INTRO. A short, loud statement + the rules of the list. */
 import { gsap, ScrollTrigger } from '../core/scroll.js';
 import { splitChars, splitWords } from '../core/split.js';
-import { ALL_PRODUCTS } from '../data/products.js';
+import { ALL_PRODUCTS, CATEGORIES } from '../data/products.js';
 
 export function renderManifesto(el) {
   el.innerHTML = `
@@ -10,7 +10,7 @@ export function renderManifesto(el) {
       <div class="mf__label"><span>02</span> THE BLACKLIST — DROP 01</div>
       <h2 class="mf__title">
         <span class="mf__line">${ALL_PRODUCTS.length} PIECES.</span>
-        <span class="mf__line">4 DISTRICTS.</span>
+        <span class="mf__line">${CATEGORIES.length} DISTRICTS.</span>
         <span class="mf__line mf__line--chrome">ONE CITY</span>
         <span class="mf__line">AFTER MIDNIGHT.</span>
       </h2>
