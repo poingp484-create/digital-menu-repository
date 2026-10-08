@@ -10,7 +10,7 @@ import { device } from './core/device.js';
 import { state, tickState } from './core/state.js';
 import { initScroll, gsap, ScrollTrigger, scrollTo } from './core/scroll.js';
 import { Stage } from './webgl/stage.js';
-import { CATEGORIES } from './data/products.js';
+import { CATEGORIES, FEATURED } from './data/products.js';
 
 import { initCursor } from './ui/cursor.js';
 import { initNav } from './ui/nav.js';
@@ -32,8 +32,17 @@ import { renderStatement, buildStatement } from './sections/statement.js';
 import { renderFooter, buildFooter } from './sections/footer.js';
 
 const $ = (s) => document.querySelector(s);
+// Always open on the hero: no restored scroll position, no deep-link jump.
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+if (location.hash) history.replaceState(null, '', location.pathname + location.search);
 window.scrollTo(0, 0);
+const toTop = () => {
+  ScrollTrigger.clearScrollMemory('manual');
+  if (lenis) lenis.scrollTo(0, { immediate: true, force: true });
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  state.hero.progress = 0;
+};
 
 /* ── WebGL ─────────────────────────────────────────────────────────────── */
 const stage = new Stage($('#gl'));
@@ -56,7 +65,7 @@ const overlay = initPieceOverlay();
 const categories = [];
 const index = initIndexOverlay({
   onPick(id) {
-    if (id === 'bounty-01-racer') return scrollTo(featured.st.start + (featured.st.end - featured.st.start) * 0.62);
+    if (id === FEATURED.id) return scrollTo(featured.st.start + (featured.st.end - featured.st.start) * 0.62);
     const cat = categories.find((c) => c.ids.includes(id));
     if (cat) scrollTo(cat.posFor(cat.ids.indexOf(id)), { duration: 2.6 });
   },
@@ -85,7 +94,7 @@ const footer = buildFooter($('#footer'), {
 magnetize(document);
 
 /* Theme / nav / HUD per section — measured on pin spacers so pinned lengths count. */
-const NAV_KEY = { collection: 'collection', 'cat-jackets': 'jackets', 'cat-tees': 'tees', 'cat-denim': 'denim', 'cat-headgear': 'headgear', 'cat-shoes': 'shoes', 'cat-jewelry': 'jewelry' };
+const NAV_KEY = { collection: 'collection', 'cat-jackets': 'jackets', 'cat-tees': 'tees', 'cat-denim': 'denim', 'cat-headgear': 'headgear', 'cat-shoes': 'shoes' };
 document.querySelectorAll('main section, main footer').forEach((sec) => {
   const wrap = sec.parentElement.classList.contains('pin-spacer') ? sec.parentElement : sec;
   const activate = () => {
@@ -126,6 +135,7 @@ loadScriptFonts(document.body.textContent);
 runBoot(ready)
   .then(() => {
     ScrollTrigger.refresh();
+    toTop();
     // straight onto YAKUZA: the chrome logo lands while the sakura grows in behind it
     gsap.to(state.hero, { bloom: 1, duration: 2.8, ease: 'power2.inOut' });
     playIntro($('#intro'));
@@ -133,6 +143,10 @@ runBoot(ready)
     else document.documentElement.classList.remove('no-scroll');
   });
 
-window.addEventListener('load', () => ScrollTrigger.refresh());
+window.addEventListener('load', () => {
+  ScrollTrigger.refresh();
+  if (document.body.classList.contains('is-booting')) toTop();
+});
+window.addEventListener('pageshow', (e) => e.persisted && toTop());
 // Expose for debugging / QA in the console.
 window.__yakuza = { state, stage, device, ScrollTrigger, setMood };

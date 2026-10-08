@@ -166,8 +166,8 @@
   position: absolute;
   left: 50%;
   top: 52%;
-  width: min(36vw, 62vh);
-  aspect-ratio: 4 / 5;
+  width: min(46vw, 70vh);
+  aspect-ratio: 729 / 741;
   translate: -50% -50%;
   z-index: 2;
 }
