@@ -1,0 +1,28 @@
+{
+  "name": "yakuza",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fontsource/bruno-ace-sc": "5.3.0",
+    "@fontsource/instrument-serif": "5.3.0",
+    "@fontsource/jetbrains-mono": "5.3.0",
+    "@fontsource/michroma": "5.3.0",
+    "@fontsource/noto-sans-jp": "5.3.0",
+    "@fontsource/rubik-mono-one": "5.3.0",
+    "@fontsource/saira-extra-condensed": "5.3.0",
+    "@fontsource/sedgwick-ave-display": "5.3.0",
+    "@fontsource/unbounded": "5.3.0",
+    "gsap": "3.13.0",
+    "lenis": "1.1.20",
+    "three": "0.170.0"
+  },
+  "devDependencies": {
+    "vite": "6.3.5"
+  }
+}

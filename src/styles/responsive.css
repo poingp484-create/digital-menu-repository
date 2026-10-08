@@ -1,0 +1,419 @@
+/* ─── TABLET ───────────────────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .layout-left .piece__info,
+  .layout-split .piece__info,
+  .layout-bottom .piece__info {
+    left: calc(var(--gutter) + 100px);
+  }
+  .layout-bottom .piece__info {
+    grid-template-columns: auto 1fr auto;
+  }
+  .layout-bottom .piece__cta {
+    grid-column: 3;
+    grid-row: 1;
+  }
+}
+
+/* ─── MOBILE — rebuilt, not shrunk ─────────────────────────────────────── */
+@media (max-width: 759px) {
+  :root {
+    --gutter: 16px;
+  }
+  .nav__index,
+  .nav__cur {
+    display: none;
+  }
+  .nav__logo {
+    width: 96px;
+    top: 14px;
+  }
+  .nav__utils {
+    top: 10px;
+    gap: 10px;
+  }
+  .nav__menu {
+    display: block;
+    padding: 10px 4px;
+    position: relative;
+    z-index: 2;
+  }
+  .nav__bag {
+    position: relative;
+    z-index: 2;
+  }
+  .mmenu {
+    display: grid;
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    grid-template-rows: 1fr auto;
+    padding: 90px var(--gutter) 28px;
+    background: rgba(5, 5, 6, 0.97);
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    transition: clip-path 0.8s var(--ease-out);
+    pointer-events: none;
+  }
+  .nav.menu-open .mmenu {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    pointer-events: auto;
+  }
+  .mmenu ol {
+    align-self: center;
+    display: grid;
+    gap: 4px;
+  }
+  .mmenu a {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    font-family: var(--f-display);
+    font-weight: 800;
+    font-size: 11.5vw;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  .mmenu a small {
+    font-family: var(--f-mono);
+    font-weight: 400;
+    font-size: 11px;
+    color: var(--red);
+  }
+  .mmenu a.is-active {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--ink);
+  }
+  .mmenu__foot {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9.5px;
+    letter-spacing: 0.2em;
+    color: var(--ink-3);
+  }
+  .nav.menu-open .nav__logo {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    position: fixed;
+    z-index: 2;
+  }
+
+  .hud {
+    font-size: 8.5px;
+    padding-bottom: 10px;
+  }
+  .hud__piece,
+  .hud__route {
+    display: none;
+  }
+  .hud__speed span {
+    font-size: 15px;
+  }
+
+  .hero__hud--tr {
+    display: none;
+  }
+  .hero__hud--tl {
+    top: 64px;
+  }
+  .hero__hud--bl {
+    bottom: 110px;
+  }
+  .hero__target {
+    width: 74vw;
+    height: 60vh;
+  }
+
+  /* manifesto */
+  .mf__inner {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto;
+    padding: 84px var(--gutter) 60px;
+    align-content: center;
+    row-gap: 24px;
+  }
+  .mf__title {
+    grid-row: 2;
+    font-size: 10.2vw;
+  }
+  .mf__line {
+    white-space: normal;
+  }
+  .mf__tag {
+    grid-row: 2;
+    margin: 0 0 -4vh;
+    font-size: 13vw;
+  }
+  .mf__copy {
+    grid-column: 1;
+    grid-row: 3;
+    font-size: 1.15rem;
+  }
+  .mf__stats {
+    grid-row: 4;
+    gap: 22px;
+  }
+  .mf__stats b {
+    font-size: 12px;
+  }
+
+  /* categories */
+  .ct__word {
+    font-size: 15vw;
+  }
+  .cat--jackets .ct__word {
+    font-size: 12.5vw;
+  }
+  .cat--tees .ct__word {
+    font-size: 14vw;
+  }
+  .cat--shoes .ct__word {
+    font-size: 36vw;
+  }
+  .cat--jewelry .ct__word {
+    font-size: 25vw;
+  }
+  .ct__tag {
+    left: 40%;
+    top: 58%;
+    font-size: 12vw;
+  }
+  .ct__jp {
+    right: 10px;
+    top: auto;
+    bottom: 90px;
+    translate: none;
+    font-size: 2.2rem;
+  }
+  .ct__district {
+    top: 70px;
+  }
+  .ct__blurb {
+    padding: 0 30px;
+  }
+
+  /* every composition collapses to: image up top, story at the bottom */
+  .piece,
+  .layout-left,
+  .layout-right,
+  .layout-split,
+  .layout-bottom {
+    --media-x: 50%;
+    --media-y: 36%;
+    --media-w: min(76vw, 44vh);
+  }
+  .piece--shoe,
+  .layout-bottom.piece--shoe {
+    --media-w: 94vw;
+    --media-y: 38%;
+  }
+  .piece--jewelry {
+    --media-w: min(78vw, 42vh);
+  }
+  .piece__ghost {
+    font-size: 78vw;
+    top: 34%;
+  }
+  .piece__jp,
+  .layout-right .piece__jp,
+  .layout-split .piece__jp {
+    left: auto;
+    right: 8px;
+    top: 74px;
+    bottom: auto;
+    translate: none;
+    font-size: 1.7rem;
+  }
+  .piece__cover {
+    font-size: 19vw;
+    flex-direction: column;
+    gap: 0;
+    line-height: 0.9;
+  }
+  .piece .piece__info,
+  .layout-left .piece__info,
+  .layout-right .piece__info,
+  .layout-split .piece__info,
+  .layout-bottom .piece__info {
+    inset: auto var(--gutter) calc(48px + env(safe-area-inset-bottom)) var(--gutter);
+    max-width: none;
+    translate: none;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto auto auto;
+    justify-items: start;
+    text-align: left;
+    gap: 10px 14px;
+    align-items: end;
+  }
+  .piece .piece__rank { grid-column: 1; grid-row: 1; }
+  .piece .piece__count { grid-column: 2; grid-row: 1; justify-self: end; }
+  .piece .piece__name { grid-column: 1 / -1; grid-row: 2; justify-items: start; }
+  .piece .piece__name .l1 { font-size: 13vw; }
+  .piece .piece__name .l2 { font-size: 4.2vw; }
+  .piece .piece__specs {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    justify-self: start;
+    text-align: left;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 12px;
+    font-size: 9px;
+  }
+  .piece .piece__price { grid-column: 1; grid-row: 4; align-self: center; font-size: 1.15rem; }
+  .piece .piece__cta { grid-column: 2; grid-row: 4; justify-self: end; padding: 13px 16px; font-size: 9.5px; }
+  .cat__ticks {
+    bottom: 14px;
+    gap: 12px;
+    font-size: 8.5px;
+    display: none;
+  }
+
+  /* featured */
+  .ft__word {
+    font-size: 30vw;
+  }
+  .ft__word--a {
+    top: 11vh;
+    translate: -56% 0;
+  }
+  .ft__word--b {
+    bottom: auto;
+    top: 52vh;
+    translate: -46% 0;
+  }
+  .ft__tag {
+    right: 6vw;
+    top: 20vh;
+    font-size: 15vw;
+  }
+  .ft__media {
+    width: 70vw;
+    top: 42%;
+  }
+  .co__line {
+    width: 26px;
+  }
+  .co--r .co__label {
+    left: 38px;
+  }
+  .co--l .co__label {
+    right: 38px;
+  }
+  .co__label,
+  .co__line {
+    display: none;
+  }
+  .ft__heat {
+    left: var(--gutter);
+    top: 60px;
+  }
+  .ft__bounty {
+    left: var(--gutter);
+    bottom: 50px;
+  }
+  .ft__bounty b {
+    font-size: 1.5rem;
+  }
+  .ft__info {
+    right: var(--gutter);
+    bottom: 50px;
+    gap: 8px;
+  }
+  .ft__name .n1 {
+    font-size: 7vw;
+  }
+  .ft__jp {
+    display: none;
+  }
+  .ft__cta {
+    padding: 13px 16px;
+    font-size: 9.5px;
+  }
+
+  .st__jp {
+    font-size: 2.6rem;
+    right: 8px;
+  }
+  .st__lines {
+    font-size: 9.2vw;
+  }
+
+  .footer {
+    padding-top: 100px;
+  }
+  .fo__links {
+    gap: 8px 18px;
+    font-size: 10.5px;
+  }
+  .fo__base {
+    padding-right: 0;
+    padding-bottom: 50px;
+    flex-direction: column;
+  }
+
+  /* overlays */
+  .po__media,
+  .piece-overlay[data-type='shoe'] .po__media,
+  .piece-overlay[data-type='jewelry'] .po__media {
+    left: 50%;
+    top: 26%;
+    width: min(66vw, 38vh);
+    translate: -50% -50%;
+  }
+  .piece-overlay[data-type='shoe'] .po__media {
+    width: 90vw;
+  }
+  .po__ghost {
+    font-size: 9vh;
+    top: 26%;
+  }
+  .po__info {
+    left: var(--gutter);
+    right: var(--gutter);
+    top: auto;
+    bottom: 0;
+    translate: none;
+    width: auto;
+    max-height: 54%;
+    overflow-y: auto;
+    padding-bottom: calc(20px + env(safe-area-inset-bottom));
+    gap: 12px;
+  }
+  .po__desc {
+    font-size: 1.05rem;
+  }
+  .po__meta {
+    display: none;
+  }
+  .ix__head,
+  .ix__list {
+    padding-left: var(--gutter);
+  }
+  .ix__row {
+    grid-template-columns: 40px 1fr auto;
+    gap: 10px;
+  }
+  .ix__cat,
+  .ix__peek {
+    display: none;
+  }
+  .bag__head,
+  .bag__lines,
+  .bag__foot {
+    padding-left: 40px;
+    padding-right: 18px;
+  }
+}
+
+/* short landscape phones */
+@media (max-height: 520px) and (orientation: landscape) {
+  .piece__specs,
+  .piece__jp,
+  .hud {
+    display: none;
+  }
+  .piece__name .l1 {
+    font-size: 8vh !important;
+  }
+}
