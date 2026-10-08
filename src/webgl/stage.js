@@ -7,10 +7,12 @@
 import * as THREE from 'three';
 import { state } from '../core/state.js';
 import { device } from '../core/device.js';
-import { THEMES } from '../data/themes.js';
+import { THEMES, MOODS, SIREN } from '../data/themes.js';
 import { FEATURED } from '../data/products.js';
 import { productSVGString } from '../art/renders.js';
 import { buildLogoAtlas } from './logoAtlas.js';
+import { LOGO_FAMILY } from '../brand/logo.js';
+import logoFontUrl from '@fontsource/bruno-ace-sc/files/bruno-ace-sc-latin-400-normal.woff2?url';
 import * as S from './shaders.js';
 
 const QUALITY = {
@@ -73,6 +75,8 @@ export class Stage {
       uFog: { value: new THREE.Vector3() },
       uAccent: { value: new THREE.Vector3() },
       uHeat: { value: 0 },
+      uSiren: { value: SIREN.intensity },
+      uSirenPeriod: { value: SIREN.period },
       uStreaks: { value: 0 },
       uSpeed: { value: 0 },
       uSky: { value: 1 },
@@ -109,7 +113,49 @@ export class Stage {
     this.logo = new THREE.Group();
     this.scene.add(this.logo);
 
-    // atlas + glyph meshes
+    // glyph meshes are built once the logo font has loaded (buildLogo)
+    this.glyphs = [];
+    this.atlas = null;
+
+    // spray-paint dust behind the logo
+    const spray = new THREE.Mesh(
+      new THREE.PlaneGeometry(1, 1),
+      new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(sprayCanvas()), transparent: true, opacity: 0, depthWrite: false, color: 0xb9ad94 }),
+    );
+    spray.position.z = -1.2;
+    this.spray = spray;
+    this.scene.add(spray);
+
+    // hero reveal piece
+    this.pieceUniforms = { uMap: { value: null }, uOpacity: { value: 0 }, uAberr: { value: 0 }, uBright: { value: 1 }, uTime: { value: 0 } };
+    this.piece = new THREE.Mesh(
+      new THREE.PlaneGeometry(1, 1),
+      new THREE.ShaderMaterial({
+        vertexShader: S.logoVert,
+        fragmentShader: S.pieceFrag,
+        uniforms: this.pieceUniforms,
+        transparent: true,
+        depthWrite: false,
+        blending: THREE.CustomBlending,
+        blendSrc: THREE.OneFactor,
+        blendDst: THREE.OneMinusSrcAlphaFactor,
+      }),
+    );
+    this.piece.visible = false;
+    this.piece.renderOrder = -1;
+    this.scene.add(this.piece);
+    this.#loadPieceTexture();
+  }
+
+
+  /** Build the chrome glyph meshes. Needs the logo font, so it runs after fonts load. */
+  async buildLogo() {
+    if (!this.ok) return;
+    try {
+      await document.fonts.load(`400 100px '${LOGO_FAMILY}'`);
+    } catch {
+      /* fall through with whatever font is available */
+    }
     const atlas = buildLogoAtlas(this.q.atlas);
     this.atlas = atlas;
     const tex = new THREE.DataTexture(atlas.data, atlas.width, atlas.height, THREE.RGBAFormat);
@@ -148,34 +194,7 @@ export class Stage {
       return mesh;
     });
 
-    // spray-paint dust behind the logo
-    const spray = new THREE.Mesh(
-      new THREE.PlaneGeometry(1, 1),
-      new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(sprayCanvas()), transparent: true, opacity: 0, depthWrite: false, color: 0xb9ad94 }),
-    );
-    spray.position.z = -1.2;
-    this.spray = spray;
-    this.scene.add(spray);
-
-    // hero reveal piece
-    this.pieceUniforms = { uMap: { value: null }, uOpacity: { value: 0 }, uAberr: { value: 0 }, uBright: { value: 1 }, uTime: { value: 0 } };
-    this.piece = new THREE.Mesh(
-      new THREE.PlaneGeometry(1, 1),
-      new THREE.ShaderMaterial({
-        vertexShader: S.logoVert,
-        fragmentShader: S.pieceFrag,
-        uniforms: this.pieceUniforms,
-        transparent: true,
-        depthWrite: false,
-        blending: THREE.CustomBlending,
-        blendSrc: THREE.OneFactor,
-        blendDst: THREE.OneMinusSrcAlphaFactor,
-      }),
-    );
-    this.piece.visible = false;
-    this.piece.renderOrder = -1;
-    this.scene.add(this.piece);
-    this.#loadPieceTexture();
+    this.resize();
   }
 
   async #loadPieceTexture() {
@@ -184,7 +203,19 @@ export class Stage {
       if (FEATURED.image) {
         tex = await new THREE.TextureLoader().loadAsync(FEATURED.image);
       } else {
-        const url = URL.createObjectURL(new Blob([productSVGString(FEATURED)], { type: 'image/svg+xml' }));
+        // SVG-as-image can't see page fonts, so embed the logo face as a data URI
+        let fontCSS = '';
+        try {
+          const buf = await (await fetch(logoFontUrl)).arrayBuffer();
+          let bin = '';
+          const bytes = new Uint8Array(buf);
+          for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+          fontCSS = `<style>@font-face{font-family:'${LOGO_FAMILY}';src:url(data:font/woff2;base64,${btoa(bin)}) format('woff2');}</style>`;
+        } catch {
+          /* fallback font */
+        }
+        const svgText = productSVGString(FEATURED).replace(/(<svg[^>]*>)/, `$1${fontCSS}`);
+        const url = URL.createObjectURL(new Blob([svgText], { type: 'image/svg+xml' }));
         const img = new Image();
         img.src = url;
         await img.decode();
@@ -235,6 +266,7 @@ export class Stage {
   }
 
   #layoutLogo(visW, visH) {
+    if (!this.atlas) return;
     const cells = this.atlas.cells;
     const wordW = this.atlas.wordWidth;
     const portrait = visW / visH < 0.9;
@@ -295,9 +327,11 @@ export class Stage {
 
     // environment grade
     const target = THEMES[state.theme] || THEMES.hero;
+    const mood = MOODS[state.mood] || MOODS.dusk;
     const k = 1 - Math.pow(0.12, dt);
     const env = this.env;
-    for (const key of ['base', 'fog', 'accent']) for (let i = 0; i < 3; i++) env[key][i] = lerp(env[key][i], target[key][i], k);
+    for (const key of ['base', 'fog', 'accent'])
+      for (let i = 0; i < 3; i++) env[key][i] = lerp(env[key][i], lerp(target[key][i], mood[key][i], mood.weight), k);
     env.heat = lerp(env.heat, target.heat + state.env.heatBoost, k);
     env.streaks = lerp(env.streaks, target.streaks + state.env.streakBoost, k);
     env.sky = lerp(env.sky, target.sky, k);
@@ -446,23 +480,6 @@ function sprayCanvas() {
     ctx.beginPath();
     ctx.arc(x, y, r, 0, Math.PI * 2);
     ctx.fill();
-  }
-  // blobs with drips
-  for (let i = 0; i < 7; i++) {
-    const x = 120 + rnd() * 780;
-    const y = 120 + rnd() * 200;
-    const r = 5 + rnd() * 14;
-    ctx.globalAlpha = 0.5 + rnd() * 0.4;
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, Math.PI * 2);
-    ctx.fill();
-    if (rnd() > 0.35) {
-      const len = 40 + rnd() * 160;
-      ctx.fillRect(x - r * 0.18, y, r * 0.36, len);
-      ctx.beginPath();
-      ctx.arc(x, y + len, r * 0.3, 0, Math.PI * 2);
-      ctx.fill();
-    }
   }
   return c;
 }

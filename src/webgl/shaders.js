@@ -33,6 +33,8 @@ uniform vec3 uBase;
 uniform vec3 uFog;
 uniform vec3 uAccent;
 uniform float uHeat;
+uniform float uSiren;
+uniform float uSirenPeriod;
 uniform float uStreaks;
 uniform float uSpeed;
 uniform float uSky;
@@ -102,19 +104,34 @@ void main(){
   float sl = step(0.985, hash(vec2(floor(uv.y * 220.0), floor(uTime * 20.0)))) * uSpeed;
   col += vec3(0.9) * sl * 0.08 * uStreaks;
 
-  // police strobes — red left / blue right, double-flash pattern
-  float ph = fract(uTime * 1.6);
-  float flashA = step(ph, 0.08) + step(0.16, ph) * step(ph, 0.24);
-  float flashB = step(0.5, ph) * step(ph, 0.58) + step(0.66, ph) * step(ph, 0.74);
-  float pulse = 0.35 + 0.65 * (0.5 + 0.5 * sin(uTime * 6.0));
-  col += vec3(1.0, 0.06, 0.08) * uHeat * (flashA * 0.9 + pulse * 0.25) * exp(-length(p - vec2(-asp * 0.55, 0.6)) * 1.5);
-  col += vec3(0.12, 0.3, 1.0) * uHeat * (flashB * 0.9 + (1.0 - pulse) * 0.25) * exp(-length(p - vec2(asp * 0.55, 0.6)) * 1.5);
-
   col *= 1.0 + uBright;
 
   // vignette
   float vig = smoothstep(1.25, 0.2, length(p * vec2(0.85, 1.1)));
   col *= mix(0.35, 1.0, vig);
+
+  // police sirens — always on: slow red / blue alternation from the top corners,
+  // spilling into the fog. Heat (pursuit) adds a fast double-flash on top.
+  float sp = fract(uTime / uSirenPeriod);
+  float redS = smoothstep(0.0, 0.14, sp) * (1.0 - smoothstep(0.34, 0.5, sp));
+  float blueS = smoothstep(0.5, 0.64, sp) * (1.0 - smoothstep(0.84, 1.0, sp));
+  float ph = fract(uTime * 1.6);
+  float flashA = step(ph, 0.08) + step(0.16, ph) * step(ph, 0.24);
+  float flashB = step(0.5, ph) * step(ph, 0.58) + step(0.66, ph) * step(ph, 0.74);
+  vec2 lpR = vec2(-asp * 0.5 - 0.05, 0.62);
+  vec2 lpB = vec2(asp * 0.5 + 0.05, 0.62);
+  float gR = exp(-length((p - lpR) * vec2(0.75, 1.0)) * 2.6);
+  float gB = exp(-length((p - lpB) * vec2(0.75, 1.0)) * 2.6);
+  vec3 RED = vec3(1.0, 0.05, 0.07);
+  vec3 BLUE = vec3(0.1, 0.28, 1.0);
+  float redI = redS * uSiren + flashA * uHeat * 0.9;
+  float blueI = blueS * uSiren + flashB * uHeat * 0.9;
+  col += RED * redI * (gR * 1.1 + gR * fog * 0.6);
+  col += BLUE * blueI * (gB * 1.1 + gB * fog * 0.6);
+  // faint wash across the top edge so it reads behind content too
+  float top = smoothstep(0.55, 1.0, uv.y);
+  col += (RED * redS + BLUE * blueS) * uSiren * top * 0.025;
+
 
   gl_FragColor = vec4(col, 1.0);
 }

@@ -12,7 +12,7 @@ export function initIndexOverlay({ onPick }) {
   const el = document.getElementById('indexOverlay');
   const rows = [...ALL_PRODUCTS].sort((a, b) => a.rank - b.rank);
   el.innerHTML = `
-    <div class="ix__head"><span>THE BLACKLIST</span><small>${rows.length} PIECES — DROP 01</small><button type="button" class="ix__close" data-cursor="link">[ CLOSE ]</button></div>
+    <div class="ix__head"><span>THE BLACKLIST</span><small>${rows.length} PIECES — DROP 01</small><button type="button" class="ix__close" data-sfx="back" data-cursor="link">[ CLOSE ]</button></div>
     <ol class="ix__list">
       ${rows
         .map(

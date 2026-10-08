@@ -3,7 +3,33 @@
  * speed readout + route progress bottom-right. Speed = scroll velocity.
  */
 import { state } from '../core/state.js';
-import { HEAT } from '../data/themes.js';
+import { HEAT, MOODS, DEFAULT_MOOD, SHOW_MOOD_SWITCHER } from '../data/themes.js';
+
+const MOOD_KEY = 'yakuza:mood';
+const MOOD_IDS = Object.keys(MOODS);
+
+function loadMood() {
+  try {
+    const m = localStorage.getItem(MOOD_KEY);
+    if (SHOW_MOOD_SWITCHER && MOODS[m]) return m;
+  } catch {
+    /* ignore */
+  }
+  return DEFAULT_MOOD;
+}
+
+/** Switch the background mood (also callable from the console: __yakuza.setMood('midnight')). */
+export function setMood(id) {
+  if (!MOODS[id]) return;
+  state.mood = id;
+  document.documentElement.dataset.mood = id;
+  try {
+    localStorage.setItem(MOOD_KEY, id);
+  } catch {
+    /* ignore */
+  }
+  document.querySelectorAll('[data-mood-label]').forEach((el) => (el.textContent = MOODS[id].label));
+}
 
 export function initHud() {
   const hud = document.getElementById('hud');
@@ -11,6 +37,7 @@ export function initHud() {
     <div class="hud__l">
       <div class="hud__sec" id="hudSec">01 — INTRO</div>
       <div class="hud__heat"><span>HEAT</span><b></b><b></b><b></b><b></b><b></b></div>
+      ${SHOW_MOOD_SWITCHER ? `<button class="hud__mood" type="button" data-sfx="tick" data-cursor="link" aria-label="Change background filter"><span>FILTER</span><i>◂</i><b data-mood-label>${MOODS[DEFAULT_MOOD].label}</b><i>▸</i></button>` : ''}
     </div>
     <div class="hud__r">
       <div class="hud__speed"><span id="hudSpeed">000</span><small>KM/H</small></div>
@@ -22,6 +49,13 @@ export function initHud() {
   const speed = hud.querySelector('#hudSpeed');
   const route = hud.querySelector('#hudRoute');
   const piece = hud.querySelector('#hudPiece');
+  setMood(loadMood());
+  hud.querySelector('.hud__mood')?.addEventListener('click', (e) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    const back = e.clientX && e.clientX < r.left + r.width * 0.45;
+    const i = MOOD_IDS.indexOf(state.mood);
+    setMood(MOOD_IDS[(i + (back ? -1 : 1) + MOOD_IDS.length) % MOOD_IDS.length]);
+  });
   let shown = -1;
   let lastPiece = '';
 

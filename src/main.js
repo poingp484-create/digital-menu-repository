@@ -14,7 +14,8 @@ import { CATEGORIES } from './data/products.js';
 
 import { initCursor } from './ui/cursor.js';
 import { initNav } from './ui/nav.js';
-import { initHud } from './ui/hud.js';
+import { initHud, setMood } from './ui/hud.js';
+import { initSound } from './ui/sound.js';
 import { initBag } from './ui/bag.js';
 import { initPieceOverlay } from './ui/pieceOverlay.js';
 import { initIndexOverlay } from './ui/indexOverlay.js';
@@ -47,6 +48,7 @@ renderFooter($('#footer'));
 /* ── UI ────────────────────────────────────────────────────────────────── */
 const lenis = initScroll();
 const cursorTick = initCursor();
+initSound();
 const hud = initHud();
 const bag = initBag();
 const overlay = initPieceOverlay();
@@ -114,7 +116,7 @@ gsap.ticker.add((time, deltaMS) => {
 });
 
 /* ── boot ──────────────────────────────────────────────────────────────── */
-const ready = Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 2500))]);
+const ready = Promise.race([Promise.all([document.fonts.ready, stage.buildLogo()]), new Promise((r) => setTimeout(r, 3500))]);
 runBoot(ready).then(() => {
   import('@fontsource/noto-sans-jp/700.css');
   ScrollTrigger.refresh();
@@ -124,4 +126,4 @@ runBoot(ready).then(() => {
 
 window.addEventListener('load', () => ScrollTrigger.refresh());
 // Expose for debugging / QA in the console.
-window.__yakuza = { state, stage, device, ScrollTrigger };
+window.__yakuza = { state, stage, device, ScrollTrigger, setMood };

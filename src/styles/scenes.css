@@ -44,18 +44,6 @@
   white-space: nowrap;
   perspective: 900px;
 }
-.ct__tag {
-  position: absolute;
-  left: 58%;
-  top: 56%;
-  font-family: var(--f-tag);
-  font-size: clamp(2.6rem, 7vw, 8rem);
-  color: var(--red);
-  transform: rotate(-8deg);
-  text-shadow: 0 0 22px rgba(255, 45, 58, 0.55), 0 0 2px #000;
-  white-space: nowrap;
-  mix-blend-mode: screen;
-}
 .ct__jp {
   position: absolute;
   right: calc(var(--gutter) + 6px);
@@ -103,10 +91,6 @@
   background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.35) 0 2px, transparent 2px 5px);
   pointer-events: none;
 }
-.cat--tees .ct__tag {
-  color: #5fd0ff;
-  text-shadow: 0 0 22px rgba(95, 208, 255, 0.6);
-}
 .cat--shoes .ct__word {
   font-family: var(--f-cond);
   font-weight: 800;
@@ -123,10 +107,6 @@
   color: transparent;
   -webkit-text-stroke: 1.5px var(--ink);
 }
-.cat--shoes .ct__tag {
-  color: var(--ink);
-  text-shadow: 0 0 18px rgba(255, 255, 255, 0.5);
-}
 .cat--jewelry .ct__word {
   font-family: var(--f-serif);
   font-style: italic;
@@ -140,10 +120,6 @@
   background-clip: text;
   color: transparent;
   padding: 0 0.04em;
-}
-.cat--jewelry .ct__tag {
-  color: #f4f6f9;
-  text-shadow: 0 0 24px rgba(255, 255, 255, 0.7);
 }
 
 .cat__ticks {

@@ -24,7 +24,7 @@ npm run preview
 | 08 | Statement | Three lines in the fog. |
 | 09 | Footer | Mark + four links. |
 
-Plus: custom cursor (VIEW PIECE / link states), magnetic buttons, ₹ / $ / ¥ currency,
+Plus: always-on slow red/blue police siren lights, six background moods (FILTER switch in the HUD — set the default in `src/data/themes.js`), synthesised click sound effects with a SND toggle (`src/ui/sound.js`), custom cursor (VIEW PIECE / link states), magnetic buttons, ₹ / $ / ¥ currency,
 bag (localStorage), SHOP = the Blacklist index with hover previews, product overlay with sizes,
 game-style HUD (scroll speed in km/h, heat, route progress).
 

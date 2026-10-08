@@ -16,7 +16,6 @@ export function renderFeatured(el) {
     <div class="ft__alert" aria-hidden="true"><div class="ft__alert-track">${'⚠ PURSUIT IN PROGRESS — ALL UNITS RESPOND — SUSPECT WEARING CHROME — '.repeat(4)}</div></div>
     <div class="ft__word ft__word--a" aria-hidden="true">MOST</div>
     <div class="ft__word ft__word--b" aria-hidden="true">WANTED</div>
-    <div class="ft__tag" aria-hidden="true">no.01</div>
     <div class="ft__media" data-cursor="view" data-enter="${p.id}">
       <div class="ft__tilt">
         <div class="ft__img">${productVisual(p)}</div>
@@ -53,7 +52,6 @@ export function buildFeatured(el) {
   tl.fromTo(el.querySelector('.ft__alert'), { yPercent: -100 }, { yPercent: 0, duration: 0.3, ease: 'power3.out' }, 0)
     .fromTo(el.querySelector('.ft__word--a'), { xPercent: -160, skewX: 30, opacity: 0 }, { xPercent: 0, skewX: 0, opacity: 1, duration: 0.7, ease: 'expo.out' }, 0.15)
     .fromTo(el.querySelector('.ft__word--b'), { xPercent: 160, skewX: -30, opacity: 0 }, { xPercent: 0, skewX: 0, opacity: 1, duration: 0.7, ease: 'expo.out' }, 0.25)
-    .fromTo(el.querySelector('.ft__tag'), { opacity: 0, scale: 2.2, rotation: -30 }, { opacity: 1, scale: 1, rotation: -10, duration: 0.3, ease: 'back.out(2)' }, 0.75)
     .fromTo(img, { yPercent: 70, rotationY: 88, scale: 0.6, filter: 'brightness(0.2)' }, { yPercent: 0, rotationY: 0, scale: 1, filter: 'brightness(1)', duration: 1.1, ease: 'power3.out' }, 0.5)
     .set(img, { filter: 'none' }, 1.62)
     .fromTo(el.querySelectorAll('.ft__heat i'), { opacity: 0.12 }, { opacity: 1, stagger: 0.18, duration: 0.05 }, 0.6)
@@ -75,7 +73,7 @@ export function buildFeatured(el) {
     .to(img, { scale: 1.25, yPercent: -10, opacity: 0, filter: 'blur(14px)', duration: 0.8, ease: 'power2.in' }, 'exit+=0.3')
     .to(el.querySelector('.ft__word--a'), { xPercent: -140, opacity: 0, duration: 0.7, ease: 'power2.in' }, 'exit+=0.3')
     .to(el.querySelector('.ft__word--b'), { xPercent: 140, opacity: 0, duration: 0.7, ease: 'power2.in' }, 'exit+=0.3')
-    .to(el.querySelectorAll('.ft__info, .ft__bounty, .ft__heat, .ft__tag, .ft__stamp, .ft__alert'), { opacity: 0, y: -30, duration: 0.5, stagger: 0.03 }, 'exit+=0.5');
+    .to(el.querySelectorAll('.ft__info, .ft__bounty, .ft__heat, .ft__stamp, .ft__alert'), { opacity: 0, y: -30, duration: 0.5, stagger: 0.03 }, 'exit+=0.5');
 
   const st = ScrollTrigger.create({
     trigger: el,

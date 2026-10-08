@@ -20,6 +20,7 @@ export const state = {
   scroll: { y: 0, velocity: 0, speed: 0 },
   hero: { progress: 0, intro: 0 },
   theme: 'hero',
+  mood: 'dusk',
   /** Extra env controls sections may drive (lerped in stage). */
   env: { heatBoost: 0, brightBoost: 0, streakBoost: 0 },
 };

@@ -24,7 +24,7 @@
     display: none;
   }
   .nav__logo {
-    width: 96px;
+    font-size: 16px;
     top: 14px;
   }
   .nav__utils {
@@ -105,6 +105,9 @@
   .hud__route {
     display: none;
   }
+  .nav__snd span {
+    display: none;
+  }
   .hud__speed span {
     font-size: 15px;
   }
@@ -116,7 +119,7 @@
     top: 64px;
   }
   .hero__hud--bl {
-    bottom: 110px;
+    bottom: 150px;
   }
   .hero__target {
     width: 74vw;
@@ -137,11 +140,6 @@
   }
   .mf__line {
     white-space: normal;
-  }
-  .mf__tag {
-    grid-row: 2;
-    margin: 0 0 -4vh;
-    font-size: 13vw;
   }
   .mf__copy {
     grid-column: 1;
@@ -171,11 +169,6 @@
   }
   .cat--jewelry .ct__word {
     font-size: 25vw;
-  }
-  .ct__tag {
-    left: 40%;
-    top: 58%;
-    font-size: 12vw;
   }
   .ct__jp {
     right: 10px;
@@ -281,11 +274,6 @@
     bottom: auto;
     top: 52vh;
     translate: -46% 0;
-  }
-  .ft__tag {
-    right: 6vw;
-    top: 20vh;
-    font-size: 15vw;
   }
   .ft__media {
     width: 70vw;

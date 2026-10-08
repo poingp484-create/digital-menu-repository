@@ -46,7 +46,6 @@ function categoryHTML(cat) {
       <div class="ct__index">${cat.index}</div>
       <div class="ct__district">${cat.district}</div>
       <h2 class="ct__word">${cat.title}</h2>
-      <div class="ct__tag" aria-hidden="true">${cat.tag}</div>
       <div class="ct__jp" aria-hidden="true">${cat.jp}</div>
       <p class="ct__blurb">${cat.blurb}</p>
     </div>
@@ -130,7 +129,6 @@ export function buildCategory(section, cat, { onPiece }) {
   if (!reduced) {
     titleTl.fromTo(wChars, tIn.from, { ...tIn.to, duration: 1 }, 0);
     titleTl.fromTo(title.querySelectorAll('.ct__index, .ct__district, .ct__blurb'), { opacity: 0, y: 40 }, { opacity: 1, y: 0, stagger: 0.1, duration: 0.6 }, 0.3);
-    titleTl.fromTo(title.querySelector('.ct__tag'), { opacity: 0, scale: 1.8, filter: 'blur(12px)', rotation: -14 }, { opacity: 1, scale: 1, filter: 'blur(0px)', rotation: -8, duration: 0.5, ease: 'power3.out' }, 0.55);
     titleTl.fromTo(title.querySelector('.ct__jp'), { opacity: 0, yPercent: 30 }, { opacity: 1, yPercent: 0, duration: 0.8 }, 0.2);
   }
 

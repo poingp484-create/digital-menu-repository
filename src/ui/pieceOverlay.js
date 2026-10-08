@@ -8,6 +8,7 @@ import { state } from '../core/state.js';
 import { magnetize } from './magnetic.js';
 import { toast } from './toast.js';
 import { splitChars } from '../core/split.js';
+import { play } from './sound.js';
 
 const SIZES = {
   jacket: ['S', 'M', 'L', 'XL', 'XXL'],
@@ -42,12 +43,12 @@ export function initPieceOverlay() {
         <p class="po__desc">${p.description}</p>
         <ul class="po__specs">${p.specs.map((s) => `<li>${s}</li>`).join('')}</ul>
         <fieldset class="po__sizes"><legend>SIZE</legend>
-          ${sizes.map((s, i) => `<label data-cursor="link"><input type="radio" name="size" value="${s}" ${sizes.length === 1 && i === 0 ? 'checked' : ''}/><span>${s}</span></label>`).join('')}
+          ${sizes.map((s, i) => `<label data-cursor="link" data-sfx="tick"><input type="radio" name="size" value="${s}" ${sizes.length === 1 && i === 0 ? 'checked' : ''}/><span>${s}</span></label>`).join('')}
         </fieldset>
-        <button class="btn btn--solid po__add" type="button" data-magnetic=".25" data-cursor="link"><span>ADD TO BAG</span><i>→</i></button>
+        <button class="btn btn--solid po__add" type="button" data-sfx="none" data-magnetic=".25" data-cursor="link"><span>ADD TO BAG</span><i>→</i></button>
         <div class="po__meta"><span>FREE EXPRESS OVER ₹15,000</span><span>SHIPS IN 48H — TOKYO / MUMBAI / NYC</span></div>
       </div>
-      <button class="po__close" type="button" data-cursor="link" aria-label="Close">[ ESC ]</button>`;
+      <button class="po__close" type="button" data-sfx="back" data-cursor="link" aria-label="Close">[ ESC ]</button>`;
 
     el.querySelector('.po__close').addEventListener('click', close);
     el.querySelector('.po__add').addEventListener('click', () => {
@@ -57,8 +58,10 @@ export function initPieceOverlay() {
         void el.offsetWidth;
         el.querySelector('.po__sizes').classList.add('shake');
         toast('SELECT A SIZE FIRST');
+        play('error');
         return;
       }
+      play('confirm');
       addToBag(p.id, size.value);
       toast(`${p.name.join(' ')} — ${size.value} — ADDED TO BAG`);
     });
@@ -119,7 +122,7 @@ export function initPieceOverlay() {
     });
   }
 
-  window.addEventListener('keydown', (e) => e.key === 'Escape' && close());
+  window.addEventListener('keydown', (e) => e.key === 'Escape' && open && (play('back'), close()));
   document.addEventListener('click', (e) => {
     const t = e.target.closest('[data-enter]');
     if (!t) return;

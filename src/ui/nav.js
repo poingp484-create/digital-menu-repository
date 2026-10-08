@@ -3,11 +3,12 @@
  * vertical index on the left edge, utilities top-right. On mobile the index
  * collapses into a full-screen menu.
  */
-import { logoSVG } from '../brand/logo.js';
+import { logoHTML } from '../brand/logo.js';
 import { CURRENCIES, store, setCurrency, subscribe, bagCount } from './store.js';
 import { scrollTo } from '../core/scroll.js';
 import { randomGlyph } from '../core/split.js';
 import { magnetize } from './magnetic.js';
+import { isSoundOn, setSound, onSoundChange } from './sound.js';
 
 export const NAV_ITEMS = [
   { label: 'SHOP', action: 'index', key: 'shop' },
@@ -34,7 +35,7 @@ function scramble(el) {
 export function initNav({ onIndex, onBag }) {
   const nav = document.getElementById('nav');
   nav.innerHTML = `
-    <a class="nav__logo" href="#intro" data-cursor="link" aria-label="YAKUZA — back to start">${logoSVG({ id: 'navlogo', swoosh: true })}</a>
+    <a class="nav__logo" href="#intro" data-cursor="link" aria-label="YAKUZA — back to start">${logoHTML()}</a>
     <nav class="nav__index" aria-label="Primary">
       <ol>
         ${NAV_ITEMS.map(
@@ -46,9 +47,10 @@ export function initNav({ onIndex, onBag }) {
     </nav>
     <div class="nav__utils">
       <div class="nav__cur" role="group" aria-label="Currency">
-        ${CURRENCIES.map((c) => `<button type="button" data-cur="${c.code}" data-cursor="link" aria-label="${c.code}">${c.symbol}</button>`).join('<i>/</i>')}
+        ${CURRENCIES.map((c) => `<button type="button" data-sfx="tick" data-cur="${c.code}" data-cursor="link" aria-label="${c.code}">${c.symbol}</button>`).join('<i>/</i>')}
       </div>
-      <button class="nav__bag" type="button" data-cursor="link" data-magnetic=".4" aria-label="Open bag">
+      <button class="nav__snd" type="button" data-sfx="none" data-cursor="link" aria-pressed="true" aria-label="Toggle sound"><i></i><i></i><i></i><i></i><span>SND</span></button>
+      <button class="nav__bag" type="button" data-sfx="whoosh" data-cursor="link" data-magnetic=".4" aria-label="Open bag">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8Z" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M9 8V6a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
         <span class="nav__count" id="bagCount">0</span>
       </button>
@@ -99,6 +101,15 @@ export function initNav({ onIndex, onBag }) {
   };
   subscribe(sync);
   sync();
+
+  const snd = nav.querySelector('.nav__snd');
+  const syncSnd = (on) => {
+    snd.classList.toggle('is-off', !on);
+    snd.setAttribute('aria-pressed', String(on));
+  };
+  snd.addEventListener('click', () => setSound(!isSoundOn()));
+  onSoundChange(syncSnd);
+  syncSnd(isSoundOn());
   magnetize(nav);
 
   return {

@@ -1,19 +1,17 @@
 /**
- * Rasterises the vector logotype into a texture atlas:
+ * Rasterises the logotype (Bruno Ace SC, italic shear) into a texture atlas:
  *   R = glyph coverage, G = tight bevel height, B = broad "liquid" height.
  * Each glyph (and the swoosh) gets its own padded cell so letters can be
  * split apart into independent meshes for the hero transition.
+ *
+ * Units: cap height = 100 (cap line y = 0, baseline y = 100, y grows down).
+ * Call only after the font has loaded (see Stage.buildLogo).
  */
-import { layout, polysToD, shear, SWOOSH, CUT } from '../brand/logo.js';
+import { WORD, LOGO_FAMILY, SKEW, TRACKING, SWOOSH } from '../brand/logo.js';
 
 const PAD = 28;
-
-function bbox(polys) {
-  const pts = polys.flat().map(shear);
-  const xs = pts.map((p) => p[0]);
-  const ys = pts.map((p) => p[1]);
-  return { minX: Math.min(...xs) - PAD, maxX: Math.max(...xs) + PAD, minY: Math.min(...ys) - PAD, maxY: Math.max(...ys) + PAD };
-}
+const FONT_PX = 200; // measuring size
+const EMBOLDEN = 7; // stroke width in cap units (cap height = 100)
 
 /** Separable running-sum box blur (edges treated as empty). */
 function boxBlur(src, w, h, r) {
@@ -53,11 +51,44 @@ const blur = (src, w, h, r, passes = 2) => {
 };
 
 export function buildLogoAtlas(scale = 2.2) {
-  const { items, width: wordWidth } = layout();
-  const glyphs = items.map((g) => ({ char: g.char, polys: g.polys, x: g.x, ...bbox(g.polys) }));
-  const sw = { char: 'swoosh', polys: SWOOSH, x: 0, ...bbox(SWOOSH) };
+  // ── measure in font pixels, convert to cap units
+  const m = document.createElement('canvas').getContext('2d');
+  m.font = `400 ${FONT_PX}px '${LOGO_FAMILY}'`;
+  const capPx = m.measureText('Y').actualBoundingBoxAscent || FONT_PX * 0.72;
+  const u = 100 / capPx; // units per font px
+  const track = TRACKING * 100;
+  const chars = [...WORD];
 
-  // row 1: letters, row 2: swoosh
+  // pen positions from cumulative substring widths (keeps kerning) + tracking
+  const glyphs = chars.map((ch, i) => {
+    const x = m.measureText(WORD.slice(0, i)).width * u + i * track;
+    const mt = m.measureText(ch);
+    const left = -mt.actualBoundingBoxLeft * u;
+    const right = mt.actualBoundingBoxRight * u;
+    // shear moves the cap line right by SKEW*100 units, the baseline stays
+    return {
+      char: ch,
+      x,
+      minX: left - PAD,
+      maxX: right + SKEW * 100 + PAD,
+      minY: -PAD - 6,
+      maxY: 100 + PAD + 4,
+    };
+  });
+  const last = glyphs[glyphs.length - 1];
+  const wordWidth = last.x + m.measureText(last.char).actualBoundingBoxRight * u + SKEW * 50;
+
+  const swPts = SWOOSH.map(([x, y]) => [x * wordWidth, y * 100]);
+  const sw = {
+    char: 'swoosh',
+    x: 0,
+    minX: Math.min(...swPts.map((p) => p[0])) - PAD,
+    maxX: Math.max(...swPts.map((p) => p[0])) + PAD,
+    minY: Math.min(...swPts.map((p) => p[1])) - PAD,
+    maxY: Math.max(...swPts.map((p) => p[1])) + PAD,
+  };
+
+  // ── pack: row 1 letters, row 2 swoosh
   let cx = 0;
   const row1H = Math.max(...glyphs.map((g) => g.maxY - g.minY));
   glyphs.forEach((g) => {
@@ -69,32 +100,47 @@ export function buildLogoAtlas(scale = 2.2) {
   sw.py = row1H;
   const Wu = Math.max(cx, sw.maxX - sw.minX);
   const Hu = row1H + (sw.maxY - sw.minY);
-
   const W = Math.ceil(Wu * scale);
   const H = Math.ceil(Hu * scale);
+
   const canvas = document.createElement('canvas');
   canvas.width = W;
   canvas.height = H;
   const ctx = canvas.getContext('2d', { willReadFrequently: true });
   ctx.fillStyle = '#fff';
+  ctx.textBaseline = 'alphabetic';
 
-  [...glyphs, sw].forEach((g) => {
+  glyphs.forEach((g) => {
     ctx.save();
     ctx.scale(scale, scale);
-    ctx.translate(g.px - g.minX, g.py - g.minY);
-    ctx.fill(new Path2D(polysToD(g.polys, 0)), 'evenodd');
-    if (g !== sw) {
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.fillRect(g.minX, CUT[0], g.maxX - g.minX, CUT[1] - CUT[0]);
-    }
+    // cell origin → glyph pen origin at baseline (y = 100 units)
+    ctx.translate(g.px - g.minX, g.py - g.minY + 100);
+    ctx.transform(1, 0, -SKEW, 1, 0, 0); // italic shear about the baseline
+    ctx.scale(u, u);
+    ctx.font = `400 ${FONT_PX}px '${LOGO_FAMILY}'`;
+    ctx.fillText(g.char, 0, 0);
+    // slight faux-bold so the chrome bevel has body to catch light
+    ctx.strokeStyle = '#fff';
+    ctx.lineJoin = 'miter';
+    ctx.lineWidth = EMBOLDEN / u;
+    ctx.strokeText(g.char, 0, 0);
     ctx.restore();
   });
+
+  ctx.save();
+  ctx.scale(scale, scale);
+  ctx.translate(sw.px - sw.minX, sw.py - sw.minY);
+  ctx.beginPath();
+  swPts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
 
   const img = ctx.getImageData(0, 0, W, H).data;
   const a = new Float32Array(W * H);
   for (let i = 0; i < W * H; i++) a[i] = img[i * 4 + 3] / 255;
-  const tight = blur(a, W, H, Math.max(2, Math.round(3.2 * scale)));
-  const broad = blur(a, W, H, Math.max(4, Math.round(9 * scale)), 3);
+  const tight = blur(a, W, H, Math.max(2, Math.round(2.6 * scale)));
+  const broad = blur(a, W, H, Math.max(3, Math.round(6 * scale)), 3);
 
   const data = new Uint8Array(W * H * 4);
   for (let i = 0; i < W * H; i++) {

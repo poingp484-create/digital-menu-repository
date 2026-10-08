@@ -1,6 +1,6 @@
 /** 09 — FOOTER. Extremely minimal: the mark, four links, the end credits. */
 import { gsap } from '../core/scroll.js';
-import { logoSVG } from '../brand/logo.js';
+import { logoHTML } from '../brand/logo.js';
 import { state } from '../core/state.js';
 import { scrollTo } from '../core/scroll.js';
 
@@ -13,7 +13,7 @@ const LINKS = [
 
 export function renderFooter(el) {
   el.innerHTML = `
-    <div class="fo__logo" aria-hidden="true">${logoSVG({ id: 'folo' })}</div>
+    <div class="fo__logo" aria-hidden="true">${logoHTML()}</div>
     <nav class="fo__links" aria-label="Footer">
       ${LINKS.map((l) => `<a href="${l.href || '#'}" ${l.action ? `data-action="${l.action}"` : 'target="_blank" rel="noopener"'} data-cursor="link" data-magnetic=".3"><span>[</span>${l.label}<span>]</span></a>`).join('')}
     </nav>

@@ -14,7 +14,6 @@ export function renderManifesto(el) {
         <span class="mf__line mf__line--chrome">ONE CITY</span>
         <span class="mf__line">AFTER MIDNIGHT.</span>
       </h2>
-      <div class="mf__tag" aria-hidden="true">most wanted</div>
       <p class="mf__copy">YAKUZA is streetwear for the after-hours city — chrome, leather and noise, cut for the ones who move fast and never stop for the lights. Every piece on this list carries a bounty. Climb it from #${ALL_PRODUCTS.length} to #01.</p>
       <ul class="mf__stats">
         <li><small>RANK</small><b>#${ALL_PRODUCTS.length} → #01</b></li>
@@ -34,7 +33,6 @@ export function buildManifesto(el) {
     tl.fromTo(chars, { yPercent: 120, rotation: 8, opacity: 0, filter: 'blur(10px)' }, { yPercent: 0, rotation: 0, opacity: 1, filter: 'blur(0px)', stagger: 0.02, duration: 0.5, ease: 'power3.out' }, i * 0.22);
   });
   tl.fromTo(el.querySelector('.mf__label'), { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.4 }, 0)
-    .fromTo(el.querySelector('.mf__tag'), { opacity: 0, scale: 2, filter: 'blur(14px)' }, { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 0.35, ease: 'power4.out' }, 0.8)
     .fromTo(words, { opacity: 0.08 }, { opacity: 1, stagger: 0.02, duration: 0.2 }, 0.7)
     .fromTo(el.querySelectorAll('.mf__stats li'), { opacity: 0, y: 30 }, { opacity: 1, y: 0, stagger: 0.08, duration: 0.3 }, 1.2)
     .to({}, { duration: 0.4 })

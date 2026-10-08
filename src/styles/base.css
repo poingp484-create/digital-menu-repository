@@ -14,7 +14,6 @@
   --f-nav: 'Michroma', 'Eurostile', sans-serif;
   --f-mono: 'JetBrains Mono', ui-monospace, monospace;
   --f-serif: 'Instrument Serif', 'Times New Roman', serif;
-  --f-tag: 'Sedgwick Ave Display', 'Permanent Marker', cursive;
   --f-race: 'Bruno Ace SC', 'Michroma', sans-serif;
   --f-block: 'Rubik Mono One', 'Unbounded', sans-serif;
   --f-cond: 'Saira Extra Condensed', 'Arial Narrow', sans-serif;
@@ -449,4 +448,34 @@ main {
   .render .glint {
     animation: none;
   }
+}
+
+/* ─── LOGO (DOM) — Bruno Ace SC, italic, chrome ─────────────────────────── */
+.logo-type {
+  position: relative;
+  display: inline-block;
+  font-family: var(--f-race);
+  font-style: italic;
+  line-height: 1;
+  white-space: nowrap;
+  padding-bottom: 0.32em;
+}
+.logo-type__word {
+  display: inline-block;
+  letter-spacing: 0.04em;
+  padding: 0 0.08em 0 0.02em;
+  background: var(--chrome);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0.04em 0.08em rgba(0, 0, 0, 0.6));
+}
+.logo-type__swoosh {
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 100%;
+  height: 0.48em;
+  fill: #c9ced6;
+  opacity: 0.9;
 }

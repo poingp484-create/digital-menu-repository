@@ -6,7 +6,7 @@
  * Drawn as inline SVG so they stay razor sharp at any scale and cost no
  * network requests.
  */
-import { layout, polysToD, GLYPHS } from '../brand/logo.js';
+import { LOGO_FONT_STACK } from '../brand/logo.js';
 
 let uidCounter = 0;
 
@@ -40,16 +40,14 @@ function defs(u, extra = '') {
 const svg = (vb, body, cls = '') =>
   `<svg class="render ${cls}" viewBox="${vb}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" aria-hidden="true">${body}</svg>`;
 
-/** The logo as a path, scaled + positioned (for prints / engraving). */
+/** The wordmark as SVG text in the logo face (italic via skew), left edge at x, baseline at y. */
 function logoPath({ x, y, width, fill, extra = '' }) {
-  const { items, width: w } = layout();
-  const d = items.map((g) => polysToD(g.polys, g.x)).join('');
-  const s = width / (w + 30);
-  return `<path transform="translate(${x} ${y}) scale(${s})" fill-rule="evenodd" fill="${fill}" d="${d}" ${extra}/>`;
+  const size = width / 4.6;
+  return `<text transform="translate(${x} ${y + size * 0.72}) skewX(-12)" font-family="${LOGO_FONT_STACK.replace(/'/g, '&quot;')}" font-size="${size.toFixed(1)}" textLength="${width}" lengthAdjust="spacingAndGlyphs" fill="${fill}" ${extra}>YAKUZA</text>`;
 }
+/** A single "Y" in the logo face, top-left at (x, y). */
 function yGlyph({ x, y, size, fill, extra = '' }) {
-  const s = size / 120;
-  return `<path transform="translate(${x} ${y}) scale(${s})" fill="${fill}" d="${polysToD(GLYPHS[0].polys)}" ${extra}/>`;
+  return `<text transform="translate(${x} ${y + size * 0.86}) skewX(-12)" font-family="${LOGO_FONT_STACK.replace(/'/g, '&quot;')}" font-size="${(size * 1.15).toFixed(1)}" fill="${fill}" ${extra}>Y</text>`;
 }
 
 const sparkle = (x, y, r, delay = 0) =>

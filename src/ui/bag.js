@@ -12,9 +12,9 @@ export function initBag() {
   function render() {
     const lines = store.bag;
     el.innerHTML = `
-      <div class="bag__scrim" data-close></div>
+      <div class="bag__scrim" data-close data-sfx="back"></div>
       <div class="bag__panel">
-        <header class="bag__head"><span>BAG</span><small>${lines.reduce((n, l) => n + l.qty, 0)} PIECES</small><button type="button" data-close data-cursor="link" aria-label="Close bag">[ CLOSE ]</button></header>
+        <header class="bag__head"><span>BAG</span><small>${lines.reduce((n, l) => n + l.qty, 0)} PIECES</small><button type="button" data-close data-sfx="back" data-cursor="link" aria-label="Close bag">[ CLOSE ]</button></header>
         <div class="bag__lines">
           ${
             lines.length
@@ -24,7 +24,7 @@ export function initBag() {
                     return `<div class="bag__line">
                       <div class="bag__thumb">${productVisual(p)}</div>
                       <div class="bag__txt"><b>${p.name.join(' ')}</b><span>${l.size} — #${String(p.rank).padStart(2, '0')}</span><span data-price="${p.id}">${formatPrice(p.price)}</span></div>
-                      <div class="bag__qty"><button type="button" data-i="${i}" data-d="-1" aria-label="Decrease">−</button><span>${l.qty}</span><button type="button" data-i="${i}" data-d="1" aria-label="Increase">+</button></div>
+                      <div class="bag__qty"><button type="button" data-i="${i}" data-d="-1" data-sfx="tick" aria-label="Decrease">−</button><span>${l.qty}</span><button type="button" data-i="${i}" data-d="1" data-sfx="tick" aria-label="Increase">+</button></div>
                     </div>`;
                   })
                   .join('')
