@@ -1,15 +1,16 @@
 /*
  * Typography systems (self-hosted via Fontsource — no external requests):
- *   Logo ............ Bruno Ace SC, italic, liquid chrome (src/brand/logo.js)
- *   Product names ... Unbounded 800 — wide Y2K display
+ *   Logo ............ Archivo Expanded Black Italic, liquid chrome (src/brand/logo.js)
+ *   Product names ... Archivo Condensed Black (same family, other end of the width axis)
+ *   Display lines ... Archivo Expanded
  *   Category marks .. Bruno Ace SC / Rubik Mono One / Saira Extra Condensed / Instrument Serif
  *   Navigation ...... Michroma — wide tech caps
  *   Metadata ........ JetBrains Mono
  *   Descriptions .... Instrument Serif (+ italic) — editorial contrast
  *   Japanese ........ Noto Sans JP 700 (unicode-range split, only used glyphs load)
  */
-import '@fontsource/unbounded/latin-400.css';
-import '@fontsource/unbounded/latin-800.css';
+import '@fontsource-variable/archivo/standard.css';
+import '@fontsource-variable/archivo/standard-italic.css';
 import '@fontsource/michroma/latin-400.css';
 import '@fontsource/jetbrains-mono/latin-400.css';
 import '@fontsource/jetbrains-mono/latin-700.css';

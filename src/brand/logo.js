@@ -1,5 +1,5 @@
 /**
- * YAKUZA logotype — set in Bruno Ace SC, italicised and finished in chrome.
+ * YAKUZA logotype — Archivo Expanded Black Italic, finished in chrome.
  *
  * One source of truth feeds: the WebGL liquid-chrome hero logo (canvas atlas,
  * src/webgl/logoAtlas.js), the DOM logo used in the nav + footer, and the
@@ -7,12 +7,17 @@
  */
 
 export const WORD = 'YAKUZA';
-export const LOGO_FAMILY = 'Bruno Ace SC';
-export const LOGO_FONT_STACK = `'${LOGO_FAMILY}', 'Michroma', sans-serif`;
-/** Italic shear applied to the word (x += -y * SKEW, y down). Matches the category titles. */
-export const SKEW = 0.21;
+export const LOGO_FAMILY = 'Archivo Variable';
+export const LOGO_FONT_STACK = `'${LOGO_FAMILY}', 'Archivo', 'Arial Black', sans-serif`;
+/** CSS font shorthand pieces for canvas: italic, black, expanded (wdth 125). */
+export const LOGO_CANVAS = { style: 'italic', weight: 900, stretch: 'expanded' };
+export const logoCanvasFont = (px) => `${LOGO_CANVAS.style} ${LOGO_CANVAS.weight} ${LOGO_CANVAS.stretch} ${px}px '${LOGO_FAMILY}'`;
+/** Extra shear on top of the italic (x += -y * SKEW, y down). The face is already italic. */
+export const SKEW = 0.03;
 /** Extra tracking between glyphs, as a fraction of cap height. */
-export const TRACKING = 0.06;
+export const TRACKING = 0.07;
+/** Optical kerning for pairs the italic crowds (added space, fraction of cap height). */
+export const KERN = { AK: 0.1, YA: -0.03 };
 
 /**
  * Tapered underline blade that sweeps back under the word.

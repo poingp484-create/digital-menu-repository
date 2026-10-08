@@ -67,6 +67,7 @@
     align-items: baseline;
     gap: 12px;
     font-family: var(--f-display);
+    font-stretch: 125%;
     font-weight: 800;
     font-size: 11.5vw;
     line-height: 1.05;
@@ -272,8 +273,8 @@
   .piece .piece__rank { grid-column: 1; grid-row: 1; }
   .piece .piece__count { grid-column: 2; grid-row: 1; justify-self: end; }
   .piece .piece__name { grid-column: 1 / -1; grid-row: 2; justify-items: start; }
-  .piece .piece__name .l1 { font-size: 13vw; }
-  .piece .piece__name .l2 { font-size: 4.2vw; }
+  .piece .piece__name .l1 { font-size: 17vw; }
+  .piece .piece__name .l2 { font-size: 3.6vw; }
   .piece .piece__specs {
     grid-column: 1 / -1;
     grid-row: 3;

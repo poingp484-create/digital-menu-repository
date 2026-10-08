@@ -92,6 +92,7 @@
 .po__name {
   display: grid;
   font-family: var(--f-display);
+  font-stretch: 125%;
   font-weight: 800;
   line-height: 0.95;
 }
@@ -101,7 +102,9 @@
   padding-bottom: 0.05em;
 }
 .po__name .n1 {
-  font-size: clamp(2.2rem, 4.2vw, 4.4rem);
+  font-stretch: 62%;
+  font-weight: 900;
+  font-size: clamp(2.8rem, 5.4vw, 5.6rem);
 }
 .po__name .n1 .c {
   background: var(--chrome);
@@ -266,6 +269,7 @@
 }
 .bag__head span {
   font-family: var(--f-display);
+  font-stretch: 125%;
   font-weight: 800;
   font-size: 2rem;
 }
@@ -308,6 +312,9 @@
 }
 .bag__txt b {
   font-family: var(--f-display);
+  font-stretch: 62%;
+  font-weight: 900;
+  font-size: 1.15rem;
   font-size: 0.95rem;
   letter-spacing: 0;
   color: var(--ink);
@@ -334,6 +341,7 @@
 }
 .bag__empty span {
   font-family: var(--f-display);
+  font-stretch: 125%;
   font-weight: 800;
   font-size: 3rem;
   color: transparent;
@@ -399,7 +407,9 @@
   border-bottom: 1px solid var(--line);
 }
 .ix__head span {
-  font-family: var(--f-race);
+  font-family: var(--f-logo);
+  font-weight: 900;
+  font-stretch: 125%;
   font-style: italic;
   font-size: clamp(1.6rem, 3vw, 2.8rem);
 }
@@ -439,6 +449,8 @@
 }
 .ix__name {
   font-family: var(--f-display);
+  font-stretch: 62%;
+  font-weight: 900;
   font-weight: 800;
   font-size: clamp(1.2rem, 2.6vw, 2.6rem);
   letter-spacing: -0.01em;

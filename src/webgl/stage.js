@@ -11,8 +11,8 @@ import { THEMES, MOODS, SIREN } from '../data/themes.js';
 import { FEATURED } from '../data/products.js';
 import { productSVGString } from '../art/renders.js';
 import { buildLogoAtlas } from './logoAtlas.js';
-import { LOGO_FAMILY } from '../brand/logo.js';
-import logoFontUrl from '@fontsource/bruno-ace-sc/files/bruno-ace-sc-latin-400-normal.woff2?url';
+import { LOGO_FAMILY, logoCanvasFont } from '../brand/logo.js';
+import logoFontUrl from '@fontsource-variable/archivo/files/archivo-latin-standard-italic.woff2?url';
 import * as S from './shaders.js';
 import { Sakura } from './sakura.js';
 
@@ -156,7 +156,7 @@ export class Stage {
   async buildLogo() {
     if (!this.ok) return;
     try {
-      await document.fonts.load(`400 100px '${LOGO_FAMILY}'`);
+      await document.fonts.load(logoCanvasFont(100), 'YAKUZA');
     } catch {
       /* fall through with whatever font is available */
     }
@@ -214,7 +214,7 @@ export class Stage {
           let bin = '';
           const bytes = new Uint8Array(buf);
           for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
-          fontCSS = `<style>@font-face{font-family:'${LOGO_FAMILY}';src:url(data:font/woff2;base64,${btoa(bin)}) format('woff2');}</style>`;
+          fontCSS = `<style>@font-face{font-family:'${LOGO_FAMILY}';font-style:italic;font-weight:100 900;font-stretch:62% 125%;src:url(data:font/woff2;base64,${btoa(bin)}) format('woff2');}</style>`;
         } catch {
           /* fallback font */
         }

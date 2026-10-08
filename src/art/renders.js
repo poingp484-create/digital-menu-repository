@@ -43,11 +43,11 @@ const svg = (vb, body, cls = '') =>
 /** The wordmark as SVG text in the logo face (italic via skew), left edge at x, baseline at y. */
 function logoPath({ x, y, width, fill, extra = '' }) {
   const size = width / 4.6;
-  return `<text transform="translate(${x} ${y + size * 0.72}) skewX(-12)" font-family="${LOGO_FONT_STACK.replace(/'/g, '&quot;')}" font-size="${size.toFixed(1)}" textLength="${width}" lengthAdjust="spacingAndGlyphs" fill="${fill}" ${extra}>YAKUZA</text>`;
+  return `<text transform="translate(${x} ${y + size * 0.72})" font-family="${LOGO_FONT_STACK.replace(/'/g, '&quot;')}" font-style="italic" font-weight="900" style="font-stretch:125%" font-size="${size.toFixed(1)}" textLength="${width}" lengthAdjust="spacingAndGlyphs" fill="${fill}" ${extra}>YAKUZA</text>`;
 }
 /** A single "Y" in the logo face, top-left at (x, y). */
 function yGlyph({ x, y, size, fill, extra = '' }) {
-  return `<text transform="translate(${x} ${y + size * 0.86}) skewX(-12)" font-family="${LOGO_FONT_STACK.replace(/'/g, '&quot;')}" font-size="${(size * 1.15).toFixed(1)}" fill="${fill}" ${extra}>Y</text>`;
+  return `<text transform="translate(${x} ${y + size * 0.86})" font-family="${LOGO_FONT_STACK.replace(/'/g, '&quot;')}" font-style="italic" font-weight="900" style="font-stretch:125%" font-size="${(size * 1.15).toFixed(1)}" fill="${fill}" ${extra}>Y</text>`;
 }
 
 const sparkle = (x, y, r, delay = 0) =>

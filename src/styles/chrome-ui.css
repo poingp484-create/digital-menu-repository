@@ -503,6 +503,7 @@ body:not(.is-booting) .hud {
 }
 .hero__enter b {
   font-family: var(--f-display);
+  font-stretch: 125%;
   font-weight: 800;
   font-size: clamp(1.6rem, 4vw, 3.6rem);
   letter-spacing: inherit;

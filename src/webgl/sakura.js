@@ -1,8 +1,8 @@
 /**
- * Botanical sakura set for the intro — two procedural cherry branches that
- * grow in (bloom reveal) and sway, plus drifting petals that tumble, flip and
- * scatter away from the cursor. Lives in the WebGL scene behind the chrome
- * letters; a few petals fall in front for depth.
+ * One sakura tree on the left of the intro. The trunk rises from the bottom
+ * edge, its limbs reach toward the right over the name, and petals blow off
+ * the canopy, drifting right on the wind and tumbling as they fall. They
+ * scatter away from the cursor.
  */
 import * as THREE from 'three';
 
@@ -16,141 +16,159 @@ function mulberry(a) {
   };
 }
 
-/** Paint one branch (root at the canvas top-left corner, growing toward the centre). */
-function branchCanvas(seed, size = 1024) {
-  const c = document.createElement('canvas');
-  c.width = size;
-  c.height = size / 2;
-  const ctx = c.getContext('2d');
-  const rnd = mulberry(seed);
-  const s = size / 1024;
-  const tips = [];
+/** Texture-space layout of the tree (0..1). Used to place the petal emitter. */
+const CANOPY = { x: 0.45, y: 0.76, w: 0.75, h: 0.36 }; // centre + extent, uv (y up)
+const ROOT_U = 0.2;
 
+function treeCanvas(width) {
+  const W = width;
+  const H = Math.round(width * 1.25);
+  const s = W / 1024;
+  const c = document.createElement('canvas');
+  c.width = W;
+  c.height = H;
+  const ctx = c.getContext('2d');
+  const rnd = mulberry(23);
+  const tips = [];
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
-  function grow(x, y, ang, len, w, depth) {
-    const segs = 4;
+
+  // limbs: tapered bezier strokes, dark bark with a cool rim light from the right
+  function limb(x, y, ang, len, w, depth) {
+    const segs = 5;
     let px = x;
     let py = y;
     for (let i = 0; i < segs; i++) {
-      ang += (rnd() - 0.5) * 0.3;
-      const nx = px + Math.cos(ang) * (len / segs);
-      const ny = py + Math.sin(ang) * (len / segs);
-      const mx = (px + nx) / 2 + (rnd() - 0.5) * 14 * s;
-      const my = (py + ny) / 2 + (rnd() - 0.5) * 14 * s;
-      // bark: dark core + faint warm rim so it reads on a dark city
-      ctx.strokeStyle = '#2a171b';
+      // limbs drift toward the right (angle 0) as they grow
+      // limbs settle toward up-and-right (-0.45 rad) as they grow
+      ang += (rnd() - 0.5) * 0.24 + (-0.45 - ang) * 0.07 * (depth < 4 ? 1 : 0.3);
+      const step = len / segs;
+      const nx = px + Math.cos(ang) * step;
+      const ny = py + Math.sin(ang) * step;
+      const mx = (px + nx) / 2 + (rnd() - 0.5) * 10 * s;
+      const my = (py + ny) / 2 + (rnd() - 0.5) * 10 * s;
+      const nw = w * 0.95;
+      ctx.strokeStyle = '#26161a';
       ctx.lineWidth = w;
       ctx.beginPath();
       ctx.moveTo(px, py);
       ctx.quadraticCurveTo(mx, my, nx, ny);
       ctx.stroke();
-      ctx.strokeStyle = 'rgba(190, 110, 118, 0.6)';
-      ctx.lineWidth = Math.max(1, w * 0.2);
-      ctx.beginPath();
-      ctx.moveTo(px - w * 0.18, py - w * 0.3);
-      ctx.quadraticCurveTo(mx - w * 0.18, my - w * 0.3, nx - w * 0.18, ny - w * 0.3);
-      ctx.stroke();
-      if (depth <= 1 && rnd() > 0.6) tips.push([nx, ny, 0.5 + rnd() * 0.4]);
+      if (depth === 1 && i === segs - 2 && rnd() > 0.5) tips.push([nx, ny, 0.5]);
       px = nx;
       py = ny;
-      w *= 0.9;
+      w = nw;
     }
-    if (depth > 0) {
-      const kids = depth > 2 ? 2 : 2 + (rnd() > 0.5 ? 1 : 0);
-      for (let k = 0; k < kids; k++) {
-        // branches fan mostly sideways and droop a little — they frame, never cross the name
-        const spread = (k - (kids - 1) / 2) * (0.35 + rnd() * 0.3) + 0.12;
-        grow(px, py, ang + spread, len * (0.6 + rnd() * 0.14), w * 0.64, depth - 1);
-      }
-    } else tips.push([px, py, 1]);
+    if (depth <= 0) {
+      tips.push([px, py, 1]);
+      return;
+    }
+    const kids = depth >= 3 ? 3 : 2;
+    for (let k = 0; k < kids; k++) {
+      const spread = (k - (kids - 1) / 2) * (0.5 + rnd() * 0.3) - 0.05;
+      limb(px, py, ang + spread, len * (0.7 + rnd() * 0.12), w * 0.66, depth - 1);
+    }
   }
-  grow(-30 * s, 70 * s, 0.1, 330 * s, 22 * s, 4);
 
-  // blossoms
-  const flower = (x, y, r, rot, open) => {
+  // trunk: rises from the bottom, leaning right
+  limb(ROOT_U * W, H + 20 * s, -Math.PI / 2 + 0.1, 380 * s, 60 * s, 4);
+
+  // the bark gets a single soft rim light from the right instead of per-segment strokes
+  ctx.globalCompositeOperation = 'source-atop';
+  const rim = ctx.createLinearGradient(0, 0, W, 0);
+  rim.addColorStop(0, 'rgba(0,0,0,0)');
+  rim.addColorStop(1, 'rgba(160, 105, 118, 0.35)');
+  ctx.fillStyle = rim;
+  ctx.fillRect(0, 0, W, H);
+  ctx.globalCompositeOperation = 'source-over';
+
+  // keep blossoms inside the texture so nothing is ever cut by its edge
+  for (let i = tips.length - 1; i >= 0; i--) if (tips[i][0] > W * 0.9 || tips[i][1] < H * 0.07) tips.splice(i, 1);
+
+  // canopy: soft pink volume first, then three layers of blossoms (back → front)
+  tips.forEach(([x, y, k]) => {
+    const r = (55 + rnd() * 45) * s * k;
+    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, 'rgba(255, 150, 180, 0.16)');
+    g.addColorStop(1, 'rgba(255, 150, 180, 0)');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  const blossom = (x, y, r, rot, tone) => {
     ctx.save();
     ctx.translate(x, y);
     ctx.rotate(rot);
-    ctx.shadowColor = 'rgba(255, 150, 180, 0.55)';
-    ctx.shadowBlur = 14 * s;
     for (let p = 0; p < 5; p++) {
       ctx.save();
       ctx.rotate((p / 5) * Math.PI * 2);
       const g = ctx.createLinearGradient(0, 0, 0, -r);
-      g.addColorStop(0, '#ff7fa2');
-      g.addColorStop(0.45, '#ffc2d2');
-      g.addColorStop(1, '#fff1f5');
+      g.addColorStop(0, tone[0]);
+      g.addColorStop(1, tone[1]);
       ctx.fillStyle = g;
       ctx.beginPath();
-      // petal with the characteristic notch at the tip
       ctx.moveTo(0, 0);
-      ctx.bezierCurveTo(-r * 0.62 * open, -r * 0.25, -r * 0.55 * open, -r * 0.95, -r * 0.12, -r);
-      ctx.lineTo(0, -r * 0.84);
+      ctx.bezierCurveTo(-r * 0.6, -r * 0.3, -r * 0.5, -r * 0.95, -r * 0.12, -r);
+      ctx.lineTo(0, -r * 0.86);
       ctx.lineTo(r * 0.12, -r);
-      ctx.bezierCurveTo(r * 0.55 * open, -r * 0.95, r * 0.62 * open, -r * 0.25, 0, 0);
+      ctx.bezierCurveTo(r * 0.5, -r * 0.95, r * 0.6, -r * 0.3, 0, 0);
       ctx.fill();
       ctx.restore();
     }
-    ctx.shadowBlur = 0;
-    ctx.strokeStyle = 'rgba(190, 40, 80, 0.8)';
-    ctx.lineWidth = 1.2 * s;
-    for (let k = 0; k < 9; k++) {
-      const a = (k / 9) * Math.PI * 2;
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(Math.cos(a) * r * 0.42, Math.sin(a) * r * 0.42);
-      ctx.stroke();
-      ctx.fillStyle = '#ffd36b';
-      ctx.beginPath();
-      ctx.arc(Math.cos(a) * r * 0.42, Math.sin(a) * r * 0.42, 1.6 * s, 0, Math.PI * 2);
-      ctx.fill();
-    }
+    ctx.fillStyle = 'rgba(200, 40, 90, 0.85)';
+    ctx.beginPath();
+    ctx.arc(0, 0, r * 0.18, 0, Math.PI * 2);
+    ctx.fill();
     ctx.restore();
   };
-  tips.forEach(([x, y, k]) => {
-    if (y > 400 * s) return;
-    const n = 1 + Math.round(rnd() * 2.4 * k);
-    for (let i = 0; i < n; i++) {
-      const fx = x + (rnd() - 0.5) * 60 * s;
-      const fy = y + (rnd() - 0.5) * 44 * s;
-      if (rnd() > 0.82) {
-        ctx.fillStyle = '#d94a72';
-        ctx.beginPath();
-        ctx.ellipse(fx, fy, 5 * s, 8 * s, rnd() * 3, 0, Math.PI * 2);
-        ctx.fill();
-      } else flower(fx, fy, (14 + rnd() * 12) * s, rnd() * 6.28, 0.85 + rnd() * 0.3);
-    }
+  const LAYERS = [
+    { tone: ['#a83d60', '#d97c9a'], n: 14, r: [7, 11] },
+    { tone: ['#ef7f9f', '#ffc6d5'], n: 16, r: [8, 13] },
+    { tone: ['#ffb3c6', '#fff3f6'], n: 10, r: [9, 14] },
+  ];
+  LAYERS.forEach((L, li) => {
+    ctx.shadowColor = li === 2 ? 'rgba(255, 190, 210, 0.6)' : 'transparent';
+    ctx.shadowBlur = li === 2 ? 10 * s : 0;
+    tips.forEach(([x, y, k]) => {
+      const n = Math.round(L.n * k);
+      for (let i = 0; i < n; i++) {
+        const a = rnd() * Math.PI * 2;
+        const d = Math.sqrt(rnd()) * (50 * s) * k;
+        blossom(x + Math.cos(a) * d * 1.3, y + Math.sin(a) * d * 0.85, (L.r[0] + rnd() * (L.r[1] - L.r[0])) * s, rnd() * 6.28, L.tone);
+      }
+    });
   });
+  ctx.shadowBlur = 0;
   return c;
 }
 
-const branchVert = /* glsl */ `
+const treeVert = /* glsl */ `
 uniform float uTime;
-uniform float uSway;
 varying vec2 vUv;
 void main(){
   vUv = uv;
   vec3 p = position;
-  // distance from the root (top-left of the texture) — tips sway most
-  float d = length(vec2(uv.x, 1.0 - uv.y));
-  float w = d * d;
-  p.x += sin(uTime * 0.7 + d * 3.0) * 0.06 * w * uSway;
-  p.y += cos(uTime * 0.9 + d * 2.4) * 0.05 * w * uSway;
+  // the higher up the tree, the more it moves in the wind
+  float h = smoothstep(0.25, 1.0, uv.y);
+  float w = h * h;
+  p.x += (sin(uTime * 0.55 + uv.y * 2.0) * 0.07 + sin(uTime * 1.3 + uv.x * 5.0) * 0.02) * w;
+  p.y += cos(uTime * 0.8 + uv.x * 3.0) * 0.025 * w;
   gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
 }`;
 
-const branchFrag = /* glsl */ `
+const treeFrag = /* glsl */ `
 uniform sampler2D uMap;
 uniform float uReveal;
 uniform float uOpacity;
 varying vec2 vUv;
 void main(){
   vec4 c = texture2D(uMap, vUv);
-  float d = length(vec2(vUv.x, (1.0 - vUv.y) * 0.5)) / 1.12;
-  float grow = smoothstep(d - 0.06, d + 0.02, uReveal * 1.1);
-  // soft fade at the far texture edges so nothing ever shows a hard cut
-  float edge = smoothstep(1.0, 0.82, vUv.x) * smoothstep(0.0, 0.16, vUv.y);
+  // grows from the root upward and outward
+  float d = length((vUv - vec2(${ROOT_U.toFixed(2)}, 0.0)) * vec2(0.8, 1.0)) / 1.05;
+  float grow = smoothstep(d - 0.05, d + 0.02, uReveal * 1.12);
+  float edge = smoothstep(1.0, 0.92, vUv.x) * smoothstep(1.0, 0.95, vUv.y);
   float a = c.a * grow * edge * uOpacity;
   if (a < 0.003) discard;
   gl_FragColor = vec4(c.rgb, a);
@@ -161,7 +179,9 @@ attribute vec4 aSeed;
 uniform float uTime;
 uniform float uSize;
 uniform float uPR;
-uniform vec2 uVis;
+uniform vec2 uOrigin;    // canopy centre (world)
+uniform vec2 uSpread;    // canopy extent (world)
+uniform vec2 uTravel;    // how far a petal blows over its life (world)
 uniform vec2 uMouse;
 uniform float uZ0;
 uniform float uZ1;
@@ -170,20 +190,23 @@ varying float vFlip;
 varying float vA;
 varying float vTint;
 void main(){
-  float speed = 0.045 + aSeed.w * 0.06;
-  float fall = fract(aSeed.y + uTime * speed);
-  float y = uVis.y * 0.62 - fall * uVis.y * 1.3;
-  float x = (aSeed.x - 0.5) * uVis.x * 1.2 + sin(uTime * (0.5 + aSeed.z) + aSeed.w * 6.28) * 0.5 + fall * uVis.x * 0.18;
+  float speed = 0.05 + aSeed.w * 0.06;
+  float life = fract(aSeed.y + uTime * speed);
+  // leaves the canopy, rides the wind to the right, falls, flutters
+  vec2 o = uOrigin + (aSeed.xz - 0.5) * uSpread;
+  float gust = 0.55 + 0.45 * sin(uTime * 0.35 + aSeed.x * 6.28);
+  float x = o.x + life * uTravel.x * gust + sin(uTime * (0.7 + aSeed.z) + aSeed.w * 6.28) * 0.25;
+  float y = o.y - life * life * uTravel.y + sin(life * 9.0 + aSeed.x * 6.28) * 0.18;
   float z = mix(uZ0, uZ1, aSeed.z);
   vec2 d = vec2(x, y) - uMouse;
   float dl = length(d);
   vec2 push = normalize(d + 1e-4) * 0.9 * exp(-dl * dl * 1.4);
   vec4 mv = modelViewMatrix * vec4(x + push.x, y + push.y, z, 1.0);
   gl_Position = projectionMatrix * mv;
-  gl_PointSize = uSize * (0.6 + aSeed.w * 0.8) * uPR * (10.0 / -mv.z);
-  vRot = uTime * (0.6 + aSeed.w * 1.4) + aSeed.x * 6.28;
-  vFlip = cos(uTime * (1.0 + aSeed.y * 1.8) + aSeed.z * 6.28);
-  vA = smoothstep(0.0, 0.06, fall) * (1.0 - smoothstep(0.88, 1.0, fall));
+  gl_PointSize = uSize * (0.55 + aSeed.w * 0.8) * uPR * (10.0 / -mv.z);
+  vRot = uTime * (0.7 + aSeed.w * 1.6) + aSeed.x * 6.28;
+  vFlip = cos(uTime * (1.1 + aSeed.y * 1.8) + aSeed.z * 6.28);
+  vA = smoothstep(0.0, 0.08, life) * (1.0 - smoothstep(0.82, 1.0, life));
   vTint = aSeed.x;
 }`;
 
@@ -200,7 +223,6 @@ void main(){
   c.x /= max(abs(vFlip), 0.22);
   float d = length(vec2(c.x * 1.55, c.y * 1.05 + 0.08));
   float shape = 1.0 - smoothstep(0.78, 0.9, d);
-  // notch at the tip
   float notch = smoothstep(0.0, 0.12, abs(c.x) * 1.4 - (c.y - 0.62));
   shape *= mix(1.0, notch, step(0.55, c.y));
   if (shape < 0.01) discard;
@@ -214,24 +236,21 @@ export class Sakura {
   constructor(scene, tier) {
     this.group = new THREE.Group();
     scene.add(this.group);
-    const texSize = tier === 'low' ? 768 : 1024;
 
-    this.branches = [11, 29].map((seed, i) => {
-      const tex = new THREE.CanvasTexture(branchCanvas(seed, texSize * 1.5));
-      tex.colorSpace = THREE.NoColorSpace;
-      const mat = new THREE.ShaderMaterial({
-        vertexShader: branchVert,
-        fragmentShader: branchFrag,
-        uniforms: { uMap: { value: tex }, uTime: { value: 0 }, uSway: { value: 1 }, uReveal: { value: 0 }, uOpacity: { value: 0 } },
+    const tex = new THREE.CanvasTexture(treeCanvas(tier === 'low' ? 900 : 1280));
+    tex.colorSpace = THREE.NoColorSpace;
+    this.tree = new THREE.Mesh(
+      new THREE.PlaneGeometry(1, 1, 24, 30),
+      new THREE.ShaderMaterial({
+        vertexShader: treeVert,
+        fragmentShader: treeFrag,
+        uniforms: { uMap: { value: tex }, uTime: { value: 0 }, uReveal: { value: 0 }, uOpacity: { value: 0 } },
         transparent: true,
         depthWrite: false,
-      });
-      const mesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1, 24, 24), mat);
-      mesh.renderOrder = -2;
-      mesh.userData.flip = i === 1;
-      this.group.add(mesh);
-      return mesh;
-    });
+      }),
+    );
+    this.tree.renderOrder = -2;
+    this.group.add(this.tree);
 
     const make = (count, z0, z1, size, order) => {
       const geo = new THREE.BufferGeometry();
@@ -240,73 +259,77 @@ export class Sakura {
       for (let i = 0; i < seeds.length; i++) seeds[i] = rnd();
       geo.setAttribute('aSeed', new THREE.BufferAttribute(seeds, 4));
       geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(count * 3), 3));
-      const mat = new THREE.ShaderMaterial({
-        vertexShader: petalVert,
-        fragmentShader: petalFrag,
-        uniforms: {
-          uTime: { value: 0 },
-          uSize: { value: size },
-          uPR: { value: 1 },
-          uVis: { value: new THREE.Vector2(10, 6) },
-          uMouse: { value: new THREE.Vector2(99, 99) },
-          uZ0: { value: z0 },
-          uZ1: { value: z1 },
-          uOpacity: { value: 0 },
-        },
-        transparent: true,
-        depthWrite: false,
-      });
-      const pts = new THREE.Points(geo, mat);
+      const pts = new THREE.Points(
+        geo,
+        new THREE.ShaderMaterial({
+          vertexShader: petalVert,
+          fragmentShader: petalFrag,
+          uniforms: {
+            uTime: { value: 0 },
+            uSize: { value: size },
+            uPR: { value: 1 },
+            uOrigin: { value: new THREE.Vector2() },
+            uSpread: { value: new THREE.Vector2(1, 1) },
+            uTravel: { value: new THREE.Vector2(10, 5) },
+            uMouse: { value: new THREE.Vector2(99, 99) },
+            uZ0: { value: z0 },
+            uZ1: { value: z1 },
+            uOpacity: { value: 0 },
+          },
+          transparent: true,
+          depthWrite: false,
+        }),
+      );
       pts.frustumCulled = false;
       pts.renderOrder = order;
       this.group.add(pts);
       return pts;
     };
-    const n = tier === 'high' ? 140 : tier === 'mid' ? 90 : 55;
-    this.back = make(n, -5, -0.6, 22, -1);
-    this.front = make(Math.round(n * 0.12), 1.5, 4, 26, 3);
+    const n = tier === 'high' ? 120 : tier === 'mid' ? 80 : 50;
+    this.back = make(n, -1.4, -0.4, 20, -1);
+    this.front = make(Math.round(n * 0.15), 1.5, 3.5, 24, 3);
   }
 
   resize(visW, visH, pr) {
     const portrait = visW / visH < 0.9;
-    // wide planes (2:1), root just off the corner: top-left branch runs along the top,
-    // bottom-right branch (rotated 180°) runs along the bottom
-    const w = portrait ? visW * 1.05 : Math.min(visW * 0.62, visH * 1.5);
-    const h = w / 2;
-    const [a, b] = this.branches;
-    a.scale.set(w, h, 1);
-    a.position.set(-visW / 2 + w * 0.47, visH / 2 - h * 0.42, -1.6);
-    b.scale.set(w * 0.85, h * 0.85, 1);
-    b.rotation.z = Math.PI;
-    b.position.set(visW / 2 - w * 0.85 * 0.47, -visH / 2 + h * 0.85 * 0.42, -1.8);
+    // the tree stands on the bottom-left edge; its canopy reaches right over the name
+    const h = visH * (portrait ? 0.82 : 1.08);
+    const w = h / 1.25;
+    const x = -visW / 2 + w * (portrait ? 0.32 : 0.36);
+    const y = -visH / 2 + h * 0.5 - visH * 0.02;
+    this.tree.scale.set(w, h, 1);
+    this.tree.position.set(x, y, -1.2);
+
+    const origin = new THREE.Vector2(x + (CANOPY.x - 0.5) * w, y + (CANOPY.y - 0.5) * h);
     [this.back, this.front].forEach((p) => {
-      p.material.uniforms.uVis.value.set(visW, visH);
-      p.material.uniforms.uPR.value = pr;
+      const u = p.material.uniforms;
+      u.uOrigin.value.copy(origin);
+      u.uSpread.value.set(CANOPY.w * w, CANOPY.h * h);
+      u.uTravel.value.set(visW * 1.05, visH * 0.85);
+      u.uPR.value = pr;
     });
     this.visW = visW;
     this.visH = visH;
   }
 
-  /** bloom 0..1 grows the branches in; fade 0..1 hides the whole set. */
+  /** bloom 0..1 grows the tree in; fade 0..1 hides the whole set. */
   update(t, bloom, fade, mouse) {
     const vis = bloom * (1 - fade);
     this.group.visible = vis > 0.001;
     if (!this.group.visible) return;
-    this.branches.forEach((b) => {
-      const u = b.material.uniforms;
-      u.uTime.value = t;
-      u.uReveal.value = bloom;
-      u.uOpacity.value = 1 - fade;
-    });
+    const tu = this.tree.material.uniforms;
+    tu.uTime.value = t;
+    tu.uReveal.value = bloom;
+    tu.uOpacity.value = 1 - fade;
     const mx = mouse.nx * (this.visW / 2);
     const my = -mouse.ny * (this.visH / 2);
     [this.back, this.front].forEach((p) => {
       const u = p.material.uniforms;
       u.uTime.value = t;
       u.uMouse.value.set(mx, my);
-      u.uOpacity.value = Math.min(1, bloom * 1.5) * (1 - fade);
+      u.uOpacity.value = Math.min(1, Math.max(0, bloom * 1.6 - 0.4)) * (1 - fade);
     });
-    this.group.position.set(mouse.nx * -0.15, mouse.ny * 0.1, 0);
+    this.group.position.set(mouse.nx * -0.12, mouse.ny * 0.08, 0);
   }
 
   get visible() {

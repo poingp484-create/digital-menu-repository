@@ -1,5 +1,5 @@
 /**
- * Rasterises the logotype (Bruno Ace SC, italic shear) into a texture atlas:
+ * Rasterises the logotype (Archivo Expanded Black Italic) into a texture atlas:
  *   R = glyph coverage, G = tight bevel height, B = broad "liquid" height.
  * Each glyph (and the swoosh) gets its own padded cell so letters can be
  * split apart into independent meshes for the hero transition.
@@ -7,11 +7,11 @@
  * Units: cap height = 100 (cap line y = 0, baseline y = 100, y grows down).
  * Call only after the font has loaded (see Stage.buildLogo).
  */
-import { WORD, LOGO_FAMILY, SKEW, TRACKING, SWOOSH } from '../brand/logo.js';
+import { WORD, SKEW, TRACKING, KERN, SWOOSH, logoCanvasFont } from '../brand/logo.js';
 
 const PAD = 28;
 const FONT_PX = 200; // measuring size
-const EMBOLDEN = 7; // stroke width in cap units (cap height = 100)
+const EMBOLDEN = 1.5; // stroke width in cap units (cap height = 100) — the black weight needs almost none
 
 /** Separable running-sum box blur (edges treated as empty). */
 function boxBlur(src, w, h, r) {
@@ -53,15 +53,18 @@ const blur = (src, w, h, r, passes = 2) => {
 export function buildLogoAtlas(scale = 2.2) {
   // ── measure in font pixels, convert to cap units
   const m = document.createElement('canvas').getContext('2d');
-  m.font = `400 ${FONT_PX}px '${LOGO_FAMILY}'`;
+  m.font = logoCanvasFont(FONT_PX);
+  if ('fontStretch' in m) m.fontStretch = 'expanded';
   const capPx = m.measureText('Y').actualBoundingBoxAscent || FONT_PX * 0.72;
   const u = 100 / capPx; // units per font px
   const track = TRACKING * 100;
   const chars = [...WORD];
 
   // pen positions from cumulative substring widths (keeps kerning) + tracking
+  let kern = 0;
   const glyphs = chars.map((ch, i) => {
-    const x = m.measureText(WORD.slice(0, i)).width * u + i * track;
+    if (i > 0) kern += (KERN[chars[i - 1] + ch] || 0) * 100;
+    const x = m.measureText(WORD.slice(0, i)).width * u + i * track + kern;
     const mt = m.measureText(ch);
     const left = -mt.actualBoundingBoxLeft * u;
     const right = mt.actualBoundingBoxRight * u;
@@ -117,7 +120,8 @@ export function buildLogoAtlas(scale = 2.2) {
     ctx.translate(g.px - g.minX, g.py - g.minY + 100);
     ctx.transform(1, 0, -SKEW, 1, 0, 0); // italic shear about the baseline
     ctx.scale(u, u);
-    ctx.font = `400 ${FONT_PX}px '${LOGO_FAMILY}'`;
+    ctx.font = logoCanvasFont(FONT_PX);
+    if ('fontStretch' in ctx) ctx.fontStretch = 'expanded';
     ctx.fillText(g.char, 0, 0);
     // slight faux-bold so the chrome bevel has body to catch light
     ctx.strokeStyle = '#fff';

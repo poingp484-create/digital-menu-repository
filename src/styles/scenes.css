@@ -188,6 +188,7 @@
   left: 50%;
   translate: -50% -52%;
   font-family: var(--f-display);
+  font-stretch: 125%;
   font-weight: 800;
   font-size: 52vw;
   line-height: 1;
@@ -220,6 +221,7 @@
   align-items: center;
   gap: 0.18em;
   font-family: var(--f-display);
+  font-stretch: 125%;
   font-weight: 800;
   font-size: 15vw;
   letter-spacing: -0.04em;
@@ -319,13 +321,18 @@
 .piece__name {
   display: grid;
   font-family: var(--f-display);
+  font-stretch: 125%;
   font-weight: 800;
   line-height: 0.92;
   letter-spacing: -0.02em;
   text-transform: uppercase;
 }
 .piece__name .l1 {
-  font-size: clamp(2.6rem, 6.4vw, 7.4rem);
+  font-stretch: 62%;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  line-height: 0.88;
+  font-size: clamp(3.2rem, 8vw, 9.4rem);
   color: var(--ink);
   padding-bottom: 0.06em;
 }
@@ -336,7 +343,8 @@
   color: transparent;
 }
 .piece__name .l2 {
-  font-weight: 400;
+  font-weight: 500;
+  font-stretch: 125%;
   font-size: clamp(1.05rem, 1.9vw, 2.1rem);
   letter-spacing: 0.04em;
   color: var(--ink);
