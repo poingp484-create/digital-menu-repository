@@ -1,58 +1,49 @@
 /**
- * YAKUZA logotype — Archivo Expanded Black Italic, finished in chrome.
+ * YAKUZA logo — chrome blade lettering with katana.
  *
- * One source of truth feeds: the WebGL liquid-chrome hero logo (canvas atlas,
- * src/webgl/logoAtlas.js), the DOM logo used in the nav + footer, and the
- * no-WebGL fallback.
+ * Source art: src/brand/yakuza-logo.webp (transparent, cut from the black
+ * original by scripts in the repo history). The same file feeds the WebGL hero
+ * logo (src/webgl/stage.js) and the DOM logo in the nav, footer and the
+ * no-WebGL fallback. To swap the logo, replace both webp files and update
+ * LOGO_IMAGE.size + cuts below.
  */
+import logoUrl from './yakuza-logo.webp?url';
+import logoSmUrl from './yakuza-logo-sm.webp?url';
+import logoShadowUrl from './yakuza-logo-shadow.webp?url';
 
 export const WORD = 'YAKUZA';
 
 /**
- * Metal finishes for the WebGL logo. Set LOGO_FINISH to pick one.
- * tint = body colour, spec = highlight colour, gloss = clear-coat, iri = pearl.
+ * Hero logo image + how it splits into one strip per letter for the
+ * fly-through. Each cut is a slanted line  x + (y - h/2) * slope = c
+ * (image pixels, y down), chosen to run through the gaps between letters.
  */
-export const LOGO_FINISHES = {
-  chrome: { tint: [1, 1, 1], spec: [1, 0.97, 0.93], gloss: 0, iri: 0 },
-  candy: { tint: [1, 0.08, 0.11], spec: [1, 0.92, 0.9], gloss: 0.75, iri: 0 },
-  black: { tint: [0.2, 0.2, 0.23], spec: [1, 1, 1], gloss: 0.95, iri: 0 },
-  gold: { tint: [1, 0.74, 0.36], spec: [1, 0.95, 0.85], gloss: 0.25, iri: 0 },
-  rose: { tint: [1, 0.56, 0.66], spec: [1, 0.94, 0.95], gloss: 0.5, iri: 0 },
-  pearl: { tint: [0.96, 0.96, 1], spec: [1, 1, 1], gloss: 0.3, iri: 0.75 },
+export const LOGO_IMAGE = {
+  url: logoUrl,
+  size: [1983, 793],
+  slope: 0.2,
+  cuts: [448, 748, 1076, 1244, 1454],
+  /** soft dark halo behind the logo (separates it from the sakura); padded 160px per side */
+  shadow: { url: logoShadowUrl, pad: 160, opacity: 0.7 },
 };
-export const LOGO_FINISH = 'candy';
-export const LOGO_FAMILY = 'Archivo Variable';
-export const LOGO_FONT_STACK = `'${LOGO_FAMILY}', 'Archivo', 'Arial Black', sans-serif`;
-/** CSS font shorthand pieces for canvas: italic, black, expanded (wdth 125). */
-export const LOGO_CANVAS = { style: 'italic', weight: 900, stretch: 'expanded' };
-export const logoCanvasFont = (px) => `${LOGO_CANVAS.style} ${LOGO_CANVAS.weight} ${LOGO_CANVAS.stretch} ${px}px '${LOGO_FAMILY}'`;
-/** Extra shear on top of the italic (x += -y * SKEW, y down). The face is already italic. */
-export const SKEW = 0.03;
-/** Extra tracking between glyphs, as a fraction of cap height. */
-export const TRACKING = 0.07;
-/** Optical kerning for pairs the italic crowds (added space, fraction of cap height). */
-export const KERN = { AK: 0.1, YA: -0.03 };
 
 /**
- * Tapered underline blade that sweeps back under the word.
- * Normalised: x 0..1 across the word width, y in cap-heights below the cap line.
+ * Colour finishes for the hero logo. `chrome` shows the art as drawn; the
+ * others re-tint the metal while keeping its highlights. Set LOGO_FINISH.
  */
-export const SWOOSH = [
-  [1.04, 1.12],
-  [0.48, 1.24],
-  [-0.06, 1.42],
-  [-0.12, 1.47],
-  [-0.05, 1.33],
-  [0.47, 1.16],
-  [0.98, 1.06],
-];
+export const LOGO_FINISHES = {
+  chrome: { tint: [1, 1, 1], amount: 0 },
+  candy: { tint: [1, 0.1, 0.13], amount: 0.85 },
+  gold: { tint: [1, 0.76, 0.38], amount: 0.8 },
+  blackchrome: { tint: [0.32, 0.33, 0.36], amount: 0.7 },
+};
+export const LOGO_FINISH = 'chrome';
 
-/** DOM logo: chrome text + optional swoosh, scales with font-size of the container. */
-export function logoHTML({ swoosh = true, className = '' } = {}) {
-  const pts = SWOOSH.map(([x, y]) => `${(x * 100).toFixed(1)},${((y - 1.02) * 100).toFixed(1)}`).join(' ');
-  return `<span class="logo-type ${className}" role="img" aria-label="YAKUZA"><span class="logo-type__word" aria-hidden="true">${WORD}</span>${
-    swoosh
-      ? `<svg class="logo-type__swoosh" viewBox="-14 0 120 48" preserveAspectRatio="none" aria-hidden="true"><polygon points="${pts}"/></svg>`
-      : ''
-  }</span>`;
+/** Type used for YAKUZA prints on the placeholder garment renders. */
+export const LOGO_FAMILY = 'Archivo Variable';
+export const LOGO_FONT_STACK = `'${LOGO_FAMILY}', 'Archivo', 'Arial Black', sans-serif`;
+
+/** DOM logo (nav, footer, fallback). Size it with the container's width. */
+export function logoHTML({ large = false, className = '' } = {}) {
+  return `<img class="logo-img ${className}" src="${large ? logoUrl : logoSmUrl}" alt="YAKUZA" draggable="false" decoding="async" />`;
 }

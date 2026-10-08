@@ -449,37 +449,6 @@ main {
   }
 }
 
-/* ─── LOGO (DOM) — Archivo Expanded Black Italic, chrome ────────────────── */
-.logo-type {
-  position: relative;
-  display: inline-block;
-  font-family: var(--f-logo);
-  font-weight: 900;
-  font-stretch: 125%;
-  font-style: italic;
-  line-height: 1;
-  white-space: nowrap;
-  padding-bottom: 0.32em;
-}
-.logo-type__word {
-  display: inline-block;
-  letter-spacing: 0.01em;
-  padding: 0 0.08em 0 0.02em;
-  background: var(--chrome);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  filter: drop-shadow(0 0.04em 0.08em rgba(0, 0, 0, 0.6));
-}
-.logo-type__swoosh {
-  position: absolute;
-  left: 0;
-  top: 0.72em;
-  width: 100%;
-  height: 0.48em;
-  fill: #c9ced6;
-  opacity: 0.9;
-}
 
 /* NFS-style title prompt at the end of the boot */
 .boot__start {
@@ -650,27 +619,11 @@ main {
   visibility: hidden;
 }
 
-/* DOM logo follows the WebGL finish (LOGO_FINISH in src/brand/logo.js) */
-[data-finish='candy'] .logo-type__word {
-  background: linear-gradient(180deg, #ffd9d9 0%, #ff4d57 22%, #b3101c 46%, #3a0306 52%, #ff6a72 58%, #c4121f 78%, #ff9aa0 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-}
-[data-finish='candy'] .logo-type__swoosh {
-  fill: #d01c28;
-}
-[data-finish='black'] .logo-type__word {
-  background: linear-gradient(180deg, #d9dbe0 0%, #4a4c52 30%, #0d0e10 50%, #8b8e96 56%, #1b1c20 80%, #5d6068 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-}
-[data-finish='gold'] .logo-type__word {
-  background: linear-gradient(180deg, #fff3cf 0%, #e8b452 26%, #6b4610 48%, #ffe4a0 55%, #b98525 78%, #f5d38a 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-}
-[data-finish='rose'] .logo-type__word {
-  background: linear-gradient(180deg, #fff0f3 0%, #f2a3b5 26%, #7a3443 48%, #ffd2dc 55%, #c66f84 78%, #f8c3cf 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
+/* image logo (nav, footer, fallback) */
+.logo-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+  -webkit-user-drag: none;
 }

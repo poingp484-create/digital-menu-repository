@@ -24,7 +24,7 @@
     display: none;
   }
   .nav__logo {
-    font-size: 16px;
+    width: 104px;
     top: 14px;
   }
   .nav__utils {

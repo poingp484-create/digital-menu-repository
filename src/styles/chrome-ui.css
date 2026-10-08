@@ -12,7 +12,7 @@
   position: absolute;
   top: calc(var(--gutter) - 6px);
   left: var(--gutter);
-  font-size: clamp(17px, 1.55vw, 24px);
+  width: clamp(118px, 10vw, 178px);
   opacity: 0;
   transform: translateY(-12px) scale(1.15);
   filter: blur(8px);
@@ -31,7 +31,7 @@
   75% { clip-path: inset(60% 0 0 0); transform: translateX(2px); }
   100% { clip-path: inset(0 0 0 0); transform: none; }
 }
-.nav__logo:hover .logo-type {
+.nav__logo:hover .logo-img {
   filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.35));
 }
 
@@ -388,8 +388,8 @@ body:not(.is-booting) .hud {
   display: grid;
   place-items: center;
 }
-.no-webgl .hero__fallback .logo-type {
-  font-size: 15vw;
+.no-webgl .hero__fallback .logo-img {
+  width: 88vw;
 }
 .hero__hud {
   position: absolute;

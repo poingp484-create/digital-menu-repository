@@ -438,14 +438,9 @@
 }
 .fo__logo {
   justify-self: center;
-  font-size: min(15vw, 240px);
+  width: min(88vw, 1200px);
 }
-.fo__logo .logo-type__word {
-  background:
-    linear-gradient(105deg, transparent calc(var(--sx, 50%) - 9%), rgba(255, 255, 255, 0.9) var(--sx, 50%), transparent calc(var(--sx, 50%) + 9%)),
-    var(--chrome);
-  -webkit-background-clip: text;
-  background-clip: text;
+.fo__logo .logo-img {
   filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.7));
 }
 .fo__links {

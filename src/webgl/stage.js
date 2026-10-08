@@ -10,8 +10,7 @@ import { device } from '../core/device.js';
 import { THEMES, MOODS, SIREN } from '../data/themes.js';
 import { FEATURED } from '../data/products.js';
 import { productSVGString } from '../art/renders.js';
-import { buildLogoAtlas } from './logoAtlas.js';
-import { LOGO_FAMILY, LOGO_FINISH, LOGO_FINISHES, logoCanvasFont } from '../brand/logo.js';
+import { LOGO_FAMILY, LOGO_FINISH, LOGO_FINISHES, LOGO_IMAGE } from '../brand/logo.js';
 import logoFontUrl from '@fontsource-variable/archivo/files/archivo-latin-standard-italic.woff2?url';
 import * as S from './shaders.js';
 import { Sakura } from './sakura.js';
@@ -117,9 +116,9 @@ export class Stage {
     // sakura set behind the logo
     this.sakura = new Sakura(this.scene, device.tier);
 
-    // glyph meshes are built once the logo font has loaded (buildLogo)
+    // logo meshes are built once the logo art has loaded (buildLogo)
     this.glyphs = [];
-    this.atlas = null;
+    this.logoSize = null;
 
     // spray-paint dust behind the logo
     const spray = new THREE.Mesh(
@@ -153,42 +152,62 @@ export class Stage {
 
 
   /** Build the chrome glyph meshes. Needs the logo font, so it runs after fonts load. */
+  /** Load the logo art and build one mesh per letter strip. */
   async buildLogo() {
     if (!this.ok) return;
+    let tex;
     try {
-      await document.fonts.load(logoCanvasFont(100), 'YAKUZA');
-    } catch {
-      /* fall through with whatever font is available */
+      tex = await new THREE.TextureLoader().loadAsync(LOGO_IMAGE.url);
+    } catch (e) {
+      console.warn('[YAKUZA] logo failed to load', e);
+      return;
     }
-    const atlas = buildLogoAtlas(this.q.atlas);
-    this.atlas = atlas;
-    const tex = new THREE.DataTexture(atlas.data, atlas.width, atlas.height, THREE.RGBAFormat);
+    tex.colorSpace = THREE.NoColorSpace;
     tex.minFilter = THREE.LinearMipmapLinearFilter;
     tex.magFilter = THREE.LinearFilter;
-    tex.generateMipmaps = true;
+    tex.anisotropy = Math.min(8, this.renderer.capabilities.getMaxAnisotropy());
     tex.needsUpdate = true;
 
+    const [W, H] = LOGO_IMAGE.size;
+    const s = LOGO_IMAGE.slope;
+
+    // soft shadow plate behind the letters
+    try {
+      const sh = await new THREE.TextureLoader().loadAsync(LOGO_IMAGE.shadow.url);
+      sh.colorSpace = THREE.NoColorSpace;
+      this.logoShadow = new THREE.Mesh(
+        new THREE.PlaneGeometry(1, 1),
+        new THREE.MeshBasicMaterial({ map: sh, color: 0x000000, transparent: true, depthWrite: false, opacity: 0 }),
+      );
+      this.logoShadow.renderOrder = -1;
+      this.logo.add(this.logoShadow);
+    } catch {
+      /* optional */
+    }
+    const cuts = [-1e5, ...LOGO_IMAGE.cuts, 1e5];
     const plane = new THREE.PlaneGeometry(1, 1);
-    this.glyphs = atlas.cells.map((cell, i) => {
+    this.logoSize = [W, H];
+    this.glyphs = cuts.slice(0, -1).map((cL, i) => {
+      const cR = cuts[i + 1];
+      const x0 = Math.max(0, Math.floor(cL - (H / 2) * Math.abs(s)) - 2);
+      const x1 = Math.min(W, Math.ceil(cR + (H / 2) * Math.abs(s)) + 2);
+      const cell = { cxU: (x0 + x1) / 2, cyU: H / 2, wU: x1 - x0, hU: H };
       const mat = new THREE.ShaderMaterial({
         vertexShader: S.logoVert,
-        fragmentShader: S.logoFrag,
+        fragmentShader: S.logoImageFrag,
         uniforms: {
           uMap: { value: tex },
-          uRect: { value: new THREE.Vector4(...cell.rect) },
-          uTexel: { value: new THREE.Vector2(1 / atlas.width, 1 / atlas.height) },
+          uRect: { value: new THREE.Vector4(x0 / W, 1, x1 / W, 0) },
+          uSize: { value: new THREE.Vector2(W, H) },
+          uBand: { value: new THREE.Vector3(cL, cR, s) },
           uTime: { value: 0 },
           uOpacity: { value: 0 },
           uGlitch: { value: 0 },
           uSeed: { value: i * 7.13 },
           uMouse: { value: new THREE.Vector2() },
-          uRowY: { value: 0 },
-          uCap: { value: 1 },
           uFlash: { value: 0 },
-          uTint: { value: new THREE.Vector3() },
-          uSpec: { value: new THREE.Vector3() },
-          uGloss: { value: 0 },
-          uIri: { value: 0 },
+          uTint: { value: new THREE.Vector3(1, 1, 1) },
+          uTintAmt: { value: 0 },
         },
         transparent: true,
         depthWrite: false,
@@ -197,7 +216,7 @@ export class Stage {
         blendDst: THREE.OneMinusSrcAlphaFactor,
       });
       const mesh = new THREE.Mesh(plane, mat);
-      mesh.userData = { cell, i, base: new THREE.Vector3(), swoosh: cell.char === 'swoosh' };
+      mesh.userData = { cell, i, base: new THREE.Vector3(), swoosh: false };
       this.logo.add(mesh);
       return mesh;
     });
@@ -210,11 +229,8 @@ export class Stage {
   setLogoFinish(name) {
     const f = LOGO_FINISHES[name] || LOGO_FINISHES.chrome;
     this.glyphs.forEach((m) => {
-      const u = m.material.uniforms;
-      u.uTint.value.fromArray(f.tint);
-      u.uSpec.value.fromArray(f.spec);
-      u.uGloss.value = f.gloss;
-      u.uIri.value = f.iri;
+      m.material.uniforms.uTint.value.fromArray(f.tint);
+      m.material.uniforms.uTintAmt.value = f.amount;
     });
     document.documentElement.dataset.finish = name;
   }
@@ -289,47 +305,26 @@ export class Stage {
   }
 
   #layoutLogo(visW, visH) {
-    if (!this.atlas) return;
-    const cells = this.atlas.cells;
-    const wordW = this.atlas.wordWidth;
+    if (!this.logoSize) return;
+    const [W, H] = this.logoSize;
     const portrait = visW / visH < 0.9;
     this.portrait = portrait;
-    let U;
-    const rows = [];
-    if (!portrait) {
-      U = Math.min((visW * 0.86) / (wordW + 40), (visH * 0.46) / 130);
-      rows.push({ from: 0, to: 5, offsetX: -wordW / 2, y: 0.03 * visH });
-    } else {
-      const g = cells;
-      const rowA = g[2].cxU + g[2].wU / 2 - (g[0].cxU - g[0].wU / 2) - 56;
-      const rowB = g[5].cxU + g[5].wU / 2 - (g[3].cxU - g[3].wU / 2) - 56;
-      U = Math.min((visW * 0.86) / Math.max(rowA, rowB), (visH * 0.2) / 130);
-      const xa = g[0].cxU - g[0].wU / 2 + 28;
-      const xb = g[3].cxU - g[3].wU / 2 + 28;
-      rows.push({ from: 0, to: 2, offsetX: -xa - rowA / 2, y: 70 * U + 0.03 * visH });
-      rows.push({ from: 3, to: 5, offsetX: -xb - rowB / 2, y: -70 * U + 0.03 * visH });
-    }
+    const U = portrait ? (visW * 0.98) / W : Math.min((visW * 0.86) / W, (visH * 0.56) / H);
     this.U = U;
+    const y0 = 0.03 * visH;
     this.glyphs.forEach((m) => {
-      const { cell, i, swoosh } = m.userData;
-      if (swoosh) {
-        const last = rows[rows.length - 1];
-        const sx = portrait ? 0.48 : 1;
-        m.scale.set(cell.wU * U * sx, cell.hU * U, 1);
-        m.userData.base.set((cell.cxU - wordW / 2) * U * sx, last.y - (cell.cyU - 50) * U, 0);
-        m.material.uniforms.uRowY.value = last.y;
-        m.material.uniforms.uCap.value = 100 * U;
-        return;
-      }
-      const row = rows.find((r) => i >= r.from && i <= r.to);
+      const { cell } = m.userData;
       m.scale.set(cell.wU * U, cell.hU * U, 1);
-      m.userData.base.set((cell.cxU + row.offsetX) * U, row.y - (cell.cyU - 50) * U, 0);
-      m.material.uniforms.uRowY.value = row.y;
-      m.material.uniforms.uCap.value = 100 * U;
+      m.userData.base.set((cell.cxU - W / 2) * U, y0 - (cell.cyU - H / 2) * U, 0);
     });
-    const sprayW = portrait ? visW * 1.3 : Math.min(visW * 1.1, wordW * U * 1.35);
+    if (this.logoShadow) {
+      const pad = LOGO_IMAGE.shadow.pad;
+      this.logoShadow.scale.set((W + pad * 2) * U, (H + pad * 2) * U, 1);
+      this.logoShadow.position.set(0, y0, -0.3);
+    }
+    const sprayW = portrait ? visW * 1.3 : Math.min(visW * 1.1, W * U * 1.2);
     this.spray.scale.set(sprayW, sprayW * 0.5, 1);
-    this.spray.position.y = 0.03 * visH;
+    this.spray.position.y = y0;
   }
 
   /** Called once if the FPS monitor wants cheaper rendering. */
@@ -441,19 +436,21 @@ export class Stage {
       const dir = Math.sign(base.x) || (i < 3 ? -1 : 1);
       const centrality = 1 - Math.min(1, Math.abs(base.x) / halfW);
       const alt = i % 2 ? 1 : -1;
-      const bob = Math.sin(t * 0.7 + i * 1.3) * 0.025;
+      // shared bob: strips must stay locked together at rest so the cuts never show
+      const bob = Math.sin(t * 0.7) * 0.025;
 
       mesh.position.set(
         base.x * (1 + spread * 1.5) + dir * spread * 0.8,
         base.y + bob + alt * spread * 0.9 + (1 - appear) * 0.4 * alt,
         base.z + spread * (5 + 6 * centrality),
       );
-      mesh.rotation.set(alt * spread * 0.35 + (1 - appear) * 0.6 * alt, -dir * spread * 1.0 + m.nx * 0.05, alt * spread * 0.12);
+      mesh.rotation.set(alt * spread * 0.35 + (1 - appear) * 0.6 * alt, -dir * spread * 1.0, alt * spread * 0.12);
       const nearFade = 1 - smooth(7.5, 9.5, mesh.position.z);
       uni.uOpacity.value = appear * fade * nearFade;
     });
 
     this.spray.material.opacity = 0.14 * introE * (1 - smooth(0.02, 0.2, P));
+    if (this.logoShadow) this.logoShadow.material.opacity = LOGO_IMAGE.shadow.opacity * introE * (1 - smooth(0.03, 0.28, P));
     this.spray.position.x = m.nx * 0.15;
     this.spray.rotation.z = -0.04;
   }

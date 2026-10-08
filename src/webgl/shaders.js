@@ -281,3 +281,78 @@ void main(){
   gl_FragColor = vec4(col * c.a, c.a) * uOpacity;
 }
 `;
+
+/**
+ * Image logo (chrome blade lettering). One mesh per letter strip; each mesh
+ * keeps only the pixels inside its slanted band so the strips tile exactly at
+ * rest. Effects use image-space coordinates so nothing seams between strips:
+ * cursor glint, slow light sweep, sparkle twinkle, liquid shimmer, glitch.
+ */
+export const logoImageFrag = /* glsl */ `
+uniform sampler2D uMap;
+uniform vec4 uRect;      // u0, vTop, u1, vBottom (texture space, v up)
+uniform vec2 uSize;      // image size in px
+uniform vec3 uBand;      // cutLeft, cutRight, slope (px)
+uniform float uTime;
+uniform float uOpacity;
+uniform float uGlitch;
+uniform float uSeed;
+uniform vec2 uMouse;     // -1..1
+uniform float uFlash;
+uniform vec3 uTint;
+uniform float uTintAmt;
+varying vec2 vUv;
+varying vec2 vScreen;
+
+float hash(vec2 p){ p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
+
+void main(){
+  vec2 a0 = vec2(mix(uRect.x, uRect.z, vUv.x), mix(uRect.w, uRect.y, vUv.y));
+  vec2 p = vec2(a0.x * uSize.x, (1.0 - a0.y) * uSize.y);   // image px, y down
+  float xp = p.x + (p.y - uSize.y * 0.5) * uBand.z;
+  float inBand = step(uBand.x, xp) * (1.0 - step(uBand.y, xp));
+  if (inBand < 0.5) discard;
+
+  // glitch: horizontal slice tears + liquid shimmer (image space → seamless)
+  float tick = floor(uTime * 14.0);
+  float slice = floor(p.y / uSize.y * 18.0);
+  float gs = step(1.0 - uGlitch * 0.45, hash(vec2(slice + uSeed, tick)));
+  vec2 a = a0;
+  a.x += (hash(vec2(slice, tick + 3.0)) - 0.5) * 0.05 * gs * uGlitch;
+  a += vec2(sin(p.y * 0.02 + uTime * 1.1), cos(p.x * 0.012 - uTime * 0.8)) * 0.0009;
+
+  vec4 tx = texture2D(uMap, a);
+  float alpha = tx.a;
+  vec3 col = tx.rgb;
+  float lum = dot(col, vec3(0.333));
+
+  // tint (finishes) — keep highlights white-hot
+  vec3 tinted = lum * uTint * 1.55 + pow(lum, 6.0) * 0.9;
+  col = mix(col, tinted, uTintAmt);
+
+  // light sweep across the metal every ~11s
+  float gx = p.x / uSize.x + (p.y / uSize.y) * 0.22;
+  float sw = fract(uTime * 0.09) * 1.8 - 0.4;
+  col += vec3(1.0, 0.98, 0.95) * exp(-pow((gx - sw) * 13.0, 2.0)) * pow(lum, 1.4) * 0.8;
+
+  // cursor = moving light: brightens the chrome near it
+  float d = length((vScreen - uMouse) * vec2(1.6, 1.0));
+  col += vec3(1.0, 0.97, 0.92) * pow(lum, 2.2) * exp(-d * 2.6) * 0.9;
+
+  // sparkle twinkle on the brightest points
+  float tw = 0.5 + 0.5 * sin(uTime * 3.0 + hash(floor(p / 40.0)) * 6.28);
+  col += vec3(1.0) * smoothstep(0.86, 1.0, lum) * tw * 0.35;
+
+  col += uFlash;
+
+  // RGB split on glitch
+  float ar = texture2D(uMap, a + vec2(0.006 * uGlitch, 0.0)).a;
+  float ab = texture2D(uMap, a - vec2(0.006 * uGlitch, 0.0)).a;
+  vec3 rgb = col * alpha;
+  rgb.r += max(ar - alpha, 0.0) * 0.9;
+  rgb.b += max(ab - alpha, 0.0) * 1.0;
+  float outA = max(alpha, max(ar, ab) * step(0.01, uGlitch));
+  if (outA < 0.003) discard;
+  gl_FragColor = vec4(rgb, outA) * uOpacity;
+}
+`;
