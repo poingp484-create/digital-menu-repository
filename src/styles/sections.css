@@ -46,18 +46,19 @@
   grid-row: 2;
   align-self: center;
   display: grid;
+  min-width: 0;
   font-family: var(--f-display);
-  font-stretch: 125%;
+  font-stretch: 112%;
   font-weight: 800;
-  font-size: clamp(2.2rem, 5.4vw, 7rem);
-  line-height: 0.95;
+  font-size: clamp(2rem, 4.3vw, 6.4rem);
+  line-height: 0.98;
   letter-spacing: -0.03em;
 }
 .mf__line {
   display: block;
-  white-space: nowrap;
   overflow: hidden;
-  padding-bottom: 0.04em;
+  padding: 0 0.04em 0.04em 0;
+  white-space: nowrap;
 }
 .mf__line--chrome .c {
   background: var(--chrome);

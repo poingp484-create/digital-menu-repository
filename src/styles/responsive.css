@@ -430,3 +430,14 @@
     font-size: 8vh !important;
   }
 }
+
+@media (max-width: 759px) {
+  .boot__start {
+    width: calc(100vw - 32px);
+    white-space: normal;
+    text-align: center;
+    font-size: 7.4vw;
+    line-height: 1.15;
+    letter-spacing: 0.04em;
+  }
+}

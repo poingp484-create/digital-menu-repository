@@ -20,6 +20,10 @@ JOBS = [
     ('11.jpg', 'gilded-wing-cadet-cap', []),
     ('12.jpg', 'sanctum-shield-shades', []),
     ('13.jpg', 'twin-dragon-henley-tee', []),
+    ('15.jpg', 'iron-clasp-bomber', [], 0.06, [[(198, 652), (538, 652), (538, 720), (198, 720)]]),  # torn lining scraps under the hem
+    ('16.jpg', 'ash-fade-leather-jacket', []),
+    ('17.jpg', 'grave-stud-zip-jacket', [], 0.06, [[(285, 0), (565, 0), (565, 40), (548, 102), (500, 86), (450, 80), (400, 82), (350, 90), (304, 110), (285, 70)]]),  # hanger
+    ('18.jpg', 'oxblood-fur-collar-jacket', []),
 ]
 only = sys.argv[1:]
 session = new_session('birefnet-general')
@@ -42,6 +46,7 @@ def blur(x, r):
 for job in JOBS:
     fn, out, covers = job[:3]
     lo = job[3] if len(job) > 3 else 0.06
+    clips = job[4] if len(job) > 4 else []
     if only and fn not in only:
         continue
     im = Image.open(f'{SRC}/{fn}').convert('RGB')
@@ -55,6 +60,13 @@ for job in JOBS:
     a = np.asarray(mask).astype(np.float32) / 255.0
     # tighten the matte slightly: kills faint halos, keeps soft fur / fabric edges
     a = np.clip((a - lo) / (0.94 - lo), 0, 1)
+    if clips:
+        from PIL import ImageDraw
+        cm = Image.new('L', im.size, 255)
+        for poly in clips:
+            ImageDraw.Draw(cm).polygon(poly, fill=0)
+        cm = cm.filter(ImageFilter.GaussianBlur(1.2))
+        a = a * (np.asarray(cm).astype(np.float32) / 255)
     # drop tiny detached specks
     hard = Image.fromarray((a > 0.5).astype(np.uint8) * 255)
     # estimate the local background colour behind each edge pixel (normalised convolution)
