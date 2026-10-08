@@ -1,0 +1,162 @@
+@import "tailwindcss";
+
+/*
+  Gokudo tokens. One accent (vermilion), neutral greys, sharp corners
+  everywhere (radius 0). Light and dark follow the visitor's system setting.
+
+  Z-index scale: header 40, mobile nav overlay 50. Nothing else layers.
+*/
+
+:root {
+  --bg: #efefec;
+  --surface: #e4e4e0;
+  --surface-2: #d9d9d4;
+  --ink: #151514;
+  --muted: #57564f;
+  --line: rgb(21 21 20 / 0.12);
+  --line-strong: rgb(21 21 20 / 0.28);
+  --accent: #b8371f;
+  --accent-ink: #f4f3ef;
+  --scrim: rgb(14 14 13 / 0.72);
+  --on-media: #f2f1ec;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e0e0d;
+    --surface: #181817;
+    --surface-2: #222220;
+    --ink: #ebeae5;
+    --muted: #a19f97;
+    --line: rgb(235 234 229 / 0.1);
+    --line-strong: rgb(235 234 229 / 0.26);
+    --accent: #e5553a;
+    --accent-ink: #0e0e0d;
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-on-media: var(--on-media);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html {
+  background: var(--bg);
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+blockquote {
+  text-wrap: balance;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.75rem;
+    padding: 0 1.25rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition:
+      transform 0.2s var(--ease-out-expo),
+      background-color 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+  .btn:active {
+    transform: translateY(1px) scale(0.98);
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+  .btn-primary:hover {
+    background: color-mix(in oklab, var(--accent) 88%, var(--ink));
+  }
+  .btn-ghost {
+    border: 1px solid var(--line-strong);
+    color: var(--ink);
+  }
+  .btn-ghost:hover {
+    background: var(--surface);
+    border-color: var(--ink);
+  }
+
+  .link-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.35s var(--ease-out-expo);
+  }
+  .link-underline:hover {
+    background-size: 100% 1px;
+  }
+
+  /* Shown in place of a Higgsfield shot until its file exists. */
+  .media-placeholder {
+    background-color: var(--surface);
+    background-image: repeating-linear-gradient(
+      135deg,
+      transparent 0 14px,
+      var(--line) 14px 15px
+    );
+  }
+
+  .rail {
+    scrollbar-width: none;
+  }
+  .rail::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
