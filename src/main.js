@@ -23,7 +23,6 @@ import { magnetize } from './ui/magnetic.js';
 import { toast } from './ui/toast.js';
 
 import { runBoot } from './sections/boot.js';
-import { renderTransmission, runTransmission, TRANSMISSION_TEXT } from './sections/transmission.js';
 import { loadScriptFonts } from './styles/scriptFonts.js';
 import { renderHero, buildHero, playIntro } from './sections/hero.js';
 import { renderManifesto, buildManifesto } from './sections/manifesto.js';
@@ -40,8 +39,6 @@ window.scrollTo(0, 0);
 const stage = new Stage($('#gl'));
 
 /* ── render sections from data ─────────────────────────────────────────── */
-document.documentElement.classList.add('pre-intro');
-renderTransmission($('#tx'));
 renderHero($('#intro'));
 renderManifesto($('#collection'));
 renderCategories($('#categories'), CATEGORIES);
@@ -124,16 +121,14 @@ gsap.ticker.add((time, deltaMS) => {
 /* ── boot ──────────────────────────────────────────────────────────────── */
 const ready = Promise.race([Promise.all([document.fonts.ready, stage.buildLogo()]), new Promise((r) => setTimeout(r, 3500))]);
 // Japanese + the 22 intro scripts: one tiny Google Fonts request subset to the exact glyphs used
-loadScriptFonts(document.body.textContent + TRANSMISSION_TEXT);
+loadScriptFonts(document.body.textContent);
 
 runBoot(ready)
   .then(() => {
     ScrollTrigger.refresh();
-    // sakura grows in behind the name while the transmission plays
-    gsap.to(state.hero, { bloom: 1, duration: 3.4, ease: 'power2.inOut' });
-    return runTransmission($('#tx'), { onLand: () => playIntro($('#intro')) });
-  })
-  .then(() => {
+    // straight onto YAKUZA: the chrome logo lands while the sakura grows in behind it
+    gsap.to(state.hero, { bloom: 1, duration: 2.8, ease: 'power2.inOut' });
+    playIntro($('#intro'));
     if (lenis) lenis.start();
     else document.documentElement.classList.remove('no-scroll');
   });

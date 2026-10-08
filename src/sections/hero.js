@@ -16,7 +16,7 @@ export function renderHero(el) {
     <div class="hero__hud hero__hud--tr"><span>DROP 01 — THE BLACKLIST</span><span>SEASON 2026 // ${ALL_PRODUCTS.length} PIECES</span></div>
     <div class="hero__hud hero__hud--bl"><span>ヤクザ</span><span>UNDERGROUND STREETWEAR — EST. 2000</span></div>
     <div class="hero__seal" aria-hidden="true"><span>極</span></div>
-    <div class="hero__tagline">ONE NAME <i>·</i> EVERY LANGUAGE <i>·</i> DROP 01</div>
+    <div class="hero__tagline">BUILT AFTER MIDNIGHT <i>·</i> DROP 01</div>
     <div class="hero__scroll" aria-hidden="true"><span>SCROLL TO ENTER</span><i></i></div>
     <div class="hero__target" aria-hidden="true">
       <i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
@@ -62,8 +62,7 @@ export function buildHero(el, { onReveal }) {
 
 /** Intro choreography after boot: drives state.hero.intro for the WebGL logo. */
 export function playIntro(el) {
-  // the chrome mark slams in (this is the landing beat of the transmission)
-  document.documentElement.classList.remove('pre-intro');
+  // the chrome mark slams in as the site opens
   const tl = gsap.timeline();
   tl.to(state.hero, { intro: 1, duration: 1.5, ease: 'power3.out' }, 0)
     .fromTo(el.querySelector('.hero__seal'), { opacity: 0, scale: 2.6, rotation: -24 }, { opacity: 1, scale: 1, rotation: -8, duration: 0.42, ease: 'power4.in' }, 0.55)

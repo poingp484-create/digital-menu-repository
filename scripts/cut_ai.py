@@ -24,6 +24,7 @@ JOBS = [
     ('16.jpg', 'ash-fade-leather-jacket', []),
     ('17.jpg', 'grave-stud-zip-jacket', [], 0.06, [[(285, 0), (565, 0), (565, 40), (548, 102), (500, 86), (450, 80), (400, 82), (350, 90), (304, 110), (285, 70)]]),  # hanger
     ('18.jpg', 'oxblood-fur-collar-jacket', []),
+    ('19.jpg', 'recon-cargo-leather-jacket', []),
 ]
 only = sys.argv[1:]
 session = new_session('birefnet-general')
