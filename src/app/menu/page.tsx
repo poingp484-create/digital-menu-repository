@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Media } from "@/components/Media";
 import { MenuBoard } from "@/components/menu/MenuBoard";
+import { ShareMenu } from "@/components/menu/ShareMenu";
 import { menu } from "@/content/menu";
 
 export const metadata: Metadata = {
@@ -21,9 +22,12 @@ export default function MenuPage() {
     <>
       <section className="mx-auto max-w-[1400px] px-4 pt-16 pb-10 md:px-8 md:pt-24">
         <h1 className="text-5xl font-semibold leading-none tracking-[-0.04em] md:text-7xl">Menu</h1>
-        <p className="mt-6 max-w-[52ch] text-lg leading-relaxed text-muted">
-          The fish changes with the market, so some dishes may differ on the night.
-        </p>
+        <div className="mt-6 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+          <p className="max-w-[52ch] text-lg leading-relaxed text-muted">
+            The fish changes with the market, so some dishes may differ on the night.
+          </p>
+          <ShareMenu />
+        </div>
       </section>
       <MenuBoard sections={menu} images={images} />
     </>

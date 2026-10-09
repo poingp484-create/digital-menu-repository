@@ -32,6 +32,21 @@ Each slot in `src/content/media.ts` maps to a file in `public/media/`. Until a f
 - Stills: `.webp`, generated with Higgsfield `gpt_image_2_5` at the listed ratio
 - Loops: `hero.mp4` and `robata.mp4`, generated with Higgsfield `kling3_0` (sound off) from the matching still
 
+## Vengeance UI components
+
+Two components from [Vengeance UI](https://www.vengenceui.com/) live in `src/components/ui/`:
+
+- `share-sheet.tsx` on `/menu` (via `src/components/menu/ShareMenu.tsx`): copy link, share, or show and download a QR code for the menu
+- `staggerText.tsx` on the home hero heading: word-by-word reveal
+
+`components.json` registers the `@vengeanceui` registry, so more can be added with:
+
+```bash
+npx shadcn@latest add @vengeanceui/<component-name>
+```
+
+The share sheet ships its own styles. The "Vengeance UI Share Sheet" block in `src/app/globals.css` maps it onto the Gokudo tokens (square corners, one accent, light and dark), so leave the component file as-is and adjust that block instead.
+
 ## Reservations
 
 `src/app/api/reservations/route.ts` validates requests but only logs them. Connect it to your booking system or email before going live.

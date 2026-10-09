@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Loop } from "@/components/Media";
 import { Enter } from "@/components/motion/Enter";
+import TextAnimation from "@/components/ui/staggerText";
 
 export function Hero() {
   return (
@@ -11,11 +12,9 @@ export function Hero() {
             Japanese counter and grill
           </p>
         </Enter>
-        <Enter delay={0.08}>
-          <h1 className="mt-6 max-w-[11ch] text-[clamp(3rem,7vw,6.5rem)] font-semibold leading-[0.95] tracking-[-0.045em]">
-            Fish, rice and fire.
-          </h1>
-        </Enter>
+        <h1 className="mt-6 max-w-[11ch] text-[clamp(3rem,7vw,6.5rem)] font-semibold leading-[0.95] tracking-[-0.045em]">
+          <TextAnimation delay={0.08}>Fish, rice and fire.</TextAnimation>
+        </h1>
         <Enter delay={0.16}>
           <p className="mt-8 max-w-[44ch] text-lg leading-relaxed text-muted">
             Omakase at a twelve-seat hinoki counter, robata over binchotan, and a menu set by the
