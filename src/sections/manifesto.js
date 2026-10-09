@@ -39,8 +39,8 @@ export function buildManifesto(el) {
     .fromTo(words, { opacity: 0.08 }, { opacity: 1, stagger: 0.02, duration: 0.2 }, 0.7)
     .fromTo(el.querySelectorAll('.mf__districts li'), { opacity: 0, y: 40 }, { opacity: 1, y: 0, stagger: 0.07, duration: 0.3, ease: 'power3.out' }, 1.0)
     .addLabel('shown')
-    .to({}, { duration: 0.6 })
-    .to(el.querySelector('.mf__inner'), { yPercent: -10, opacity: 0, filter: 'blur(8px)', duration: 0.5, ease: 'power2.in' });
+    .to({}, { duration: 0.6 });
+  // no fade-out: the text scrolls away as the next district rises in, so there is no empty gap
 
   // reveal starts while the section is still rising into view, then holds under the pin
   ScrollTrigger.create({ trigger: el, start: 'top top', end: '+=160%', pin: true });

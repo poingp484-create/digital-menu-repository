@@ -177,8 +177,9 @@
   }
 
   /* categories */
+  /* big words always fit the screen width (--chars set per element) */
   .ct__word {
-    font-size: 27vw;
+    font-size: min(27vw, calc((100vw - 40px) / (var(--chars, 6) * 0.56)));
   }
   .ct__jp {
     right: 10px;
@@ -257,7 +258,7 @@
   .piece .piece__rank { grid-column: 1; grid-row: 1; }
   .piece .piece__count { grid-column: 2; grid-row: 1; justify-self: end; }
   .piece .piece__name { grid-column: 1 / -1; grid-row: 2; justify-items: start; }
-  .piece .piece__name .l1 { font-size: 17vw; }
+  .piece .piece__name .l1 { font-size: min(17vw, calc((100vw - 40px) / (var(--chars, 8) * 0.58))); }
   .piece .piece__name .l2 { font-size: 3.6vw; }
   .piece .piece__specs {
     grid-column: 1 / -1;

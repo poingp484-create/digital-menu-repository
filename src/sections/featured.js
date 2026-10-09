@@ -1,5 +1,5 @@
 /**
- * 07 — MOST WANTED. Police-strobe pursuit scene: the #01 piece turns in 3D,
+ * 08 — MOST WANTED. Police-strobe pursuit scene: the #01 piece turns in 3D,
  * spec call-outs wire themselves to the garment, the bounty counts up.
  */
 import { gsap, ScrollTrigger } from '../core/scroll.js';

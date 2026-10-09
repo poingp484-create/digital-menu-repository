@@ -80,7 +80,7 @@ function pieceHTML(p, i, n) {
     </div>
     <div class="piece__info">
       <div class="piece__rank"><span>BLACKLIST</span><b>#${String(p.rank).padStart(2, '0')}</b></div>
-      <h3 class="piece__name"><span class="l1">${p.name[0]}</span><span class="l2">${p.name[1]}</span></h3>
+      <h3 class="piece__name" style="--chars:${p.name[0].length}"><span class="l1">${p.name[0]}</span><span class="l2">${p.name[1]}</span></h3>
       <div class="piece__count"><b>${num}</b><i>/</i>${String(n).padStart(2, '0')}</div>
       <ul class="piece__specs">${p.specs.map((s) => `<li>${s}</li>`).join('')}</ul>
       <div class="piece__price" data-price="${p.id}">${formatPrice(p.price)}</div>
@@ -95,7 +95,7 @@ function categoryHTML(cat) {
     <div class="cat__title">
       <div class="ct__index">${cat.index}</div>
       <div class="ct__district">${cat.district}</div>
-      <h2 class="ct__word">${cat.title}</h2>
+      <h2 class="ct__word" style="--chars:${cat.title.length}">${cat.title}</h2>
       <div class="ct__jp" aria-hidden="true">${cat.jp}</div>
       <p class="ct__blurb">${cat.blurb}</p>
     </div>
@@ -189,8 +189,13 @@ export function buildCategory(section, cat, { onPiece }) {
   // ── main stage timeline
   const tl = gsap.timeline({ defaults: { ease: 'none' } });
   // the district word builds once the stage is pinned, so the whole transition plays in view
-  const TIN = reduced ? 0 : 0.7;
-  if (!reduced) tl.fromTo(wChars, tIn.from, { ...tIn.to, duration: 0.5 }, 0);
+  // the district word builds as it rises into view (played, not scrubbed, so the
+  // whole transition is seen even on a quick scroll); reverses when scrolling back up
+  const TIN = 0;
+  if (!reduced) {
+    const titleIn = gsap.fromTo(wChars, tIn.from, { ...tIn.to, duration: 1.1, paused: true });
+    ScrollTrigger.create({ trigger: section, start: 'top 55%', onEnter: () => titleIn.play(), onLeaveBack: () => titleIn.reverse() });
+  }
   tl.fromTo(wInner, { opacity: 1 }, { ...TITLE_OUT[cat.id], duration: 0.9, immediateRender: false }, 0.05 + TIN);
   tl.fromTo(title, { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: -40, duration: 0.45, immediateRender: false }, 0.6 + TIN);
 
