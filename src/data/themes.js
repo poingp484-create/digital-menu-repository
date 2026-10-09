@@ -48,4 +48,4 @@ export const SHOW_MOOD_SWITCHER = true;
 
 /** Police siren lights — always on, red/blue alternation. Fast on the hero (a live pursuit),
  *  easing to a slow pulse once the visitor scrolls into the drop. Pursuit sections push harder. */
-export const SIREN = { intensity: 0.6, period: 2.2, heroPeriod: 0.8 };
+export const SIREN = { intensity: 0.6, period: 2.2, heroPeriod: 0.5 };
