@@ -193,7 +193,10 @@ export function buildCategory(section, cat, { onPiece }) {
   // whole transition is seen even on a quick scroll); reverses when scrolling back up
   const TIN = 0;
   if (!reduced) {
-    const titleIn = gsap.fromTo(wChars, tIn.from, { ...tIn.to, duration: 1.1, paused: true });
+    // lazy: false — hide the letters right now. A lazy first render waits for the next frame,
+    // and when load runs without frames (a background tab) ScrollTrigger's refresh drops it:
+    // the word then sits fully built until each letter's stagger turn snaps it away and back in.
+    const titleIn = gsap.fromTo(wChars, tIn.from, { ...tIn.to, duration: 1.1, paused: true, lazy: false });
     ScrollTrigger.create({ trigger: section, start: 'top 55%', onEnter: () => titleIn.play(), onLeaveBack: () => titleIn.reverse() });
   }
   tl.fromTo(wInner, { opacity: 1 }, { ...TITLE_OUT[cat.id], duration: 0.9, immediateRender: false }, 0.05 + TIN);
