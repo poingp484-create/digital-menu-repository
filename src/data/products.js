@@ -337,7 +337,9 @@ export const CATEGORIES = [
         specs: ['LIQUID-SILVER WRAP FRAME', 'SMOKE MIRROR LENS', 'SCULPTED BLADE TEMPLES'],
         description:
           'A liquid-silver wraparound frame with sculpted blade temples and a smoke mirror lens. Built for 300 km/h, worn at 3AM.',
-        image: 'products/quicksilver-wrap-shades.webp',
+        image: 'products/quicksilver-wrap-shades-front.webp',
+        // extra views: shown one at a time, cycling while the cursor is on the product
+        gallery: ['products/quicksilver-wrap-shades-front.webp', 'products/quicksilver-wrap-shades-side.webp'],
         art: { type: 'shades', variant: 'shield' },
         enter: 'visor',
         exit: 'visorOut',

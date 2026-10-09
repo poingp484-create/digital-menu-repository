@@ -160,8 +160,43 @@
   --media-w: min(36vw, 60vh);
 }
 .piece--shades {
-  --ratio: 736 / 594;
-  --media-w: min(44vw, 76vh);
+  --ratio: 2.4 / 1;
+  --media-w: min(52vw, 112vh);
+}
+/* hover slideshow (products with several views) */
+.piece__img {
+  position: relative;
+}
+.piece__img .render--alt {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+.piece__glint {
+  position: absolute;
+  inset: -10% 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.55) 50%, transparent 60%);
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  opacity: 0;
+}
+.piece__dots {
+  position: absolute;
+  left: 50%;
+  bottom: -9%;
+  translate: -50% 0;
+  display: flex;
+  gap: 8px;
+}
+.piece__dots i {
+  width: 18px;
+  height: 2px;
+  background: var(--ink-3);
+  transition: background 0.4s, width 0.4s var(--ease-out);
+}
+.piece__dots i.on {
+  width: 34px;
+  background: var(--red);
 }
 
 .piece--jewelry {

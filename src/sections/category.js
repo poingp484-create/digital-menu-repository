@@ -14,6 +14,55 @@ import { ENTER, EXIT, TEXT_IN, textOut, metaIn, metaOut, hold } from './choreo.j
 const TILT = { jacket: 7, tee: 6, pants: 8, shoe: 16, kicks: 14, cap: 14, hat: 10, shades: 18, jewelry: 20 };
 const FX = { lightSweep: 'sheen', visor: 'sheen', drift: 'speed' };
 
+/** Extra views of a product (stacked, hidden) for the hover slideshow. */
+function galleryHTML(p) {
+  if (!p.gallery || p.gallery.length < 2) return '';
+  const alt = `${p.name.join(' ')} — YAKUZA`;
+  return p.gallery
+    .slice(1)
+    .map((src, k) => `<img class="render render--photo render--${p.art.type} render--alt" src="${src}" alt="${alt}, view ${k + 2}" loading="lazy" decoding="async" draggable="false" />`)
+    .join('');
+}
+
+/**
+ * Hover slideshow for products with a gallery: one view at a time; while the
+ * cursor is on the product it switches view every few seconds (chrome glint
+ * sweep + a quick turn). On touch screens it cycles while the scene is active.
+ */
+const SLIDE_EVERY = 2400;
+function makeSlideshow(e) {
+  const frames = [...e.img.querySelectorAll('.render')];
+  const dots = [...e.media.querySelectorAll('.piece__dots i')];
+  const glint = e.media.querySelector('.piece__glint');
+  let cur = 0;
+  let timer = 0;
+  const show = (n) => {
+    const prev = frames[cur];
+    cur = (n + frames.length) % frames.length;
+    const next = frames[cur];
+    gsap.to(prev, { opacity: 0, xPercent: -10, rotationY: 28, duration: 0.55, ease: 'power2.in', overwrite: true });
+    gsap.fromTo(
+      next,
+      { opacity: 0, xPercent: 12, rotationY: -32 },
+      { opacity: 1, xPercent: 0, rotationY: 0, duration: 0.85, ease: 'expo.out', delay: 0.2, overwrite: true },
+    );
+    gsap.fromTo(glint, { xPercent: -130, opacity: 1 }, { xPercent: 130, opacity: 1, duration: 0.75, ease: 'power2.inOut', delay: 0.25, onComplete: () => gsap.set(glint, { opacity: 0 }) });
+    dots.forEach((d, k) => d.classList.toggle('on', k === cur));
+  };
+  const start = () => {
+    if (!timer) timer = setInterval(() => show(cur + 1), SLIDE_EVERY);
+  };
+  const stop = () => {
+    clearInterval(timer);
+    timer = 0;
+  };
+  if (!device.touch) {
+    e.media.addEventListener('pointerenter', start);
+    e.media.addEventListener('pointerleave', stop);
+  }
+  return { start, stop };
+}
+
 function pieceHTML(p, i, n) {
   const num = String(i + 1).padStart(2, '0');
   const fx = FX[p.enter] || '';
@@ -24,7 +73,8 @@ function pieceHTML(p, i, n) {
     ${p.enter === 'behindType' ? `<div class="piece__cover" aria-hidden="true"><span>${p.name[0]}</span><span>${p.name[1].split(' ')[0]}</span></div>` : ''}
     ${p.enter === 'motionBlur' || p.exit === 'whoosh' ? `<svg class="sr-defs" aria-hidden="true"><filter id="mb-${p.id}" x="-50%" y="-10%" width="200%" height="120%"><feGaussianBlur stdDeviation="0 0"/></filter></svg>` : ''}
     <div class="piece__media" data-cursor="view" data-enter="${p.id}" role="button" tabindex="-1" aria-label="View ${p.name.join(' ')}">
-      <div class="piece__vel"><div class="piece__img">${productVisual(p)}</div></div>
+      <div class="piece__vel"><div class="piece__img">${productVisual(p)}${galleryHTML(p)}</div></div>
+      ${p.gallery?.length > 1 ? `<div class="piece__glint" aria-hidden="true"></div><div class="piece__dots" aria-hidden="true">${p.gallery.map((_, k) => `<i class="${k ? '' : 'on'}"></i>`).join('')}</div>` : ''}
       ${p.art.type === 'shoe' ? '<div class="piece__floor" aria-hidden="true"></div>' : ''}
       <div class="piece__fx ${fx ? `fx--${fx}` : ''}" aria-hidden="true"></div>
     </div>
@@ -108,6 +158,7 @@ export function renderCategories(root, categories) {
 export function buildCategory(section, cat, { onPiece }) {
   const pieces = [...section.querySelectorAll('.piece')];
   const els = pieces.map(parts);
+  const slideshows = els.map((e, i) => (cat.products[i].gallery?.length > 1 ? makeSlideshow(e) : null));
   const reduced = device.reduced;
   const E = 1;
   const H = 0.9;
@@ -187,6 +238,7 @@ export function buildCategory(section, cat, { onPiece }) {
     if (idx !== active) {
       active = idx;
       pieces.forEach((pc, i) => pc.classList.toggle('is-active', i === idx));
+      slideshows.forEach((sl, i) => sl && (i === idx && device.touch ? sl.start() : i !== idx && sl.stop()));
       ticks.forEach((tk, i) => tk.classList.toggle('on', i === idx));
       if (idx < 0) els.forEach((e) => (e.vel.style.transform = ''));
       onPiece?.(idx >= 0 ? cat.products[idx] : null, idx, cat);

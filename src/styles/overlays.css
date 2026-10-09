@@ -62,8 +62,8 @@
   aspect-ratio: 0.77 / 1;
 }
 .piece-overlay[data-type='shades'] .po__media {
-  aspect-ratio: 736 / 594;
-  width: min(50vw, 86vh);
+  aspect-ratio: 2.4 / 1;
+  width: min(54vw, 120vh);
 }
 .piece-overlay[data-type='jewelry'] .po__media {
   aspect-ratio: 1;
