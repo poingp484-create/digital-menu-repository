@@ -132,7 +132,7 @@ function parts(piece) {
 /* Category title treatments: each district has its own identity. */
 const TITLE_IN = {
   jackets: (c) => ({ from: { yPercent: (i) => (i % 2 ? 140 : -140), rotationX: 90, opacity: 0 }, to: { yPercent: 0, rotationX: 0, opacity: 1, stagger: 0.04, ease: 'power3.out' } }),
-  tees: () => ({ from: { x: () => gsap.utils.random(-120, 120), skewX: 40, opacity: 0 }, to: { x: 0, skewX: 0, opacity: 1, stagger: { each: 0.03, from: 'random' }, ease: 'steps(6)' } }),
+  tees: () => ({ from: { clipPath: 'inset(50% 0% 50% 0%)', scaleY: 2.4, yPercent: -8, opacity: 0.4 }, to: { clipPath: 'inset(0% 0% 0% 0%)', scaleY: 1, yPercent: 0, opacity: 1, stagger: { each: 0.05, from: 'center' }, ease: 'expo.out' } }),
   shoes: () => ({ from: { xPercent: 420, scaleX: 3.2, opacity: 0 }, to: { xPercent: 0, scaleX: 1, opacity: 1, stagger: 0.035, ease: 'expo.out' } }),
   denim: () => ({ from: { yPercent: -170, rotation: () => gsap.utils.random(-24, 24), opacity: 0 }, to: { yPercent: 0, rotation: 0, opacity: 1, stagger: 0.05, ease: 'back.out(1.6)' } }),
   headgear: () => ({ from: { yPercent: 130, scaleY: 0.2, opacity: 0, transformOrigin: '50% 100%' }, to: { yPercent: 0, scaleY: 1, opacity: 1, stagger: { each: 0.04, from: 'center' }, ease: 'expo.out' } }),
@@ -142,7 +142,7 @@ const TITLE_OUT = {
   headgear: { yPercent: -140, scaleY: 2.2, opacity: 0, stagger: { each: 0.03, from: 'edges' }, ease: 'power3.in' },
   denim: { y: () => window.innerHeight * 0.9, rotation: () => gsap.utils.random(-30, 30), opacity: 0, stagger: { each: 0.03, from: 'random' }, ease: 'power2.in' },
   jackets: { y: (i) => (i % 2 ? -1 : 1) * window.innerHeight, rotation: (i) => (i % 2 ? -18 : 18), opacity: 0, stagger: 0.02, ease: 'power2.in' },
-  tees: { x: () => gsap.utils.random(-300, 300), skewX: -40, opacity: 0, stagger: { each: 0.02, from: 'random' }, ease: 'steps(7)' },
+  tees: { clipPath: 'inset(50% 0% 50% 0%)', scaleY: 2.2, opacity: 0, stagger: { each: 0.035, from: 'edges' }, ease: 'power3.in' },
   shoes: { xPercent: -520, scaleX: 3, opacity: 0, stagger: 0.025, ease: 'expo.in' },
   jewelry: { opacity: 0, filter: 'blur(24px)', scale: 1.4, stagger: { each: 0.02, from: 'center' }, ease: 'power2.in' },
 };
@@ -182,18 +182,20 @@ export function buildCategory(section, cat, { onPiece }) {
   const tIn = (TITLE_IN[cat.id] || TITLE_IN.jackets)();
   const titleTl = gsap.timeline({ scrollTrigger: { trigger: section, start: 'top bottom', end: 'top top', scrub: device.touch ? 0.4 : 0.8 } });
   if (!reduced) {
-    titleTl.fromTo(wChars, tIn.from, { ...tIn.to, duration: 1 }, 0);
     titleTl.fromTo(title.querySelectorAll('.ct__index, .ct__district, .ct__blurb'), { opacity: 0, y: 40 }, { opacity: 1, y: 0, stagger: 0.1, duration: 0.6 }, 0.3);
     titleTl.fromTo(title.querySelector('.ct__jp'), { opacity: 0, yPercent: 30 }, { opacity: 1, yPercent: 0, duration: 0.8 }, 0.2);
   }
 
   // ── main stage timeline
   const tl = gsap.timeline({ defaults: { ease: 'none' } });
-  tl.fromTo(wInner, { opacity: 1 }, { ...TITLE_OUT[cat.id], duration: 0.9, immediateRender: false }, 0.05);
-  tl.fromTo(title, { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: -40, duration: 0.45, immediateRender: false }, 0.6);
+  // the district word builds once the stage is pinned, so the whole transition plays in view
+  const TIN = reduced ? 0 : 0.7;
+  if (!reduced) tl.fromTo(wChars, tIn.from, { ...tIn.to, duration: 0.5 }, 0);
+  tl.fromTo(wInner, { opacity: 1 }, { ...TITLE_OUT[cat.id], duration: 0.9, immediateRender: false }, 0.05 + TIN);
+  tl.fromTo(title, { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: -40, duration: 0.45, immediateRender: false }, 0.6 + TIN);
 
   const marks = [];
-  let at = 0.55;
+  let at = 0.55 + TIN;
   els.forEach((e, i) => {
     const p = cat.products[i];
     const dir = p.layout === 'right' ? -1 : 1;

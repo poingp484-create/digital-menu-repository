@@ -160,12 +160,20 @@
     grid-row: 3;
     font-size: 1.15rem;
   }
-  .mf__stats {
+  .mf__districts {
     grid-row: 4;
-    gap: 22px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
   }
-  .mf__stats b {
-    font-size: 12px;
+  .mf__districts li:last-child {
+    grid-column: 1 / -1;
+  }
+  .mfd__img {
+    flex-basis: 40px;
+    height: 40px;
+  }
+  .mfd__txt b {
+    font-size: 1.05rem;
   }
 
   /* categories */

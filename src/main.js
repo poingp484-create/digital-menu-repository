@@ -70,13 +70,14 @@ const index = initIndexOverlay({
     if (cat) scrollTo(cat.posFor(cat.ids.indexOf(id)), { duration: 2.6 });
   },
 });
-const nav = initNav({ onIndex: () => index.open(), onBag: () => bag.open() });
+const nav = initNav({ onIndex: () => index.open(), onBag: () => bag.open(), target: (href) => (href === '#collection' && manifesto ? manifesto.target() : null) });
+let manifesto = null;
 if (lenis) lenis.stop();
 else document.documentElement.classList.add('no-scroll');
 
 /* ── scroll choreography (top → bottom) ────────────────────────────────── */
 buildHero($('#intro'), { onReveal: (on) => nav.setRevealed(on) });
-buildManifesto($('#collection'));
+manifesto = buildManifesto($('#collection'));
 CATEGORIES.forEach((cat) => {
   categories.push(
     buildCategory($(`#cat-${cat.id}`), cat, {

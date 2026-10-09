@@ -33,7 +33,7 @@ function scramble(el) {
   run();
 }
 
-export function initNav({ onIndex, onBag }) {
+export function initNav({ onIndex, onBag, target }) {
   const nav = document.getElementById('nav');
   nav.innerHTML = `
     <a class="nav__logo" href="#intro" data-cursor="link" aria-label="YAKUZA — back to start">${logoHTML()}</a>
@@ -80,7 +80,7 @@ export function initNav({ onIndex, onBag }) {
     toggleMenu(false);
     if (a.dataset.action === 'index') return onIndex();
     const href = a.getAttribute('href');
-    scrollTo(href === '#intro' ? 0 : href);
+    scrollTo(href === '#intro' ? 0 : (target && target(href)) ?? href);
   });
 
   nav.querySelectorAll('.nav__index a').forEach((a) => {
