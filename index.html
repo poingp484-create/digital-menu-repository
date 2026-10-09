@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Teaching by Age Group</title>
+  <meta name="description" content="A quick-reference guide for adapting faith formation lessons to each age group, from Classes 1–2 through Classes 9–11.">
+  <style>
+    :root {
+      --bg: #faf7f2;
+      --surface: #ffffff;
+      --text: #2a2622;
+      --muted: #6b635a;
+      --border: #e6dfd4;
+      --shadow: 0 1px 2px rgba(40, 30, 20, .06), 0 4px 16px rgba(40, 30, 20, .06);
+
+      --g1: #d9822b; --g1-soft: #fbeedd;
+      --g2: #3d8b5a; --g2-soft: #e3f2e8;
+      --g3: #3a6fb0; --g3-soft: #e2ecf8;
+      --g4: #7a4fa3; --g4-soft: #efe6f7;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #1a1816;
+        --surface: #24211e;
+        --text: #eee8e0;
+        --muted: #a89f94;
+        --border: #3a3530;
+        --shadow: none;
+
+        --g1: #f0a65a; --g1-soft: #3a2b1b;
+        --g2: #6cc08a; --g2-soft: #1e3326;
+        --g3: #7ea9e0; --g3-soft: #1d2a3d;
+        --g4: #b993dd; --g4-soft: #2e2339;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #1a1816;
+      --surface: #24211e;
+      --text: #eee8e0;
+      --muted: #a89f94;
+      --border: #3a3530;
+      --shadow: none;
+
+      --g1: #f0a65a; --g1-soft: #3a2b1b;
+      --g2: #6cc08a; --g2-soft: #1e3326;
+      --g3: #7ea9e0; --g3-soft: #1d2a3d;
+      --g4: #b993dd; --g4-soft: #2e2339;
+    }
+
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.55;
+    }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 32px 16px 48px; }
+
+    header { margin-bottom: 24px; }
+    .eyebrow {
+      font-size: .8rem; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--muted); margin: 0 0 6px;
+    }
+    h1 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.7rem, 4.5vw, 2.6rem);
+      line-height: 1.15; margin: 0 0 10px;
+    }
+    .lede { color: var(--muted); max-width: 62ch; margin: 0; }
+
+    nav.picker {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin: 20px 0 28px;
+    }
+    nav.picker button {
+      font: inherit; font-size: .92rem; cursor: pointer;
+      border: 1px solid var(--border); background: var(--surface); color: var(--text);
+      padding: 8px 14px; border-radius: 999px;
+    }
+    nav.picker button[aria-pressed="true"] {
+      background: var(--text); color: var(--bg); border-color: var(--text);
+    }
+    nav.picker button:focus-visible { outline: 2px solid var(--g3); outline-offset: 2px; }
+
+    .grid {
+      display: grid; gap: 18px;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 720px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .card {
+      --accent: var(--g1); --soft: var(--g1-soft);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 5px solid var(--accent);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 20px 20px 18px;
+      display: flex; flex-direction: column;
+    }
+    .card[data-group="2"] { --accent: var(--g2); --soft: var(--g2-soft); }
+    .card[data-group="3"] { --accent: var(--g3); --soft: var(--g3-soft); }
+    .card[data-group="4"] { --accent: var(--g4); --soft: var(--g4-soft); }
+    .card[hidden] { display: none; }
+
+    .classes {
+      display: inline-block; align-self: flex-start;
+      font-size: .78rem; font-weight: 600; letter-spacing: .04em;
+      color: var(--accent); background: var(--soft);
+      padding: 3px 10px; border-radius: 999px; margin-bottom: 10px;
+    }
+    .card h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.35rem; line-height: 1.25; margin: 0 0 6px;
+    }
+    .approach { color: var(--muted); font-size: .93rem; margin: 0 0 14px; }
+
+    .card ul { margin: 0; padding: 0; list-style: none; flex: 1; }
+    .card li {
+      position: relative; padding-left: 20px; margin-bottom: 9px; font-size: .95rem;
+    }
+    .card li::before {
+      content: ""; position: absolute; left: 3px; top: .62em;
+      width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+    }
+
+    .closing {
+      margin: 14px 0 0; padding: 12px 14px;
+      background: var(--soft); border-radius: 8px;
+      font-size: .93rem;
+    }
+    .closing strong { color: var(--accent); display: block; font-size: .75rem;
+      letter-spacing: .08em; text-transform: uppercase; margin-bottom: 2px; }
+
+    footer { margin-top: 32px; color: var(--muted); font-size: .85rem; }
+    footer button {
+      font: inherit; cursor: pointer; color: var(--text);
+      background: none; border: 1px solid var(--border); border-radius: 6px;
+      padding: 6px 12px; margin-left: 6px;
+    }
+
+    @media print {
+      body { background: #fff; color: #000; }
+      nav.picker, footer button { display: none; }
+      .card { box-shadow: none; break-inside: avoid; }
+      .card[hidden] { display: flex; }
+      .wrap { padding: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <p class="eyebrow">Faith formation · teacher guide</p>
+      <h1>Adapt your teaching to the age group</h1>
+      <p class="lede">The same Gospel, met at each stage of growth: from discovering Jesus through play, to exploring and participating, to questioning and connecting, to reflecting, discerning and living the faith.</p>
+    </header>
+
+    <nav class="picker" aria-label="Show age group">
+      <button type="button" data-show="all" aria-pressed="true">All classes</button>
+      <button type="button" data-show="1" aria-pressed="false">Classes 1–2</button>
+      <button type="button" data-show="2" aria-pressed="false">Classes 3–5</button>
+      <button type="button" data-show="3" aria-pressed="false">Classes 6–8</button>
+      <button type="button" data-show="4" aria-pressed="false">Classes 9–11</button>
+    </nav>
+
+    <main class="grid">
+      <article class="card" data-group="1">
+        <span class="classes">Classes 1–2</span>
+        <h2>Discover Jesus</h2>
+        <p class="approach">Short activities, concrete objects, movement and repetition.</p>
+        <ul>
+          <li>Use picture cards, puppets, songs, action rhymes and colouring.</li>
+          <li>Teach one main message at a time.</li>
+          <li>Use simple prayer gestures and familiar examples from home.</li>
+        </ul>
+        <p class="closing"><strong>End with</strong>“What can I do this week to show Jesus’ love?”</p>
+      </article>
+
+      <article class="card" data-group="2">
+        <span class="classes">Classes 3–5</span>
+        <h2>Explore and participate</h2>
+        <p class="approach">Stories, puzzles, teamwork and practical applications.</p>
+        <ul>
+          <li>Organise Bible-story sequencing and Scripture treasure hunts.</li>
+          <li>Use quizzes, role-play, drawing and group challenges.</li>
+          <li>Introduce the meaning behind prayers, symbols and Church celebrations.</li>
+        </ul>
+        <p class="closing"><strong>Connect</strong>Ask students to connect a Bible story to a situation in school or at home.</p>
+      </article>
+
+      <article class="card" data-group="3">
+        <span class="classes">Classes 6–8</span>
+        <h2>Question and connect</h2>
+        <p class="approach">Problem-solving, discussion, reflection and collaboration.</p>
+        <ul>
+          <li>Use moral dilemmas, case studies and Bible investigations.</li>
+          <li>Let students prepare short skits, podcasts, posters or presentations.</li>
+          <li>Connect the Ten Commandments and Jesus’ teachings to friendships, honesty, peer pressure and responsibility.</li>
+        </ul>
+        <p class="closing"><strong>Invite</strong>Invite questions about faith and allow respectful discussion.</p>
+      </article>
+
+      <article class="card" data-group="4">
+        <span class="classes">Classes 9–11</span>
+        <h2>Reflect, discern and live the faith</h2>
+        <p class="approach">Authentic dialogue, critical thinking, discernment and service.</p>
+        <ul>
+          <li>Begin with a real-life question rather than a lecture.</li>
+          <li>Explore Scripture in context and connect it to Catholic teaching.</li>
+          <li>Discuss conscience, vocation, suffering, justice, relationships, digital behaviour and social responsibility.</li>
+          <li>Use debates, reflective journals, service projects and student-led prayer.</li>
+        </ul>
+        <p class="closing"><strong>Encourage</strong>Encourage students to examine why they believe, not merely repeat what they have learnt.</p>
+      </article>
+    </main>
+
+    <footer>
+      Print this page for a one-sheet staffroom reference.
+      <button type="button" onclick="window.print()">Print</button>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      var buttons = document.querySelectorAll('nav.picker button');
+      var cards = document.querySelectorAll('.card');
+      function show(group) {
+        buttons.forEach(function (b) {
+          b.setAttribute('aria-pressed', String(b.dataset.show === group));
+        });
+        cards.forEach(function (c) {
+          c.hidden = group !== 'all' && c.dataset.group !== group;
+        });
+      }
+      buttons.forEach(function (b) {
+        b.addEventListener('click', function () { show(b.dataset.show); });
+      });
+    })();
+  </script>
+</body>
+</html>
