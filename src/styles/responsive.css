@@ -103,7 +103,10 @@
     padding-bottom: 10px;
   }
   .hud__piece,
-  .hud__route {
+  .hud__route,
+  /* the product price row sits where these would be; the piece count already says where you are */
+  .hud__sec,
+  .hud__heat {
     display: none;
   }
   .nav__snd span {

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://poingp484-create.github.io/digital-menu-repository/sitemap.xml
