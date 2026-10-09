@@ -303,7 +303,9 @@ export class Stage {
     this.sakura.resize(visW, visH, dpr);
 
     if (this.pieceAspect) {
-      const ph = visH * 0.86;
+      // sized to sit inside the SUSPECT SPOTTED brackets (70vh) while the frame is on screen,
+      // and never wider than the viewport on portrait phones
+      const ph = Math.min(visH * 0.6, (visW * 0.82) / this.pieceAspect);
       this.piece.scale.set(ph * this.pieceAspect, ph, 1);
     }
   }
@@ -475,7 +477,7 @@ export class Stage {
     const appear = smooth(0.2, 0.48, P);
     const approach = smooth(0.48, 0.86, P);
     const leave = smooth(0.84, 1.0, P);
-    this.piece.position.set(m.nx * -0.2 * (1 - approach), lerp(-0.6, 0, appear) - approach * 0.4, lerp(-9, -1.5, appear) + approach * 5.5);
+    this.piece.position.set(m.nx * -0.2 * (1 - approach), lerp(-0.6, 0, appear) - approach * 0.4, lerp(-9, -1.5, appear) + approach * 6.3);
     this.piece.rotation.set(m.ny * 0.08 + (1 - appear) * 0.3, m.nx * 0.18 + (1 - appear) * -0.5, (1 - appear) * 0.08);
     uni.uOpacity.value = appear * (1 - leave);
     uni.uAberr.value = 0.003 + (1 - appear) * 0.04 + approach * 0.012 + Math.min(state.scroll.speed, 1) * 0.012;

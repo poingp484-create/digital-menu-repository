@@ -142,6 +142,10 @@
     width: 74vw;
     height: 60vh;
   }
+  .hero__target-label {
+    font-size: 8.5px;
+    letter-spacing: 0.08em;
+  }
 
   /* manifesto */
   .mf__inner {
