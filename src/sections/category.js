@@ -227,7 +227,7 @@ export function buildCategory(section, cat, { onPiece }) {
   const st = ScrollTrigger.create({
     trigger: section,
     start: 'top top',
-    end: () => `+=${total * window.innerHeight * (device.mobile ? 0.7 : 0.85)}`,
+    end: () => `+=${total * window.innerHeight * (device.mobile ? 0.5 : 0.6)}`,
     pin: true,
     scrub: device.touch ? 0.5 : 0.9,
     anticipatePin: 1,

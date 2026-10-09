@@ -246,6 +246,21 @@ export const CATEGORIES = [
     blurb: 'Grip the asphalt. Leave the rest behind.',
     products: [
       {
+        id: 'riot-stud-hi-top',
+        name: ['RIOT STUD', 'HI-TOP'],
+        jp: '暴動',
+        price: price(14900, 179, 27400),
+        specs: ['BLACK PEBBLED LEATHER', 'STUDDED STRIPES + STRAP', 'ZIP-DOWN COLLAR, TARTAN LINING'],
+        description:
+          'Black pebbled leather hi-tops with studded stripes, a studded ankle strap and a zip-down collar that folds open to show the tartan lining.',
+        image: 'products/riot-stud-hi-top.webp',
+        art: { type: 'kicks', variant: 'black' },
+        enter: 'dropBounce',
+        exit: 'scaleThrough',
+        text: 'split',
+        layout: 'right',
+      },
+      {
         id: 'blood-script-skate-shoe',
         name: ['BLOOD SCRIPT', 'SKATE SHOE'],
         jp: '血文字',

@@ -42,7 +42,7 @@ export function buildHero(el, { onReveal }) {
   const st = ScrollTrigger.create({
     trigger: el,
     start: 'top top',
-    end: '+=230%',
+    end: '+=190%',
     pin: true,
     scrub: true,
     animation: tl,

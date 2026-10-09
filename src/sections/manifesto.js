@@ -44,7 +44,7 @@ export function buildManifesto(el) {
 
   // reveal starts while the section is still rising into view, then holds under the pin
   ScrollTrigger.create({ trigger: el, start: 'top top', end: '+=160%', pin: true });
-  const reveal = ScrollTrigger.create({ trigger: el, start: 'top 70%', end: () => `+=${window.innerHeight * (0.7 + 1.6)}`, scrub: 0.8, animation: tl, invalidateOnRefresh: true });
+  const reveal = ScrollTrigger.create({ trigger: el, start: 'top 95%', end: () => `+=${window.innerHeight * (0.95 + 1.6)}`, scrub: 0.8, animation: tl, invalidateOnRefresh: true });
 
   el.querySelectorAll('.mf__districts a').forEach((a) =>
     a.addEventListener('click', (e) => {

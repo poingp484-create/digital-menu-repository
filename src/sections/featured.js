@@ -8,7 +8,7 @@ import { device } from '../core/device.js';
 import { splitChars } from '../core/split.js';
 import { FEATURED } from '../data/products.js';
 import { productVisual } from '../art/renders.js';
-import { formatPrice, formatAmount, store, subscribe } from '../ui/store.js';
+import { formatAmount, store, subscribe } from '../ui/store.js';
 
 export function renderFeatured(el) {
   const p = FEATURED;
@@ -32,7 +32,6 @@ export function renderFeatured(el) {
       <div class="ft__rank">BLACKLIST <b>#01</b></div>
       <h2 class="ft__name"><span class="n1">${p.name[0]}</span><span class="n2">${p.name[1]}</span></h2>
       <div class="ft__jp">${p.jp}</div>
-      <div class="ft__price" data-price="${p.id}">${formatPrice(p.price)}</div>
       <button class="btn btn--solid ft__cta" type="button" data-enter="${p.id}" data-magnetic=".3" data-cursor="link"><span>ENTER PIECE</span><i>→</i></button>
     </div>
     <div class="ft__stamp" aria-hidden="true">EVADED</div>`;
@@ -65,7 +64,7 @@ export function buildFeatured(el) {
   });
   tl.fromTo(el.querySelector('.ft__rank'), { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.3 }, 2.6)
     .fromTo(nameChars, { yPercent: 120, opacity: 0 }, { yPercent: 0, opacity: 1, stagger: 0.02, duration: 0.5, ease: 'power4.out' }, 2.65)
-    .fromTo(el.querySelectorAll('.ft__jp, .ft__price, .ft__cta'), { opacity: 0, y: 24 }, { opacity: 1, y: 0, stagger: 0.08, duration: 0.3 }, 2.9)
+    .fromTo(el.querySelectorAll('.ft__jp, .ft__cta'), { opacity: 0, y: 24 }, { opacity: 1, y: 0, stagger: 0.08, duration: 0.3 }, 2.9)
     .to({}, { duration: 1.3 })
     .addLabel('exit')
     .to(cos, { opacity: 0, duration: 0.3 }, 'exit+=0.45')
