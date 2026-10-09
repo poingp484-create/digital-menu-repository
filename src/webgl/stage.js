@@ -35,6 +35,7 @@ export class Stage {
   constructor(canvas) {
     this.canvas = canvas;
     this.ok = false;
+    this.sirenPhase = 0;
     try {
       this.renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false, powerPreference: 'high-performance', stencil: false, depth: true });
     } catch (e) {
@@ -76,7 +77,7 @@ export class Stage {
       uAccent: { value: new THREE.Vector3() },
       uHeat: { value: 0 },
       uSiren: { value: SIREN.intensity },
-      uSirenPeriod: { value: SIREN.period },
+      uSirenPhase: { value: 0 },
       uStreaks: { value: 0 },
       uSpeed: { value: 0 },
       uSky: { value: 1 },
@@ -380,6 +381,9 @@ export class Stage {
     const m = state.mouse;
     const u = this.bgUniforms;
     u.uTime.value = t;
+    // sirens: fast on the hero, slowing to the ambient pulse as the fly-through starts
+    this.sirenPhase = (this.sirenPhase + dt / lerp(SIREN.heroPeriod, SIREN.period, smooth(0.12, 0.5, P))) % 1;
+    u.uSirenPhase.value = this.sirenPhase;
     u.uMouse.value.set((m.nx + 1) / 2, 1 - (m.ny + 1) / 2);
     u.uMouseE.value = device.touch ? m.energy * 0.6 : 0.25 + m.energy;
     u.uBase.value.fromArray(env.base);

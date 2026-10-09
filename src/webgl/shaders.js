@@ -34,7 +34,7 @@ uniform vec3 uFog;
 uniform vec3 uAccent;
 uniform float uHeat;
 uniform float uSiren;
-uniform float uSirenPeriod;
+uniform float uSirenPhase;
 uniform float uStreaks;
 uniform float uSpeed;
 uniform float uSky;
@@ -110,9 +110,10 @@ void main(){
   float vig = smoothstep(1.25, 0.2, length(p * vec2(0.85, 1.1)));
   col *= mix(0.35, 1.0, vig);
 
-  // police sirens — always on: slow red / blue alternation from the top corners,
-  // spilling into the fog. Heat (pursuit) adds a fast double-flash on top.
-  float sp = fract(uTime / uSirenPeriod);
+  // police sirens — always on: red / blue alternation from the top corners, spilling
+  // into the fog (phase integrated on the CPU so the tempo can change without jumps).
+  // Heat (pursuit) adds a fast double-flash on top.
+  float sp = fract(uSirenPhase);
   float redS = smoothstep(0.0, 0.14, sp) * (1.0 - smoothstep(0.34, 0.5, sp));
   float blueS = smoothstep(0.5, 0.64, sp) * (1.0 - smoothstep(0.84, 1.0, sp));
   float ph = fract(uTime * 1.6);
