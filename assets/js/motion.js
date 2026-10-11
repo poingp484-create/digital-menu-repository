@@ -17,9 +17,11 @@
     var els = root.querySelectorAll("[data-split]");
     els.forEach(function (el) {
       if (el.dataset.splitDone) return;
-      var text = el.textContent.replace(/\s+/g, " ").trim();
-      if (!el.hasAttribute("aria-label")) el.setAttribute("aria-label", text);
       var lines = el.innerHTML.split(/<br\s*\/?>/i);
+      if (!el.hasAttribute("aria-label")) {
+        var probe = document.createElement("div");
+        el.setAttribute("aria-label", lines.map(function (l) { probe.innerHTML = l; return probe.textContent.trim(); }).join(" ").replace(/\s+/g, " ").trim());
+      }
       var i = 0;
       el.innerHTML = lines.map(function (line) {
         var tmp = document.createElement("div");

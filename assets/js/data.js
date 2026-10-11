@@ -7,7 +7,7 @@
 (function () {
   "use strict";
 
-  // Cutouts in /cutout-review were approved by the owner.
+  // Cutouts in /cutout-review are cleared for use (the owner approved them).
   // While false, every shoe slot renders a same-proportion placeholder instead.
   var CUTOUTS_APPROVED = true;
   var IMG_DIR = "assets/shoes/";
@@ -30,10 +30,6 @@
         "High-shine maroon upper with silver striping",
         "Fold-over tongue with a printed emblem",
         "Long maroon laces, left untied in the photo"
-      ],
-      details: [
-        { label: "Tongue emblem", x: 0.32, y: 0.34, z: 2.4 },
-        { label: "Striped upper", x: 0.36, y: 0.62, z: 2.2 }
       ]
     },
     {
@@ -50,10 +46,6 @@
         "Airbrushed face with violet eyes on one shoe",
         "Airbrushed spider and web pattern on the other",
         "Oversized cream laces, red and navy foxing stripes"
-      ],
-      details: [
-        { label: "Violet eyes", x: 0.48, y: 0.27, z: 2.8 },
-        { label: "Spider", x: 0.61, y: 0.72, z: 2.2 }
       ]
     },
     {
@@ -70,10 +62,6 @@
         "Airbrushed cobra on the side panel",
         "Painted midsole covered in script tags",
         "Dog tag and charm hung from the laces"
-      ],
-      details: [
-        { label: "Cobra head", x: 0.41, y: 0.47, z: 2.4 },
-        { label: "Dog tag", x: 0.7, y: 0.22, z: 2.8 }
       ]
     },
     {
@@ -90,10 +78,6 @@
         "Tiger face printed across each toe box",
         "Teeth wrap around the front of the sole line",
         "Clear tag still attached to the laces"
-      ],
-      details: [
-        { label: "Tiger eye", x: 0.63, y: 0.7, z: 1.9 },
-        { label: "Teeth", x: 0.5, y: 0.84, z: 1.8 }
       ]
     },
     {
@@ -110,27 +94,94 @@
         "Metallic silver upper with quilted stitching",
         "Fold-over tongue",
         "Rubber turf outsole; shoe trees fitted in the photo"
-      ],
-      details: [
-        { label: "Fold-over tongue", x: 0.36, y: 0.4, z: 1.9 },
-        { label: "Stitch lines", x: 0.62, y: 0.6, z: 1.8 }
+      ]
+    },
+    {
+      no: "06",
+      slug: "fur-chain-heels",
+      name: "Fur & Chain Heels",
+      short: "Fur / Chain",
+      img: "fur-chain-heels", w: 535, h: 820, lowRes: true,
+      silhouette: "heel", silhouetteLabel: "Heeled knee boot",
+      finishes: ["hardware"],
+      ink: "#9ba36a",
+      colourway: "Olive suede, dark fur trim, gunmetal chains",
+      observed: [
+        "Bands of dark fur wrapped around each shaft",
+        "Gunmetal chains criss-crossing the boot",
+        "Buckle straps with cross charms at the ankle",
+        "Rhinestone-studded cuff, croc-effect pointed toe, metal stiletto heel"
+      ]
+    },
+    {
+      no: "07",
+      slug: "collage-lace-up-boots",
+      name: "Collage Lace-Up Boots",
+      short: "Collage",
+      img: "collage-lace-up-boots", w: 696, h: 694, lowRes: true,
+      silhouette: "laceup", silhouetteLabel: "Lace-up high boot",
+      finishes: ["print"],
+      ink: "#cf4a3f",
+      colourway: "Cream crackle with red and black newsprint collage",
+      observed: [
+        "Crackled cream finish over a printed newsprint collage",
+        "Long brown laces through a high lace-up front",
+        "Zip on the side of the shaft",
+        "Small orange kangaroo logo on the side and toe"
+      ]
+    },
+    {
+      no: "08",
+      slug: "crackle-face-boots",
+      name: "Crackle Face Boots",
+      short: "Crackle Face",
+      img: "crackle-face-boots", w: 673, h: 640, lowRes: true,
+      silhouette: "laceup", silhouetteLabel: "Lace-up high boot",
+      finishes: ["print"],
+      ink: "#e2bd45",
+      colourway: "Cream crackle print with tan suede panels",
+      observed: [
+        "Pop-art face printed in red and yellow on the shaft",
+        "Crackled cream finish with black newsprint graphics",
+        "Tan suede heel and toe panels, side zip, tall laces"
+      ]
+    },
+    {
+      no: "09",
+      slug: "pin-up-tattoo-hightops",
+      name: "Pin-Up Tattoo High-Tops",
+      short: "Pin-Up",
+      img: "pin-up-tattoo-hightops", w: 736, h: 873, lowRes: true,
+      silhouette: "high", silhouetteLabel: "High-top canvas",
+      finishes: ["print"],
+      ink: "#d9693f",
+      colourway: "Cream canvas, black foxing, red pinstripe",
+      observed: [
+        "Tattoo-flash pin-up cowgirl printed on the side",
+        "Black fold-down collar with an anchor patch",
+        "Printed script signature on the side panel",
+        "Black rubber foxing with a red stripe"
       ]
     }
   ];
 
   var SILHOUETTES = [
     { id: "all", label: "All pairs" },
-    { id: "low", label: "Low-top" },
-    { id: "high", label: "High-top" },
-    { id: "boot", label: "Boots" },
-    { id: "turf", label: "Turf" }
+    // word: the short form used as a big headline on the home page
+    { id: "low", label: "Low-top", word: "Low-top" },
+    { id: "high", label: "High-top", word: "High-top" },
+    { id: "boot", label: "Football boots", word: "Football" },
+    { id: "turf", label: "Turf", word: "Turf" },
+    { id: "laceup", label: "Lace-up boots", word: "Lace-up" },
+    { id: "heel", label: "Heels", word: "Heels" }
   ];
 
   var FINISHES = [
     { id: "airbrushed", label: "Airbrushed" },
     { id: "metallic", label: "Metallic" },
     { id: "print", label: "Print" },
-    { id: "creature", label: "Creatures" }
+    { id: "creature", label: "Creatures" },
+    { id: "hardware", label: "Hardware" }
   ];
 
   PRODUCTS.forEach(function (p) {

@@ -48,15 +48,10 @@
     return '<span class="focus-in">' + shoe(p, o) + ghost + "</span>";
   }
 
-  /* A zoomed crop of a shoe, centred on detail d, inside a box of aspect A (w/h). */
-  function crop(p, d, A, sizes) {
-    var z = d.z;
-    var left = 50 - d.x * z * 100;
-    var top = 50 - d.y * z * A * (p.h / p.w) * 100;
-    return '<div class="crop-in" style="width:' + (z * 100).toFixed(1) + "%;left:" + left.toFixed(1) + "%;top:" + top.toFixed(1) +
-      "%;transform-origin:" + (d.x * 100).toFixed(0) + "% " + (d.y * 100).toFixed(0) + '%">' +
-      shoe(p, { alt: "", sizes: sizes || "70vw" }) + "</div>";
-  }
+  function pad(n) { return n < 10 ? "0" + n : String(n); }
+  var WORDS = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"];
+  function word(n) { return WORDS[n] || String(n); }
+  function bySlug(slug) { return D.bySlug(slug); }
 
   function splitName(name) {
     var parts = name.split(" ");
@@ -68,7 +63,11 @@
 
   /* ---------- HOME ---------- */
   function home() {
-    var maroon = P[0], spider = P[1], cobra = P[2], tiger = P[3], silver = P[4];
+    // Each pair appears once on this page: two in the hero, four as spreads, three in the line-up.
+    var cobra = bySlug("cobra-airbrush-hightops"), maroon = bySlug("maroon-silver-boots");
+    var featured = ["fur-chain-heels", "airbrush-face-spider-lows", "collage-lace-up-boots", "tiger-print-boots"].map(bySlug);
+    var lineup = ["silver-turf-trainers", "crackle-face-boots", "pin-up-tattoo-hightops"].map(bySlug);
+    var N = pad(P.length);
     var html = "" +
       '<section class="hero" data-mouse-area aria-labelledby="hero-title">' +
       '  <div class="hero-far" data-mouse="-14"><div class="hero-far-in" data-depth="-0.1">' + shoe(maroon, { alt: "", sizes: "45vw", cls: "hero-far-img" }) + "</div></div>" +
@@ -79,33 +78,32 @@
       '    <a href="#p-' + cobra.slug + '" class="hero-near-link rv-shell" data-reveal aria-label="View ' + esc(cobra.name) + '">' + focusShoe(cobra, { eager: true, sizes: "(max-width:760px) 100vw, 58vw", alt: cobra.name + ": " + cobra.colourway }) + "</a>" +
       "  </div></div>" +
       '  <div class="hero-copy">' +
-      '    <p class="eyebrow hero-eyebrow" data-reveal>Index of odd footwear · 05 pairs</p>' +
+      '    <p class="eyebrow hero-eyebrow" data-reveal>Index of odd footwear · ' + N + ' pairs</p>' +
       '    <p class="hero-line" data-split data-reveal>Footwear for<br>the odd few.</p>' +
-      '    <p class="hero-sub" data-reveal>Airbrushed customs, metallic boots and printed oddities, cut clean and catalogued one pair at a time.</p>' +
+      '    <p class="hero-sub" data-reveal>Airbrushed customs, chained heels, collage boots and metallic oddities, cut clean and catalogued one pair at a time.</p>' +
       '    <div class="hero-cta" data-reveal><a class="btn btn--solid" href="#shop">Shop all pairs ' + ARROW + '</a><button class="btn btn--line" type="button" data-scrollto="pairs">See the pairs</button></div>' +
       "  </div>" +
       '  <dl class="label hero-label" data-reveal aria-label="Shoebox label">' +
-      "    <div><dt>Style</dt><dd>SLM-IDX-001</dd></div><div><dt>Pairs</dt><dd>05</dd></div>" +
+      "    <div><dt>Style</dt><dd>SLM-IDX-001</dd></div><div><dt>Pairs</dt><dd>" + N + "</dd></div>" +
       "    <div><dt>Size</dt><dd>EU 38–46*</dd></div><div><dt>Price</dt><dd>TBC</dd></div>" +
       '    <p class="label-foot">*placeholder size run</p>' +
       "  </dl>" +
       "</section>" +
 
       '<section class="statement" aria-label="What the index holds">' +
-      '  <p class="statement-text" data-split data-reveal>Airbrushed canvas. Fold-over tongues. Metallic panels. Teeth on the toe box.</p>' +
-      '  <p class="statement-sub" data-reveal>Five pairs, each photographed as found and catalogued below. Anything the photo can’t confirm is marked as unconfirmed.</p>' +
+      '  <p class="statement-text" data-split data-reveal>Airbrushed canvas. Chains on a stiletto. Collage under crackle. Teeth on the toe box.</p>' +
+      '  <p class="statement-sub" data-reveal>' + word(P.length) + ' pairs, each photographed as found and catalogued below. Anything the photo can’t confirm is marked as unconfirmed.</p>' +
       "</section>" +
 
       '<section class="pairs" id="pairs" aria-label="Featured pairs">' +
-      '  <header class="sec-head"><p class="eyebrow" data-reveal>Featured · 01–05</p><h2 class="sec-title" data-split data-reveal>The pairs</h2></header>' +
-      P.map(spread).join("") +
+      '  <header class="sec-head"><p class="eyebrow" data-reveal>Featured</p><h2 class="sec-title" data-split data-reveal>The pairs</h2></header>' +
+      featured.map(spread).join("") +
       "</section>" +
 
+      lineupSection(lineup) +
       silhouettes() +
-      details() +
 
       '<section class="teaser" aria-labelledby="teaser-q">' +
-      '  <div class="teaser-frag" data-depth="-0.12" aria-hidden="true">' + shoe(silver, { alt: "", sizes: "70vw" }) + "</div>" +
       '  <p class="eyebrow" data-reveal>The story</p>' +
       '  <blockquote class="teaser-q" id="teaser-q"><p data-split data-reveal>A shoe is the one thing people read from across a room.</p></blockquote>' +
       '  <a class="link-big" href="#story" data-reveal>Read the story ' + ARROW + "</a>" +
@@ -117,6 +115,7 @@
       enhance: function (root) {
         var cleanups = [];
         cleanups.push(bindSilhouettes(root));
+        cleanups.push(bindLineup(root));
         var shuffle = root.querySelector("[data-shuffle]");
         if (shuffle) {
           var onShuffle = function () {
@@ -134,18 +133,18 @@
     };
   }
 
-  var SPREAD_VARIANTS = ["a", "b", "c", "d", "e"];
+  var SPREAD_VARIANTS = ["a", "b", "c", "d"];
   function spread(p, i) {
     var v = SPREAD_VARIANTS[i % SPREAD_VARIANTS.length];
-    var sizes = { a: "(max-width:760px) 100vw, 62vw", b: "(max-width:760px) 100vw, 64vw", c: "(max-width:760px) 100vw, 60vw", d: "(max-width:760px) 90vw, 520px", e: "(max-width:760px) 96vw, 46vw" }[v];
+    var sizes = { a: "(max-width:760px) 100vw, 48vw", b: "(max-width:760px) 100vw, 64vw", c: "(max-width:760px) 100vw, 60vw", d: "(max-width:760px) 90vw, 520px" }[v];
     var nameHtml = v === "d"
       ? '<span class="sd-l">' + esc(p.name.split(" ")[0]) + '</span> <span class="sd-r">' + p.name.split(" ").slice(1).map(esc).join("<br>") + "</span>"
       : splitName(p.name);
     return "" +
       '<article class="spread spread--' + v + '" data-ink="' + p.ink + '" aria-labelledby="sp-' + p.no + '">' +
       '  <span class="spread-num" aria-hidden="true" data-depth="0.12">' + p.no + "</span>" +
-      '  <div class="spread-shoe rv-shell" data-reveal><a class="spread-shoe-in" href="#p-' + p.slug + '" data-depth="-0.05" data-cursor="View" tabindex="-1" aria-hidden="true">' +
-      focusShoe(p, { sizes: sizes, alt: "" }) + (v === "e" ? '<span class="reflect" aria-hidden="true">' + shoe(p, { sizes: sizes, alt: "" }) + "</span>" : "") +
+      '  <div class="spread-shoe rv-shell" data-reveal style="--r:' + (p.w / p.h).toFixed(4) + '"><a class="spread-shoe-in" href="#p-' + p.slug + '" data-depth="-0.05" data-cursor="View" tabindex="-1" aria-hidden="true">' +
+      focusShoe(p, { sizes: sizes, alt: "" }) +
       "  </a></div>" +
       '  <header class="spread-head">' +
       '    <p class="eyebrow" data-reveal>N° ' + p.no + " · " + esc(p.silhouetteLabel) + "</p>" +
@@ -166,11 +165,10 @@
       if (!list.length) return "";
       var n = list.length;
       return '<li><a class="sil-row" href="#shop-' + s.id + '" data-cursor="Shop" data-sil="' + s.id + '">' +
-        '<span class="sil-word">' + esc(s.label) + "</span>" +
-        '<span class="sil-count mono">' + (n < 10 ? "0" + n : n) + (n === 1 ? " pair" : " pairs") + "</span>" +
-        '<span class="sil-peek" aria-hidden="true">' + list.map(function (p, k) {
-          return '<span class="sil-peek-i" style="--k:' + k + '">' + shoe(p, { alt: "", sizes: "(max-width:760px) 30vw, 22vw" }) + "</span>";
-        }).join("") + "</span>" + ARROW + "</a></li>";
+        '<span class="sil-word">' + esc(s.word || s.label) + "</span>" +
+        '<span class="sil-count mono">' + pad(n) + (n === 1 ? " pair" : " pairs") + "</span>" +
+        '<span class="sil-names">' + list.map(function (p) { return "<span>" + esc(p.name) + "</span>"; }).join("") + "</span>" +
+        ARROW + "</a></li>";
     }).join("");
     return '<section class="sil" aria-labelledby="sil-title">' +
       '<header class="sec-head"><p class="eyebrow" data-reveal>Explore</p><h2 class="sec-title" id="sil-title" data-split data-reveal>By silhouette</h2></header>' +
@@ -199,27 +197,55 @@
     };
   }
 
-  function details() {
-    // Box aspects per slot: the strip mixes tall, square and wide windows.
-    var A = [0.8, 1, 1.35, 0.8, 1.2];
-    var items = P.map(function (p, i) {
-      var d = p.details[0];
-      return '<a class="detail detail--' + (i + 1) + '" href="#p-' + p.slug + '" data-reveal style="--d:' + (i * 80) + 'ms" data-cursor="View">' +
-        '<span class="crop" style="aspect-ratio:' + A[i] + '">' + crop(p, d, A[i], "(max-width:760px) 90vw, 40vw") + "</span>" +
-        '<span class="detail-label"><span class="mono">' + p.no + "</span> " + esc(d.label) + "</span>" +
-        '<span class="sr-only">: ' + esc(p.name) + "</span></a>";
+  /* The line-up: three pairs standing full-size on one floor. No crops, no repeats. */
+  function lineupSection(list) {
+    var items = list.map(function (p, k) {
+      return '<li class="lu-item" style="--k:' + k + ";--lu-ink:" + p.ink + '">' +
+        '<a class="lu-link" href="#p-' + p.slug + '" data-cursor="View">' +
+        '<span class="lu-stage rv-shell" data-reveal style="--d:' + (k * 120) + 'ms">' +
+        focusShoe(p, { alt: "", sizes: "(max-width:760px) 72vw, 30vw" }) + "</span>" +
+        '<span class="lu-cap"><span class="mono">N° ' + p.no + " · " + esc(p.silhouetteLabel) + "</span>" +
+        '<span class="lu-name">' + esc(p.name) + "</span>" +
+        '<span class="mono lu-price">' + priceLabel(p) + "</span></span></a></li>";
     }).join("");
-    return '<section class="details" aria-labelledby="det-title">' +
-      '<header class="sec-head"><p class="eyebrow" data-reveal>Discover</p><h2 class="sec-title" id="det-title" data-split data-reveal>Find a pair<br>by its detail</h2></header>' +
-      '<div class="detail-strip">' + items + "</div>" +
-      '<div class="details-foot" data-reveal><button class="btn btn--line" type="button" data-shuffle>Show me a random pair</button></div>' +
+    return '<section class="lineup" aria-labelledby="lu-title">' +
+      '<header class="sec-head"><p class="eyebrow" data-reveal>Also in the index</p><h2 class="sec-title" id="lu-title" data-split data-reveal>The line-up</h2></header>' +
+      '<ol class="lu-row">' + items + "</ol>" +
+      '<div class="lu-foot" data-reveal><p class="mono lu-hint">Swipe the line-up</p><button class="btn btn--line" type="button" data-shuffle>Show me a random pair</button></div>' +
       "</section>";
+  }
+
+  function bindLineup(root) {
+    var row = root.querySelector(".lu-row");
+    if (!row) return null;
+    // Hovering one pair steps the others back, like picking a shoe off a shelf.
+    var onOver = function (e) {
+      var it = e.target.closest(".lu-item");
+      row.classList.toggle("has-hot", !!it);
+      row.querySelectorAll(".lu-item").forEach(function (x) { x.classList.toggle("is-hot", x === it); });
+    };
+    var onOut = function (e) { if (!row.contains(e.relatedTarget)) onOver({ target: row }); };
+    var onFocus = function (e) {
+      onOver(e);
+      var it = e.target.closest(".lu-item");
+      if (it && row.scrollWidth > row.clientWidth) it.scrollIntoView({ block: "nearest", inline: "nearest", behavior: window.SOLEMN.motion.reduced() ? "auto" : "smooth" });
+    };
+    row.addEventListener("pointerover", onOver);
+    row.addEventListener("pointerout", onOut);
+    row.addEventListener("focusin", onFocus);
+    row.addEventListener("focusout", onOut);
+    return function () {
+      row.removeEventListener("pointerover", onOver);
+      row.removeEventListener("pointerout", onOut);
+      row.removeEventListener("focusin", onFocus);
+      row.removeEventListener("focusout", onOut);
+    };
   }
 
   /* ---------- SHOP ---------- */
   function shop(sil) {
     sil = sil || "all";
-    var titles = { all: "All pairs", low: "Low-tops", high: "High-tops", boot: "Boots", turf: "Turf" };
+    var titles = { all: "All pairs", low: "Low-tops", high: "High-tops", boot: "Football boots", turf: "Turf", laceup: "Lace-up boots", heel: "Heels" };
     var rows = P.map(function (p) {
       return '<li class="row-item" data-slug="' + p.slug + '" data-sil="' + p.silhouette + '" data-fin="' + p.finishes.join(" ") + '" data-no="' + p.no + '" data-name="' + esc(p.name) + '">' +
         '<a class="row" href="#p-' + p.slug + '">' +
@@ -246,7 +272,7 @@
 
     var html = '<section class="shop" aria-labelledby="shop-title">' +
       '<header class="shop-head">' +
-      '  <p class="eyebrow" data-reveal>Shop · <span data-count>05</span> pairs</p>' +
+      '  <p class="eyebrow" data-reveal>Shop · <span data-count>' + pad(P.length) + '</span> pairs</p>' +
       '  <h1 class="shop-title" id="shop-title" tabindex="-1" data-shop-title>' + titles[sil] + "</h1>" +
       "</header>" +
       '<div class="filters" data-reveal>' +
@@ -359,22 +385,14 @@
   function product(p) {
     var idx = P.indexOf(p);
     var next = P[(idx + 1) % P.length], prev = P[(idx - 1 + P.length) % P.length];
-    var views = [{ label: "Full pair", x: 0.5, y: 0.5, z: 1 }].concat(p.details);
     var sizes = p.sizes.map(function (s) {
       return '<label class="size"><input type="radio" name="size" value="' + s + '"><span>' + s + "</span></label>";
     }).join("");
     var html = '<article class="pdp" data-ink="' + p.ink + '" aria-labelledby="pdp-title">' +
       '<div class="pdp-stage">' +
       '  <span class="pdp-bgname" aria-hidden="true" data-depth="0.08">' + esc(p.short) + "</span>" +
-      '  <div class="pdp-view rv-shell" data-reveal data-cursor="Zoom"><div class="pdp-pan"><div class="pdp-zoom" style="--r:' + (p.w / p.h).toFixed(4) + '">' + focusShoe(p, { eager: true, sizes: "(max-width:900px) 100vw, 60vw" }) + "</div></div></div>" +
-      '  <div class="pdp-views" role="group" aria-label="Views of this pair">' +
-      views.map(function (v, i) {
-        return '<button type="button" class="view-btn" aria-pressed="' + (i === 0) + '" data-v="' + i + '">' +
-          '<span class="view-thumb crop" style="aspect-ratio:1">' + crop(p, { x: v.x, y: v.y, z: v.z }, 1, "96px") + "</span>" +
-          '<span class="mono">' + esc(v.label) + "</span></button>";
-      }).join("") +
-      "  </div>" +
-      '  <p class="pdp-hint mono">Click the shoe to zoom · one photo, shown as full pair and detail crops</p>' +
+      '  <div class="pdp-view rv-shell" data-reveal data-cursor="Zoom" tabindex="0" role="button" aria-pressed="false" aria-label="Look closer at the ' + esc(p.name) + '"><div class="pdp-pan"><div class="pdp-zoom" style="--r:' + (p.w / p.h).toFixed(4) + '">' + focusShoe(p, { eager: true, sizes: "(max-width:900px) 100vw, 60vw" }) + "</div></div></div>" +
+      '  <p class="pdp-hint mono">Click or press Enter to look closer · arrows move · Esc steps back</p>' +
       "</div>" +
       '<div class="pdp-info">' +
       '  <nav class="crumbs mono" aria-label="Breadcrumb"><a href="#shop">Shop</a> / <a href="#shop-' + p.silhouette + '">' + esc(silLabel(p.silhouette)) + "</a> / <span>N° " + p.no + "</span></nav>" +
@@ -406,22 +424,14 @@
       enhance: function (root) {
         var view = root.querySelector(".pdp-view");
         var pan = root.querySelector(".pdp-pan");
-        var zoomEl = root.querySelector(".pdp-zoom");
-        var btns = root.querySelectorAll(".view-btn");
         var addBtn = root.querySelector("[data-add]");
         var msg = root.querySelector(".add-msg");
         var zoomed = false;
 
-        function setView(i) {
-          var v = views[i];
-          btns.forEach(function (b, k) { b.setAttribute("aria-pressed", k === i); });
-          // move the requested point to the centre of the stage, then scale around it
-          zoomEl.style.transform = "translate(" + (-(v.x - 0.5) * v.z * 100).toFixed(2) + "%," + (-(v.y - 0.5) * v.z * 100).toFixed(2) + "%) scale(" + v.z + ")";
-          setZoom(false);
-        }
         function setZoom(on, e) {
           zoomed = on;
           view.classList.toggle("is-zoomed", on);
+          view.setAttribute("aria-pressed", on);
           if (on && e) pointPan(e);
           if (!on) pan.style.transform = "";
         }
@@ -434,7 +444,19 @@
         var onViewClick = function (e) { setZoom(!zoomed, e); };
         var onMove = function (e) { if (zoomed) pointPan(e); };
         var onLeave = function () { if (zoomed) setZoom(false); };
-        var onBtn = function (e) { var b = e.target.closest(".view-btn"); if (b) setView(+b.dataset.v); };
+        // Keyboard: Enter/Space looks closer at the centre, arrow keys move around, Escape steps back.
+        var kx = 0.5, ky = 0.5;
+        function keyPan() {
+          pan.style.transformOrigin = (kx * 100).toFixed(1) + "% " + (ky * 100).toFixed(1) + "%";
+          pan.style.transform = "scale(" + (p.lowRes ? 1.6 : 2) + ")";
+        }
+        var onKey = function (e) {
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); kx = ky = 0.5; setZoom(!zoomed); if (zoomed) keyPan(); return; }
+          if (e.key === "Escape" && zoomed) { e.stopPropagation(); setZoom(false); return; }
+          var step = { ArrowLeft: [-0.1, 0], ArrowRight: [0.1, 0], ArrowUp: [0, -0.1], ArrowDown: [0, 0.1] }[e.key];
+          if (step && zoomed) { e.preventDefault(); kx = Math.min(1, Math.max(0, kx + step[0])); ky = Math.min(1, Math.max(0, ky + step[1])); keyPan(); }
+        };
+        var onBlur = function () { if (zoomed) setZoom(false); };
         var onAdd = function () {
           var picked = root.querySelector('input[name="size"]:checked');
           if (!picked) {
@@ -451,13 +473,16 @@
         view.addEventListener("click", onViewClick);
         view.addEventListener("pointermove", onMove, { passive: true });
         view.addEventListener("pointerleave", onLeave);
-        root.querySelector(".pdp-views").addEventListener("click", onBtn);
+        view.addEventListener("keydown", onKey);
+        view.addEventListener("blur", onBlur);
         addBtn.addEventListener("click", onAdd);
         root.querySelector(".size-grid").addEventListener("change", onSize);
         return function () {
           view.removeEventListener("click", onViewClick);
           view.removeEventListener("pointermove", onMove);
           view.removeEventListener("pointerleave", onLeave);
+          view.removeEventListener("keydown", onKey);
+          view.removeEventListener("blur", onBlur);
           addBtn.removeEventListener("click", onAdd);
         };
       }
@@ -466,18 +491,27 @@
 
   /* ---------- STORY ---------- */
   function story() {
+    // Five chapters, five different pairs, each shown whole.
     var ch = [
-      { n: "I", t: "Paint that bends", p: P[2], d: P[2].details[0], body: [
+      { n: "I", t: "Paint that bends", p: bySlug("cobra-airbrush-hightops"), body: [
         "Airbrush art grew up on custom cars, T-shirts and denim long before it reached sneaker canvas. On a shoe the paint has to bend: across eyelets, over stitching, into the crease where the foot flexes.",
-        "Two pairs in the index carry it. A face and a spider on cream low-tops, and a cobra coiled up the side of green high-tops, its tongue running into the laces."
+        "A cobra coils up the side of these green high-tops, its tongue running into the laces. The face and spider lows and the pin-up high-tops carry the same idea in different hands."
       ] },
-      { n: "II", t: "The fold-over tongue", p: P[0], d: P[0].details[0], body: [
+      { n: "II", t: "The fold-over tongue", p: bySlug("maroon-silver-boots"), body: [
         "A long tongue folded down over the laces is a football-boot detail. It covers the knot and gives the top of the foot one clean surface.",
         "It shows up twice here: on the maroon boots and on the silver turf trainers, each with an emblem printed on the flap."
       ] },
-      { n: "III", t: "Shine and teeth", p: P[3], d: P[3].details[1], body: [
+      { n: "III", t: "Hardware", p: bySlug("fur-chain-heels"), body: [
+        "Some boots are worn like jewellery. Gunmetal chains criss-cross these olive shafts and lock into buckles at the ankle, each one hung with a cross.",
+        "Fur bands, a studded cuff and a croc-effect toe sit on a metal stiletto. Nothing about it is quiet."
+      ] },
+      { n: "IV", t: "Collage under crackle", p: bySlug("collage-lace-up-boots"), body: [
+        "A crackled finish laid over printed collage makes a boot read like a wall of torn posters: newsprint, red blocks, a face half lost in the cracks.",
+        "Two lace-up pairs in the index share it, one with long brown laces and one with tan suede panels and a pop-art face."
+      ] },
+      { n: "V", t: "Teeth", p: bySlug("tiger-print-boots"), body: [
         "Patent and metallic finishes throw reflections across their own panels, so the shoe changes as you walk around it. Print does the opposite: it stays put and stares back.",
-        "The tiger boots wear a face on each toe box, teeth running along the sole line. They are the loudest thing in the index and the quietest to photograph."
+        "The tiger boots wear a face on each toe box, teeth running along the sole line."
       ] }
     ];
     var html = '<article class="story" aria-labelledby="story-title">' +
@@ -488,14 +522,15 @@
       "</header>" +
       ch.map(function (c, i) {
         return '<section class="chapter chapter--' + (i % 2 ? "r" : "l") + '" data-ink="' + c.p.ink + '" aria-labelledby="ch-' + i + '">' +
-          '<div class="chapter-frag" aria-hidden="true"><div class="chapter-frag-in" data-depth="-0.08"><span class="crop" style="aspect-ratio:0.85">' + crop(c.p, c.d, 0.85, "(max-width:760px) 100vw, 50vw") + "</span></div></div>" +
+          '<div class="chapter-frag rv-shell" data-reveal aria-hidden="true"><a class="chapter-frag-in" href="#p-' + c.p.slug + '" tabindex="-1" data-depth="-0.06" data-cursor="View">' +
+          focusShoe(c.p, { alt: "", sizes: "(max-width:900px) 100vw, 46vw" }) + "</a></div>" +
           '<div class="chapter-text"><p class="chapter-n" aria-hidden="true" data-reveal>' + c.n + "</p>" +
           '<h2 class="chapter-title" id="ch-' + i + '" data-split data-reveal>' + esc(c.t) + "</h2>" +
           c.body.map(function (b) { return '<p data-reveal>' + esc(b) + "</p>"; }).join("") +
           '<a class="spread-link" href="#p-' + c.p.slug + '" data-reveal><span>See ' + esc(c.p.name) + "</span>" + ARROW + "</a></div></section>";
       }).join("") +
       '<section class="story-end" aria-label="Browse">' +
-      '  <p class="story-end-q" data-split data-reveal>Five pairs. No two alike.</p>' +
+      '  <p class="story-end-q" data-split data-reveal>' + word(P.length) + " pairs. No two alike.</p>" +
       '  <a class="btn btn--solid" href="#shop" data-reveal>Shop the index ' + ARROW + "</a>" +
       "</section></article>";
     return { title: "Story · SOLEMN", html: html };

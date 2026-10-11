@@ -16,7 +16,7 @@
     var h = decodeURIComponent(location.hash.replace(/^#/, ""));
     if (!h || h === "home") return { view: "home" };
     if (h === "shop") return { view: "shop", sil: "all" };
-    var m = h.match(/^shop-(low|high|boot|turf)$/);
+    var m = h.match(/^shop-(low|high|boot|turf|laceup|heel)$/);
     if (m) return { view: "shop", sil: m[1] };
     if (h === "story") return { view: "story" };
     m = h.match(/^p-([a-z0-9-]+)$/);

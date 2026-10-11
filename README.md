@@ -1,6 +1,6 @@
 # SOLEMN: footwear for the odd few
 
-A premium, experimental storefront for niche sneakers. It's a static site with no build step and no dependencies.
+A premium, experimental storefront for nine niche pairs: airbrushed customs, metallic boots, chained heels, collage lace-ups and more. It's a static site with no build step and no dependencies.
 
 ## Run it
 
@@ -19,16 +19,16 @@ Routing uses the URL hash, so deep links work on any static host.
 
 | Route | Page |
 | --- | --- |
-| `#home` | Intro, hero, the five featured pairs, explore by silhouette, discover by detail, story teaser |
-| `#shop`, `#shop-low`, `#shop-high`, `#shop-boot`, `#shop-turf` | Index list with silhouette and finish filters, sort, and a live preview |
-| `#p-<slug>` | Product page: full-pair and detail views, click-to-zoom, sizes, add to bag |
-| `#story` | Editorial chapters on airbrush, fold-over tongues, shine and print |
+| `#home` | Intro, hero, four featured spreads, the line-up, explore by silhouette, story teaser. Each pair appears once |
+| `#shop`, `#shop-low`, `#shop-high`, `#shop-boot`, `#shop-turf`, `#shop-laceup`, `#shop-heel` | Index list with silhouette and finish filters, sort, and a live preview |
+| `#p-<slug>` | Product page: the whole pair, click to look closer, sizes, add to bag |
+| `#story` | Five editorial chapters, each with a different pair shown whole |
 
 The bag is a slide-out drawer. It's saved in `localStorage`, so it survives reloads.
 
 ## Editing products
 
-Everything lives in `assets/js/data.js`. Each pair has its name, silhouette, finishes, accent colour (`ink`), colourway, what the photo shows (`observed`), and the detail crops used by the product views and the "Find by detail" strip (`x`, `y` as fractions of the image, `z` as zoom).
+Everything lives in `assets/js/data.js`. Each pair has its name, silhouette, finishes, accent colour (`ink`), colourway and what the photo shows (`observed`). Image sizes (`w`, `h`) are written by the export step and must match the files. To change which pairs the home page features, edit the slug lists at the top of `home()` in `assets/js/views.js`.
 
 **Placeholders:** `price` is `null` and shows as "Price TBC". Brand is not stated anywhere. The EU 38–46 size run is labelled as a placeholder. Set real values in `data.js` and the UI picks them up (a numeric `price` renders as £).
 
@@ -62,4 +62,4 @@ cutout-review/           the cutout approval gallery, plus lossless PNG masters
 
 ## Cutouts
 
-The five supplied photos were segmented with BiRefNet, cleaned of stray fragments, and colour-decontaminated at the edges. Each was checked at 4× zoom on dark, light and blue grounds. No colours were changed, nothing was upscaled and no details were painted in. Known limits are noted in `cutout-review/index.html`: some laces run off the original photo frame, and the tiger and silver pairs come from low-resolution sources.
+All nine photos were segmented with BiRefNet-general. For the four newer pairs it was compared against BiRefNet-massive, BiRefNet-DIS, BRIA RMBG and a median of the models, region by region. The others either left a 1px pale fringe from light backdrops or kept floor inside lace loops. Each cutout was cleaned of stray fragments, colour-decontaminated at the edges, checked at 4× zoom on dark, light and blue grounds, and independently inspected. No colours were changed, nothing was upscaled and no details were painted in. Known limits are noted in `cutout-review/index.html`: a few laces and one collar run off the original photo frame, and several pairs come from low-resolution sources.
