@@ -7,15 +7,12 @@
 <meta name="description" content="SOLEMN is an index of odd footwear: airbrushed customs, metallic boots and printed oddities.">
 <meta name="theme-color" content="#0b0b0a">
 <script>
-  // Decide on the intro before first paint: first visit this session, landing on home, motion allowed.
+  // The brand intro plays every time the page opens. With reduced motion it is shown still, then fades.
   (function () {
-    var d = document.documentElement, seen = "1";
-    d.classList.add("js");
+    var d = document.documentElement;
+    d.classList.add("js", "intro-play");
     try { if ("scrollRestoration" in history) history.scrollRestoration = "manual"; } catch (e) {}
-    try { seen = sessionStorage.getItem("solemn.intro"); } catch (e) {}
-    var home = !location.hash || location.hash === "#home";
-    var calm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!seen && home && !calm) d.classList.add("intro-play");
+    if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) d.classList.add("intro-calm");
   })();
 </script>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/anybody-var-latin.woff2" crossorigin>

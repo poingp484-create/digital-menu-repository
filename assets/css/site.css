@@ -779,5 +779,8 @@ a:hover .arrow, .btn:hover .arrow { transform: translateX(5px); }
   }
   .js .focus-ghost { display: none !important; }
   .hero-far-img { filter: blur(3px) brightness(.5) !important; }
-  .intro { display: none !important; }
 }
+/* reduced motion: the brand card appears still (no rising letters, no opening lid), then fades */
+.intro-calm .lid, .intro-calm .intro-word i, .intro-calm .intro-top span, .intro-calm .intro-bottom span { animation: none !important; transform: none !important; opacity: 1 !important; }
+.intro-calm .seam { display: none; }
+.intro-calm.intro-done .intro { transition: opacity .4s linear !important; }

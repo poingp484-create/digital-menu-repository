@@ -304,7 +304,6 @@
   var intro = document.querySelector(".intro");
   if (intro) {
     if (root.classList.contains("intro-play")) {
-      try { sessionStorage.setItem("solemn.intro", "1"); } catch (e) {}
       var endIntro = function () {
         if (!intro.parentNode) return;
         root.classList.add("intro-done");
@@ -313,8 +312,12 @@
       };
       var skip = function () { root.classList.add("intro-skipped"); endIntro(); };
       ["pointerdown", "keydown", "wheel", "touchstart"].forEach(function (ev) { window.addEventListener(ev, skip, { passive: true, once: true }); });
-      intro.addEventListener("animationend", function (e) { if (e.animationName === "lid-top") endIntro(); });
-      setTimeout(endIntro, 2600); // safety net if animation events never fire
+      if (root.classList.contains("intro-calm")) {
+        setTimeout(endIntro, 1500); // still brand card, then it fades
+      } else {
+        intro.addEventListener("animationend", function (e) { if (e.animationName === "lid-top") endIntro(); });
+        setTimeout(endIntro, 2600); // safety net if animation events never fire
+      }
     } else {
       intro.remove();
     }
