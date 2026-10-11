@@ -435,7 +435,7 @@ a:hover .arrow, .btn:hover .arrow { transform: translateX(5px); }
 
 /* ---------- the line-up: three pairs on one floor ---------- */
 .lineup { padding: 16vh 0 14vh; }
-.lu-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0 var(--gut); }
+.lu-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0 var(--gut); }
 .lu-item { transition: opacity .55s var(--ease-out); scroll-margin-inline: var(--gut); }
 .lu-row.has-hot .lu-item:not(.is-hot) { opacity: .36; }
 .lu-link { display: grid; }

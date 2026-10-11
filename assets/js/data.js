@@ -184,6 +184,12 @@
     { id: "hardware", label: "Hardware" }
   ];
 
+  // Display order: numbers follow the order pairs appear on the home page, top to bottom.
+  var ORDER = ["cobra-airbrush-hightops", "fur-chain-heels", "airbrush-face-spider-lows", "collage-lace-up-boots",
+    "tiger-print-boots", "maroon-silver-boots", "silver-turf-trainers", "crackle-face-boots", "pin-up-tattoo-hightops"];
+  PRODUCTS.sort(function (x, y) { return ORDER.indexOf(x.slug) - ORDER.indexOf(y.slug); });
+  PRODUCTS.forEach(function (p, i) { p.no = (i < 9 ? "0" : "") + (i + 1); });
+
   PRODUCTS.forEach(function (p) {
     p.price = null; // unknown: shown as "Price TBC"
     p.brand = null; // unconfirmed: never shown as fact

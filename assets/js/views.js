@@ -64,13 +64,11 @@
   /* ---------- HOME ---------- */
   function home() {
     // Each pair appears once on this page: two in the hero, four as spreads, three in the line-up.
-    var cobra = bySlug("cobra-airbrush-hightops"), maroon = bySlug("maroon-silver-boots");
-    var featured = ["fur-chain-heels", "airbrush-face-spider-lows", "collage-lace-up-boots", "tiger-print-boots"].map(bySlug);
-    var lineup = ["silver-turf-trainers", "crackle-face-boots", "pin-up-tattoo-hightops"].map(bySlug);
+    // Every pair appears once, in number order: 01 in the hero, 02–05 as spreads, 06–09 in the line-up.
+    var cobra = P[0], featured = P.slice(1, 5), lineup = P.slice(5, 9);
     var N = pad(P.length);
     var html = "" +
       '<section class="hero" data-mouse-area aria-labelledby="hero-title">' +
-      '  <div class="hero-far" data-mouse="-14"><div class="hero-far-in" data-depth="-0.1">' + shoe(maroon, { alt: "", sizes: "45vw", cls: "hero-far-img" }) + "</div></div>" +
       '  <h1 class="hero-logo" id="hero-title" aria-label="Solemn"><span class="hl-row" aria-hidden="true">' +
       "SOLEMN".split("").map(function (c, i) { return '<span class="hl" style="--i:' + i + '">' + c + "</span>"; }).join("") +
       "</span></h1>" +
@@ -84,7 +82,7 @@
       '    <div class="hero-cta" data-reveal><a class="btn btn--solid" href="#shop">Shop all pairs ' + ARROW + '</a><button class="btn btn--line" type="button" data-scrollto="pairs">See the pairs</button></div>' +
       "  </div>" +
       '  <dl class="label hero-label" data-reveal aria-label="Shoebox label">' +
-      "    <div><dt>Style</dt><dd>SLM-IDX-001</dd></div><div><dt>Pairs</dt><dd>" + N + "</dd></div>" +
+      "    <div><dt>On show</dt><dd>N° " + cobra.no + " " + esc(cobra.short) + "</dd></div><div><dt>Pairs</dt><dd>" + N + "</dd></div>" +
       "    <div><dt>Size</dt><dd>EU 38–46*</dd></div><div><dt>Price</dt><dd>TBC</dd></div>" +
       '    <p class="label-foot">*placeholder size run</p>' +
       "  </dl>" +
@@ -203,7 +201,7 @@
       return '<li class="lu-item" style="--k:' + k + ";--lu-ink:" + p.ink + '">' +
         '<a class="lu-link" href="#p-' + p.slug + '" data-cursor="View">' +
         '<span class="lu-stage rv-shell" data-reveal style="--d:' + (k * 120) + 'ms">' +
-        focusShoe(p, { alt: "", sizes: "(max-width:760px) 72vw, 30vw" }) + "</span>" +
+        focusShoe(p, { alt: "", sizes: "(max-width:760px) 72vw, 24vw" }) + "</span>" +
         '<span class="lu-cap"><span class="mono">N° ' + p.no + " · " + esc(p.silhouetteLabel) + "</span>" +
         '<span class="lu-name">' + esc(p.name) + "</span>" +
         '<span class="mono lu-price">' + priceLabel(p) + "</span></span></a></li>";
