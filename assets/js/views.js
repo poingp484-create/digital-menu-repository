@@ -21,6 +21,9 @@
   }
   var ARROW = '<svg class="arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>';
 
+  /* Image URL. A single-file build can supply the images inline via window.SOLEMN_ASSETS. */
+  function imgSrc(file) { var A = window.SOLEMN_ASSETS; return (A && A[file]) || D.IMG_DIR + file; }
+
   /* A shoe image. Decorative copies pass alt:"" so screen readers hear each pair once. */
   function shoe(p, o) {
     o = o || {};
@@ -31,7 +34,7 @@
         (alt ? ' role="img" aria-label="' + esc(alt) + '"' : ' aria-hidden="true"') +
         '><span class="ph-l">N° ' + p.no + " · cutout pending</span></div>";
     }
-    var full = D.IMG_DIR + p.img + ".webp", sm = D.IMG_DIR + p.img + "-sm.webp";
+    var full = imgSrc(p.img + ".webp"), sm = imgSrc(p.img + "-sm.webp");
     return '<img class="' + cls + '" src="' + full + '" srcset="' + sm + " 480w, " + full + " " + p.w + 'w" sizes="' +
       (o.sizes || "60vw") + '" width="' + p.w + '" height="' + p.h + '" alt="' + esc(alt) + '"' +
       (alt ? "" : ' aria-hidden="true"') +
@@ -43,7 +46,7 @@
    * upscaling blurs it), cross-fades out while the sharp image fades in. No CSS filter at all. */
   function focusShoe(p, o) {
     var ghost = D.CUTOUTS_APPROVED
-      ? '<img class="focus-ghost" src="' + D.IMG_DIR + p.img + '-blur.webp" width="' + p.w + '" height="' + p.h + '" alt="" aria-hidden="true" decoding="async">'
+      ? '<img class="focus-ghost" src="' + imgSrc(p.img + "-blur.webp") + '" width="' + p.w + '" height="' + p.h + '" alt="" aria-hidden="true" decoding="async">'
       : "";
     return '<span class="focus-in">' + shoe(p, o) + ghost + "</span>";
   }
