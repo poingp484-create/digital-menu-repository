@@ -1,61 +1,81 @@
-# YAKUZA — Drop 01 / The Blacklist
+# YAKUZA — Drop 01 · The Blacklist
 
-An interactive Y2K streetwear campaign that happens to be a store. Liquid-chrome
-logotype, a living WebGL city at dusk, scroll-choreographed product scenes and a
-Need for Speed: Most Wanted–style pursuit vibe (blacklist ranks, heat, bounty, police strobes).
+An interactive Y2K streetwear campaign site inspired by *Need for Speed: Most Wanted*:
+a chrome katana logo, a living WebGL city at night with police sirens, a yozakura tree,
+and 20 products, each with its own scroll-driven scene.
 
-## Run
+**Live:** https://poingp484-create.github.io/digital-menu-repository/
+
+## Features
+
+- **WebGL stage (Three.js):** custom GLSL shaders for the fog, skyline, light trails and
+  red/blue police sirens (fast on the hero, slowing once you scroll). Six background moods
+  via the **FILTER** switch in the HUD.
+- **Chrome logo:** the katana logo is sliced into six shader-lit strips with cursor glints,
+  light sweeps and glitch bursts.
+- **Procedural sakura:** a canvas-painted yozakura tree and GPU petal particles.
+- **Scroll choreography (GSAP ScrollTrigger + Lenis):** pinned, scrubbed scenes for five
+  districts (Jackets, T-Shirts, Denim, Shoes, Headgear) and *Most Wanted*. Every product
+  has its own entrance and exit; the hero flies through to the #01 piece.
+- **Shopping:** product overlay with sizes, a bag (localStorage), ₹ / $ / ¥ prices, and a
+  hide-away side nav.
+- **Details:** custom cursor, magnetic buttons, synthesized Web Audio click sounds (SND
+  toggle), a game-style HUD, adaptive quality on slower devices, a responsive mobile layout,
+  and `prefers-reduced-motion` support.
+
+Built with Three.js · GLSL · GSAP + ScrollTrigger · Lenis · Web Audio API · Vite
+
+## Run and build
 
 ```bash
 npm install
-npm run dev       # http://localhost:5173
-npm run build     # static output in dist/ (relative paths — host anywhere)
-npm run preview
+npm run dev            # http://localhost:5173
+npm run build          # static site in dist/ (relative paths: host anywhere)
+npm run build:pages    # static site in docs/ (what GitHub Pages serves)
+npm run build:single   # ONE self-contained file: dist-single/yakuza.html
 ```
 
-## Experience
+`build:single` embeds all the code, styles, fonts, the logo and every product photo in a
+single HTML file that opens with a double-click: no server, no folders. Only the Google
+Fonts used for the Japanese glyphs still load from the web.
 
-| # | Section | What happens |
-|---|---------|--------------|
-| 01 | Intro | Custom vector logotype rendered as liquid chrome in WebGL; cursor is a moving light; glitch bursts. Scrolling splits the letters, the camera flies through them toward the #01 piece, the mark lands in the nav corner. |
-| 02 | The Blacklist | Manifesto, spray tag, outlined marquee. |
-| 03–06 | Jackets / Tees / Shoes / Jewelry | One pinned stage per district. Every product is a full-viewport scene with its own entrance + exit (slide-rotate, rise-scale, motion blur, behind-type, camera pull, slice scan, glitch, ghost echo, 3D spin, bounce drop, light sweep, drift, pendulum, coin flip, far spin, toss). Scenes overlap so the scroll never "cuts". |
-| 07 | Most Wanted | Pursuit mode: strobes, heat 5, 3D turn, wired call-outs, bounty counter. |
-| 08 | Statement | Three lines in the fog. |
-| 09 | Footer | Mark + four links. |
+## Publishing
 
-Typography: the YAKUZA mark is Archivo Expanded Black Italic (liquid chrome in WebGL); product names use the same family at Condensed Black.
+GitHub Pages serves the `docs/` folder of this branch (**Settings → Pages → Deploy from a
+branch → `/docs`**). After changing anything, run `npm run build:pages` and push.
 
-Plus: always-on slow red/blue police siren lights, six background moods (FILTER switch in the HUD — set the default in `src/data/themes.js`), synthesised click sound effects with a SND toggle (`src/ui/sound.js`), custom cursor (VIEW PIECE / link states), magnetic buttons, ₹ / $ / ¥ currency,
-bag (localStorage), SHOP = the Blacklist index with hover previews, product overlay with sizes,
-game-style HUD (scroll speed in km/h, heat, route progress).
+To host the single file instead, upload `yakuza.html` (renamed to `index.html`) to any
+static host or a new GitHub Pages repo.
 
 ## Editing content
 
-Everything lives in **`src/data/products.js`** — names, prices (INR/USD/JPY), specs, copy,
-image path and which animation presets each piece uses. See `public/products/README.md`
-for dropping in real photography. Section looks (fog / accent / heat) are in `src/data/themes.js`.
+- **Products:** `src/data/products.js` holds names, prices (INR/USD/JPY), specs, copy, image
+  paths and which animation presets each piece uses. Photos go in `public/products/`.
+- **Moods, siren speed, section colours:** `src/data/themes.js`.
+- **Logo finish:** `src/brand/logo.js`.
 
 ## Structure
 
 ```
 src/
-  brand/logo.js        custom logotype geometry (SVG + WebGL atlas source)
-  webgl/               stage (bg + chrome logo + hero piece), shaders, logo atlas
-  sections/            hero, manifesto, category (+ choreo presets), featured, statement, footer, boot
-  ui/                  nav, hud, cursor, magnetic, bag, piece overlay, index, store, toast
-  art/renders.js       procedural placeholder product renders (SVG)
-  core/                device tiering, shared state, scroll (Lenis + ScrollTrigger), text split
-  styles/              base, chrome-ui, sections, scenes, overlays, responsive, fonts
+  brand/        logo image + finishes
+  webgl/        stage (background, chrome logo, hero piece), shaders, sakura
+  sections/     hero, manifesto, category (+ choreo presets), featured, statement, footer, boot
+  ui/           nav, hud, cursor, magnetic, bag, piece overlay, index, store, sound, toast
+  core/         device tiering, shared state, scroll (Lenis + ScrollTrigger), text split
+  styles/       base, chrome-ui, sections, scenes, overlays, responsive, fonts
+public/         product photos, link-preview image, robots.txt, sitemap.xml
+scripts/        artifact + single-file build helpers, image cut-out tools
+docs/           built site for GitHub Pages
 ```
 
 ## Performance notes
 
-- Single WebGL canvas; the background shader renders into a 30–50% resolution target and is upscaled.
-- Quality tiers (`high` / `mid` / `low`) from device hints, plus a runtime FPS monitor that downgrades DPR, resolution and noise octaves.
-- Logo meshes stop rendering once the hero is passed; per-frame DOM work only touches the active scene.
-- Touch devices use native scroll (no smooth-scroll hijack) and an autonomous sway instead of cursor tilt.
-- `prefers-reduced-motion` swaps choreography for fades and disables smooth scrolling.
-- Fonts are self-hosted (Fontsource); Japanese glyphs load lazily after boot.
+- One WebGL canvas; the background shader renders at reduced resolution and is upscaled.
+- Quality tiers (`high` / `mid` / `low`) from device hints, plus a runtime FPS monitor that
+  steps the tier down live.
+- Logo meshes stop rendering once the hero is passed; per-frame DOM work only touches the
+  active scene; product photos decode during idle time.
+- Touch devices use native scroll and an autonomous sway instead of cursor tilt.
 
-Checkout is intentionally not wired — connect your payment provider in `src/ui/bag.js`.
+Checkout is intentionally not wired up: connect a payment provider in `src/ui/bag.js`.
