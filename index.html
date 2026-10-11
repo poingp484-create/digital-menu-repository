@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SOLEMN · Footwear for the odd few</title>
+<meta name="description" content="SOLEMN is an index of odd footwear: airbrushed customs, metallic boots and printed oddities.">
+<meta name="theme-color" content="#0b0b0a">
+<script>
+  // The brand intro plays every time the page opens. With reduced motion it is shown still, then fades.
+  (function () {
+    var d = document.documentElement;
+    d.classList.add("js", "intro-play");
+    try { if ("scrollRestoration" in history) history.scrollRestoration = "manual"; } catch (e) {}
+    if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) d.classList.add("intro-calm");
+  })();
+</script>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/anybody-var-latin.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/geist-var-latin.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/martian-mono-var-latin.woff2" crossorigin>
+<link rel="preload" as="image" href="assets/shoes/cobra-airbrush-hightops.webp" type="image/webp">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+<span id="top"></span>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="intro" aria-hidden="true">
+  <div class="lid lid--top"><div class="lid-in">
+    <div class="intro-top mono"><span>SOLEMN · IDX 001–009</span><span>Footwear for the odd few</span></div>
+    <p class="intro-word"><span><i style="--i:0">S</i></span><span><i style="--i:1">O</i></span><span><i style="--i:2">L</i></span><span><i style="--i:3">E</i></span><span><i style="--i:4">M</i></span><span><i style="--i:5">N</i></span></p>
+    <div class="intro-bottom mono"><span>09 pairs · EU 38–46*</span><span>Lift the lid</span></div>
+  </div></div>
+  <div class="lid lid--bot"><div class="lid-in">
+    <div class="intro-top mono"><span>SOLEMN · IDX 001–009</span><span>Footwear for the odd few</span></div>
+    <p class="intro-word"><span><i style="--i:0">S</i></span><span><i style="--i:1">O</i></span><span><i style="--i:2">L</i></span><span><i style="--i:3">E</i></span><span><i style="--i:4">M</i></span><span><i style="--i:5">N</i></span></p>
+    <div class="intro-bottom mono"><span>09 pairs · EU 38–46*</span><span>Lift the lid</span></div>
+  </div></div>
+  <span class="seam"></span>
+</div>
+
+<header class="nav">
+  <a class="nav-logo" href="#home" aria-label="SOLEMN home">SOLEMN</a>
+  <nav class="nav-links" aria-label="Main">
+    <ul>
+      <li><a href="#home" data-nav="home">Home</a></li>
+      <li><a href="#shop" data-nav="shop">Shop</a></li>
+      <li><a href="#story" data-nav="story">Story</a></li>
+    </ul>
+    <span class="nav-dot" aria-hidden="true"></span>
+  </nav>
+  <div class="nav-end">
+    <button type="button" class="nav-bag" data-bag-open aria-label="Bag, 0 items" aria-controls="bag"><span>Bag</span><span class="nav-count" data-bag-count>0</span></button>
+    <button type="button" class="nav-menu" data-menu aria-expanded="false" aria-controls="menu"><span>Menu</span></button>
+  </div>
+</header>
+
+<div class="menu" id="menu" hidden>
+  <nav aria-label="Mobile">
+    <a href="#home" data-nav="home" style="--i:0"><span class="mono">01</span><span>Home</span></a>
+    <a href="#shop" data-nav="shop" style="--i:1"><span class="mono">02</span><span>Shop</span></a>
+    <a href="#story" data-nav="story" style="--i:2"><span class="mono">03</span><span>Story</span></a>
+  </nav>
+  <p class="menu-foot mono">Prices, sizes and stock are placeholders.</p>
+</div>
+
+<main id="main" tabindex="-1"></main>
+
+<footer class="foot">
+  <p class="foot-big" aria-hidden="true"><span>S</span><span>O</span><span>L</span><span>E</span><span>M</span><span>N</span></p>
+  <div class="foot-cols">
+    <div>
+      <p class="mono">Shop</p>
+      <ul>
+        <li><a href="#shop">All pairs</a></li>
+        <li><a href="#shop-low">Low-tops</a></li>
+        <li><a href="#shop-high">High-tops</a></li>
+        <li><a href="#shop-boot">Football boots</a></li>
+        <li><a href="#shop-turf">Turf</a></li>
+        <li><a href="#shop-laceup">Lace-up boots</a></li>
+        <li><a href="#shop-heel">Heels</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="mono">Read</p>
+      <ul><li><a href="#story">The story</a></li><li><a href="#home">The index</a></li></ul>
+    </div>
+    <div class="foot-note">
+      <p class="mono">About this store</p>
+      <p>SOLEMN is an independent concept store and is not affiliated with any brand shown. Prices, sizes and stock are placeholders, and checkout is not connected to a payment provider.</p>
+    </div>
+  </div>
+  <div class="foot-base mono"><span>© <span data-year>2026</span> SOLEMN</span><button type="button" data-scrollto="top">Back to top ↑</button></div>
+</footer>
+
+<div class="scrim" hidden></div>
+<aside class="bag" id="bag" role="dialog" aria-modal="true" aria-labelledby="bag-title" hidden>
+  <header class="bag-head">
+    <h2 id="bag-title">Bag <span class="mono" data-bag-n>(0)</span></h2>
+    <button type="button" class="icon-btn" data-bag-close data-autofocus aria-label="Close bag"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.5"/></svg></button>
+  </header>
+  <div class="bag-body">
+    <ul class="bag-list"></ul>
+    <div class="bag-empty">
+      <p>Your bag is empty.</p>
+      <p>Pick a pair and a size to add it here.</p>
+      <a class="btn btn--line" href="#shop" data-bag-close>Browse the pairs</a>
+    </div>
+  </div>
+  <footer class="bag-foot" hidden>
+    <dl class="bag-sum"><dt class="mono">Subtotal</dt><dd>Price TBC</dd></dl>
+    <p class="note">Prices aren’t set yet, so no total can be shown.</p>
+    <button type="button" class="btn btn--solid btn--wide" disabled aria-describedby="checkout-note">Checkout</button>
+    <p class="note" id="checkout-note">Checkout isn’t connected. This site has no payment provider, so orders can’t be placed yet.</p>
+  </footer>
+</aside>
+
+<div class="toast" role="status" aria-live="polite" hidden></div>
+<div class="wipe" aria-hidden="true"><span class="wipe-label"></span></div>
+<div class="cursor" aria-hidden="true"><span></span></div>
+
+<noscript><p style="padding:120px 24px;max-width:40ch">SOLEMN needs JavaScript to show the index. Please enable it and reload.</p></noscript>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/store.js"></script>
+<script src="assets/js/motion.js"></script>
+<script src="assets/js/views.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
