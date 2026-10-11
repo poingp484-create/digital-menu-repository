@@ -128,6 +128,7 @@ a:hover .arrow, .btn:hover .arrow { transform: translateX(5px); }
   transition: transform .6s var(--ease-out), background .4s, border-color .4s;
   border-bottom: 1px solid transparent;
 }
+html:not(.js) .nav { position: absolute; } /* no scripts (e.g. a phone file preview): the bar scrolls away instead of covering headings */
 .nav.is-solid { background: rgba(11, 11, 10, .9); border-bottom-color: var(--line); }
 .nav.is-hidden { transform: translate3d(0, -100%, 0); }
 .nav-logo {
@@ -255,7 +256,9 @@ a:hover .arrow, .btn:hover .arrow { transform: translateX(5px); }
 .intro-play .intro {
   display: block; position: fixed; inset: 0; z-index: 100; cursor: pointer;
   transition: opacity .45s var(--ease-out);
+  animation: intro-safety .4s linear 3.2s forwards; /* closes itself even if scripts never finish */
 }
+@keyframes intro-safety { to { opacity: 0; visibility: hidden; pointer-events: none; } }
 .intro-done .intro { opacity: 0; pointer-events: none; }
 .lid { position: absolute; left: 0; right: 0; height: 50%; overflow: hidden; background: var(--bg); }
 .lid--top { top: 0; animation: lid-top .85s var(--ease-io) 1.15s forwards; }
@@ -784,3 +787,4 @@ a:hover .arrow, .btn:hover .arrow { transform: translateX(5px); }
 .intro-calm .lid, .intro-calm .intro-word i, .intro-calm .intro-top span, .intro-calm .intro-bottom span { animation: none !important; transform: none !important; opacity: 1 !important; }
 .intro-calm .seam { display: none; }
 .intro-calm.intro-done .intro { transition: opacity .4s linear !important; }
+.intro-calm .intro { animation: intro-safety .01ms linear 3.2s forwards !important; }

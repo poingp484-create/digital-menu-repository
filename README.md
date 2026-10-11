@@ -13,6 +13,14 @@ python3 -m http.server 8000
 
 Any static host works: GitHub Pages, Netlify, Vercel, S3, and so on. Upload the folder as is.
 
+## One-file version (to send to someone)
+
+```
+python3 tools/build_single.py . SOLEMN.html
+```
+
+This writes `SOLEMN.html` with every image, font and script built in. It opens with no folder and no internet. The home page is also written into the file directly, so phone file previews that don't run scripts still show all nine pairs. For the full site on a phone, use the hosted link.
+
 ## Pages
 
 Routing uses the URL hash, so deep links work on any static host.
