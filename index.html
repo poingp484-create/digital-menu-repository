@@ -11,6 +11,7 @@
   (function () {
     var d = document.documentElement, seen = "1";
     d.classList.add("js");
+    try { if ("scrollRestoration" in history) history.scrollRestoration = "manual"; } catch (e) {}
     try { seen = sessionStorage.getItem("solemn.intro"); } catch (e) {}
     var home = !location.hash || location.hash === "#home";
     var calm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;

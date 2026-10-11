@@ -323,4 +323,17 @@
   document.querySelectorAll("[data-year]").forEach(function (el) { el.textContent = new Date().getFullYear(); });
   renderBag();
   render(true);
+
+  /* Always open on the hero: stop the browser (or a host page) from restoring an old scroll position.
+   * Only resets if the visitor hasn't started scrolling or interacting yet. */
+  (function () {
+    var touched = false;
+    var mark = function () { touched = true; };
+    ["wheel", "touchstart", "keydown", "pointerdown"].forEach(function (ev) { window.addEventListener(ev, mark, { passive: true, once: true }); });
+    var toTop = function () { if (!touched && window.scrollY > 0) window.scrollTo(0, 0); };
+    toTop();
+    requestAnimationFrame(toTop);
+    window.addEventListener("load", function () { toTop(); setTimeout(toTop, 120); });
+    window.addEventListener("pageshow", function (e) { if (e.persisted) { touched = false; toTop(); } });
+  })();
 })();
