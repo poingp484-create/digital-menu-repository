@@ -39,6 +39,15 @@
   $$("[data-calendar]").forEach(function (a) { a.href = CAL_URL; });
 
   function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+  // Every animation the page starts is kept here, so replay can undo all of them.
+  // (A finished, filled animation is not always reported by getAnimations(), which left the stage invisible.)
+  var running = [];
+  function anim(el, frames, opts) {
+    var a = el.animate(frames, opts);
+    running.push(a);
+    return a;
+  }
   function finished(anim) { return anim && anim.finished ? anim.finished.catch(function () {}) : Promise.resolve(); }
 
   /* ---------- Load: show the cover once every layer is decoded, so nothing pops in mid-animation ---------- */
@@ -104,21 +113,21 @@
     sparkles.burst(seal.x, seal.y, 18, 0.7);
 
     var flapTiming = { duration: 1300, delay: 220, easing: "cubic-bezier(.55,.06,.28,1)", fill: "forwards" };
-    var flapAnim = flap.animate([
+    var flapAnim = anim(flap, [
       { transform: "perspective(1100px) rotateX(0deg)" },
       { transform: "perspective(1100px) rotateX(180deg)" }
     ], flapTiming);
     // light falls off as the flap turns edge-on, then the paper inside catches it
-    flapFront.animate([{ filter: "brightness(1)" }, { filter: "brightness(.8)", offset: 0.5 }, { filter: "brightness(.7)" }], flapTiming);
-    flapBack.animate([{ filter: "brightness(.7)" }, { filter: "brightness(.84)", offset: 0.5 }, { filter: "brightness(1)" }], flapTiming);
+    anim(flapFront, [{ filter: "brightness(1)" }, { filter: "brightness(.8)", offset: 0.5 }, { filter: "brightness(.7)" }], flapTiming);
+    anim(flapBack, [{ filter: "brightness(.7)" }, { filter: "brightness(.84)", offset: 0.5 }, { filter: "brightness(1)" }], flapTiming);
     // the lace's shadow on the envelope lifts with it
-    margin.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 500, delay: 220, easing: "ease-out", fill: "forwards" });
-    clickText.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 450, easing: "ease-out", fill: "forwards" });
+    anim(margin, [{ opacity: 1 }, { opacity: 0 }], { duration: 500, delay: 220, easing: "ease-out", fill: "forwards" });
+    anim(clickText, [{ opacity: 1 }, { opacity: 0 }], { duration: 450, easing: "ease-out", fill: "forwards" });
 
     finished(flapAnim).then(function () {
       if (state !== "opening") return;
       body.classList.add("flap-open");
-      var rise = pocketCard.animate([
+      var rise = anim(pocketCard, [
         { transform: "translateY(0)" },
         { transform: "translateY(-33%)" }
       ], { duration: 1400, delay: 80, easing: "cubic-bezier(.33,.08,.2,1)", fill: "forwards" });
@@ -144,16 +153,16 @@
     var dx = first.left - last.left;
     var dy = first.top - last.top;
 
-    var fly = invite.animate([
+    var fly = anim(invite, [
       { transform: "translate(" + dx + "px," + dy + "px) scale(" + s + ")" },
       { transform: "translate(" + dx * 0.55 + "px," + (dy * 0.55 - 30) + "px) scale(" + (s + (1 - s) * 0.62) + ")", offset: 0.45 },
       { transform: "none" }
     ], { duration: 1500, easing: "cubic-bezier(.3,.7,.2,1)" });
-    inviteImg.animate([
+    anim(inviteImg, [
       { clipPath: "inset(0 0 " + hidden + "% 0)" },
       { clipPath: "inset(0 0 0% 0)" }
     ], { duration: 780, easing: "cubic-bezier(.45,0,.2,1)" });
-    stage.animate([
+    anim(stage, [
       { opacity: 1, transform: "translateY(0) scale(1)" },
       { opacity: 0, transform: "translateY(8%) scale(.9)" }
     ], { duration: 1150, easing: "cubic-bezier(.45,0,.55,1)", fill: "forwards" });
@@ -174,7 +183,7 @@
   function openQuietly() {
     reveal.hidden = false;
     reveal.scrollTop = 0;
-    if (canAnimate) stage.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 500, fill: "forwards" });
+    if (canAnimate) anim(stage, [{ opacity: 1 }, { opacity: 0 }], { duration: 500, fill: "forwards" });
     else stage.style.opacity = "0";
     body.classList.add("is-revealed");
     state = "open";
@@ -186,10 +195,12 @@
   replayBtn.addEventListener("click", function () {
     if (state !== "open") return;
     state = "closing";
-    var out = canAnimate ? reveal.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 450, easing: "ease-in", fill: "forwards" }) : null;
+    var out = canAnimate ? anim(reveal, [{ opacity: 1 }, { opacity: 0 }], { duration: 450, easing: "ease-in", fill: "forwards" }) : null;
     finished(out).then(function () {
       body.classList.add("is-loading");
       body.classList.remove("is-revealed", "is-opening", "flap-open");
+      running.forEach(function (a) { a.cancel(); });
+      running = [];
       [flap, flapFront, flapBack, margin, clickText, pocketCard, stage, invite, inviteImg, reveal].forEach(function (el) {
         if (el.getAnimations) el.getAnimations().forEach(function (a) { a.cancel(); });
       });

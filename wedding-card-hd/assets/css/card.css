@@ -68,9 +68,9 @@ img { display: block; max-width: 100%; }
 .stage {
   position: absolute;
   left: 50%;
-  top: 50%;
-  width: min(100vw, 100vh * 9 / 16);
-  width: min(100vw, 100svh * 9 / 16);
+  top: 52%;   /* sits a little low: the opened flap and the rising card reach above the page */
+  width: min(100vw, 94vh * 9 / 16);
+  width: min(100vw, 94svh * 9 / 16);
   aspect-ratio: var(--cover-ratio);
   translate: -50% -50%;
   transform: perspective(1600px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
@@ -267,7 +267,7 @@ img { display: block; max-width: 100%; }
 .is-revealed .invite::before { opacity: 1; }
 .invite img { position: relative; width: 100%; height: 100%; }
 
-/* Invisible tap target over the church name, the pin and "Click HERE for location" */
+/* Invisible tap target over the church name, the pin and "Dombivli" */
 .invite-map {
   position: absolute;
   left: 21%;
@@ -379,7 +379,7 @@ img { display: block; max-width: 100%; }
   display: flex;
   gap: 10px;
   justify-content: center;
-  margin-top: 18px;
+  margin-top: 22px;
 }
 .btn {
   flex: 1 1 0;
@@ -415,14 +415,24 @@ img { display: block; max-width: 100%; }
   text-decoration-color: rgba(23, 73, 117, .4);
 }
 
-/* Wide screens: card and countdown side by side */
-@media (min-width: 860px) and (min-aspect-ratio: 1 / 1) {
-  .reveal-inner { flex-direction: row; gap: clamp(40px, 6vw, 88px); padding-block: 32px; padding-left: max(32px, env(safe-area-inset-left, 0px)); padding-right: max(32px, env(safe-area-inset-right, 0px)); }
+/* Landscape screens, phones held sideways included: card and countdown side by side */
+@media (min-width: 600px) and (min-aspect-ratio: 1 / 1) {
+  .reveal-inner { flex-direction: row; gap: clamp(24px, 6vw, 88px); padding-block: 32px; padding-left: max(32px, env(safe-area-inset-left, 0px)); padding-right: max(32px, env(safe-area-inset-right, 0px)); }
   .invite { width: min(88vh * 9 / 16, 88svh * 9 / 16, 506px); }
-  .details { width: 380px; padding: 34px 30px 28px; }
+  .details { width: 380px; flex: 0 1 380px; padding: 34px 30px 28px; }
   .script { font-size: 48px; }
   .unit { width: 72px; height: 100px; }
   .num { font-size: 38px; }
+}
+
+@media (min-width: 600px) and (min-aspect-ratio: 1 / 1) and (max-height: 520px) {
+  .reveal-inner { padding-block: 16px; }
+  .details { padding: 18px 20px 16px; }
+  .script { font-size: 34px; margin: 2px 0 10px; }
+  .unit { width: 62px; height: 84px; }
+  .num { font-size: 30px; }
+  .actions { margin-top: 14px; }
+  .replay { margin-top: 8px; }
 }
 
 @media (max-width: 360px) {

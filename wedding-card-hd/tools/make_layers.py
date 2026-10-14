@@ -21,6 +21,9 @@ hull_m = place(np.load('hullmask3.npy').astype(np.float32))
 edge = oy + 12
 for m in (flap_m, hull_m):
     m[:edge] = np.maximum(m[:edge], m[edge][None, :])
+    # and its side edges wherever the lace reaches them (the masks stop at the paper's inner edge)
+    r_rows = m[:, ox + 979] > 0; m[r_rows, ox + 980:] = 1
+    l_rows = m[:, ox + 10] > 0; m[l_rows, :ox + 10] = 1
 soft = lambda m, s=0.7: np.clip(cv2.GaussianBlur(m, (0, 0), s), 0, 1)
 flap_a, hull_a = soft(flap_m), soft(hull_m)
 
@@ -58,8 +61,9 @@ def save(name, img, q=92):
     cv2.imwrite(os.path.join(out, name + '.webp'), img, [cv2.IMWRITE_WEBP_QUALITY, q])
 for n, im in [('flap', flap), ('body', body), ('margin', margin), ('flap-back', back), ('interior', interior), ('click', click)]:
     save(n, im)
-for n in ('cover', 'bg', 'invite'):
-    cv2.imwrite(os.path.join(out, n + '.webp'), cv2.imread('r128/%s.png' % n), [cv2.IMWRITE_WEBP_QUALITY, 90])
+# the card uses the version with "Dombivli" in place of "Click HERE for location" (see invite_dombivli.py, set_dombivli.js)
+for n, srcpng in (('cover', 'cover'), ('bg', 'bg'), ('invite', 'invite-dombivli')):
+    cv2.imwrite(os.path.join(out, n + '.webp'), cv2.imread('r128/%s.png' % srcpng), [cv2.IMWRITE_WEBP_QUALITY, 90])
 
 # checks: closed composite vs the full page, and an "open" preview
 page = cv2.imread('r128/cover.png').astype(np.float32)

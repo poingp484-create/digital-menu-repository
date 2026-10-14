@@ -24,9 +24,9 @@ The PDF keeps each element of page 1 as its own drawing group: background photo 
 | `margin.webp` | The lace's shadow on the envelope. It fades as the flap lifts. |
 | `click.webp` | "Click to open". It fades on tap. |
 | `interior.webp` | The inside of the envelope, made from the flap's own paper texture. |
-| `invite.webp` | Page 2, the card. |
+| `invite.webp` | Page 2, the card, with "Dombivli" in place of "Click HERE for location". |
 
-`tools/flapmask.py` traces the lace edge on the envelope image, and `tools/make_layers.py` cuts and writes the layers. Run them in order from a working folder holding the PDF renders. They read `r128/*.png` and write the WebP files.
+`tools/flapmask.py` traces the lace edge on the envelope image, and `tools/make_layers.py` cuts and writes the layers. For the card, `tools/invite_dombivli.py` renders page 2 without the "Click HERE for location" line, and `tools/set_dombivli.js` sets "Dombivli" in its place: same centre, baseline, cap height, colour and soft shadow. It uses Gilda Display, the closest free match to the line's original font, The Seasons, which isn't embedded in full. Run them in order from a working folder holding the PDF renders. They read `r128/*.png` and write the WebP files.
 
 ## Settings
 
@@ -36,7 +36,7 @@ At the top of `assets/js/card.js`:
 - `VENUE`, `MAP_URL`: used by "Get directions" and by the church line on the card.
 - `CAL_URL`: the "Save the date" event, 4:30 PM to 10:30 PM IST.
 
-The tap area for "Click HERE for location" is `.invite-map` in `assets/css/card.css`, in percentages of the card.
+The church line, pin and "Dombivli" on the card open Google Maps through an invisible tap area, `.invite-map` in `assets/css/card.css`, set in percentages of the card.
 
 ## One-file version
 
