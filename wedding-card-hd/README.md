@@ -37,3 +37,7 @@ At the top of `assets/js/card.js`:
 - `CAL_URL`: the "Save the date" event, 4:30 PM to 10:30 PM IST.
 
 The tap area for "Click HERE for location" is `.invite-map` in `assets/css/card.css`, in percentages of the card.
+
+## One-file version
+
+`share/melvet-rockson-invitation.html` is the whole invitation in a single file: styles, script and every image inside it (about 2.8 MB). Upload it to any static host to get a shareable link, or open it directly in a browser. Rebuild it after changes with `python3 tools/build_single.py`.
