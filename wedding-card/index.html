@@ -3,47 +3,135 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Melvet &amp; Rockson · You are invited</title>
+<title>Melvet &amp; Rockson</title>
 <meta name="description" content="Melvet Gonsalves &amp; Rockson D'souza invite you to celebrate their wedding on Saturday, 28 November 2026, at Infant Jesus Church, Dombivli.">
 <meta property="og:title" content="Melvet &amp; Rockson · You are invited">
 <meta property="og:description" content="Saturday, 28 November 2026 · Holy Mass 4:30 PM · Infant Jesus Church, Dombivli">
 <meta name="theme-color" content="#bed3de">
 <meta name="color-scheme" content="light">
 <link rel="icon" href="data:,">
-<script>document.documentElement.classList.add("js");</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Pinyon+Script&display=swap">
-<link rel="preload" as="image" href="assets/img/cover.webp" type="image/webp">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Italianno&family=Monsieur+La+Doulaise&family=Pinyon+Script&display=swap">
 <link rel="stylesheet" href="assets/css/card.css">
 </head>
-<body class="is-loading">
+<body>
+<!--CONTENT-START-->
+<script>document.documentElement.classList.add("js"); document.body.classList.add("is-loading");</script>
 
-<div class="backdrop" aria-hidden="true">
-  <div class="backdrop-layer backdrop-layer--cover"></div>
-  <div class="backdrop-layer backdrop-layer--invite"></div>
-  <div class="backdrop-tint"></div>
-</div>
+<!-- Shared paint: gradients, filters and patterns used by every envelope part -->
+<svg class="defs" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="g-flap" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f8f5ec"/><stop offset=".55" stop-color="#f2eee3"/><stop offset="1" stop-color="#e9e3d5"/>
+    </linearGradient>
+    <linearGradient id="g-side-l" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#e6e0d1"/><stop offset="1" stop-color="#f1ede3"/>
+    </linearGradient>
+    <linearGradient id="g-side-r" x1="1" y1="0" x2="0" y2="0">
+      <stop offset="0" stop-color="#e3ddcd"/><stop offset="1" stop-color="#efebe0"/>
+    </linearGradient>
+    <linearGradient id="g-bottom" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6f2e9"/><stop offset="1" stop-color="#ebe5d7"/>
+    </linearGradient>
+    <linearGradient id="g-throat" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a2414" stop-opacity=".34"/><stop offset="1" stop-color="#2a2414" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="g-seal" cx=".36" cy=".3" r=".8">
+      <stop offset="0" stop-color="#3a78b5"/><stop offset=".35" stop-color="#1b4f88"/><stop offset=".75" stop-color="#0c2c61"/><stop offset="1" stop-color="#061a3f"/>
+    </radialGradient>
+    <radialGradient id="g-seal-in" cx=".62" cy=".68" r=".75">
+      <stop offset="0" stop-color="#1c5290"/><stop offset=".6" stop-color="#0f3570"/><stop offset="1" stop-color="#0a2652"/>
+    </radialGradient>
+    <linearGradient id="g-seal-lip" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#051431"/><stop offset=".5" stop-color="#0c2c61" stop-opacity="0"/><stop offset="1" stop-color="#6d9fd0"/>
+    </linearGradient>
+    <linearGradient id="g-seal-rim" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#9cc3ea" stop-opacity=".9"/><stop offset=".45" stop-color="#9cc3ea" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".35"/>
+    </linearGradient>
+    <linearGradient id="g-silver" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/><stop offset=".3" stop-color="#dcdce2"/><stop offset=".52" stop-color="#a4a6b0"/><stop offset=".74" stop-color="#f1f1f5"/><stop offset="1" stop-color="#b9bac2"/>
+    </linearGradient>
+    <pattern id="p-grain" patternUnits="userSpaceOnUse" width="220" height="220">
+      <image data-grain width="220" height="220" href=""/>
+    </pattern>
+    <pattern id="p-damask" patternUnits="userSpaceOnUse" width="70" height="98">
+      <rect width="70" height="98" fill="#c3d7e3"/>
+      <image data-damask width="70" height="98" href=""/>
+    </pattern>
+    <filter id="f-lace" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2.5" stdDeviation="2" flood-color="#4d4430" flood-opacity=".32"/>
+    </filter>
+    <filter id="f-fold" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="-2" stdDeviation="3" flood-color="#5b5136" flood-opacity=".2"/>
+    </filter>
+    <filter id="f-flap" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#4d4430" flood-opacity=".22"/>
+    </filter>
+    <filter id="f-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7"/></filter>
+    <filter id="f-blur-s" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.5"/></filter>
+    <clipPath id="c-env"><rect width="1000" height="704"/></clipPath>
+    <path id="arc-hint" d="M362 505 A138 138 0 0 0 638 505"/>
+  </defs>
+</svg>
+
+<div class="backdrop" aria-hidden="true"><div class="backdrop-pattern"></div><div class="backdrop-tint"></div></div>
 
 <main class="scene">
-  <!-- Closed envelope: the cover exactly as designed. The envelope layers only appear once it is opened. -->
   <div class="stage" data-stage>
-    <img class="cover-img" src="assets/img/cover.webp" width="461" height="790" alt="Envelope sealed with a wax seal monogrammed R M, reading You are invited, above the names Melvet and Rockson.">
+    <div class="cover">
+      <canvas class="satin" data-satin aria-hidden="true"></canvas>
+      <div class="tulle" aria-hidden="true"></div>
+      <svg class="rosettes" data-rosettes viewBox="0 0 1000 1778" preserveAspectRatio="none" aria-hidden="true"></svg>
+      <div class="band" aria-hidden="true"></div>
+      <svg class="band-lace" data-band-lace viewBox="0 0 1000 1778" preserveAspectRatio="none" aria-hidden="true"></svg>
 
-    <div class="env" data-env aria-hidden="true">
-      <img class="env-interior" src="assets/img/interior.webp" alt="">
-      <div class="pocket">
-        <img class="pocket-card" data-pocket-card src="assets/img/invite.webp" alt="">
+      <div class="env" data-env aria-hidden="true">
+        <div class="env-shadow"></div>
+        <!-- inside of the envelope: lined with the same damask -->
+        <svg class="env-layer env-inside" viewBox="0 0 1000 704">
+          <rect width="1000" height="704" fill="#e8e1d1"/>
+          <rect x="34" y="20" width="932" height="660" rx="6" fill="url(#p-damask)"/>
+          <rect x="34" y="20" width="932" height="660" rx="6" fill="none" stroke="#bab7b8" stroke-width="2"/>
+          <rect width="1000" height="704" fill="url(#p-grain)" opacity=".5"/>
+          <rect width="1000" height="200" fill="url(#g-throat)"/>
+        </svg>
+        <div class="pocket"><div class="pocket-card" data-pocket-card></div></div>
+        <!-- front of the envelope: side flaps and bottom flap -->
+        <svg class="env-layer env-front" viewBox="0 0 1000 704">
+          <path d="M1000 0 L488 418 Q474 430 488 442 L1000 704 Z" fill="url(#g-side-r)"/>
+          <path d="M0 0 L512 418 Q526 430 512 442 L0 704 Z" fill="url(#g-side-l)" filter="url(#f-fold)"/>
+          <path d="M0 704 L432 478 Q500 444 568 478 L1000 704 Z" fill="url(#g-bottom)" filter="url(#f-fold)"/>
+          <path d="M0 0 L1000 0 L1000 704 L0 704 Z" fill="url(#p-grain)" opacity=".55"/>
+          <path d="M2 2 L506 414 M998 2 L494 414" stroke="#fffdf6" stroke-width="2" opacity=".8" fill="none"/>
+          <path d="M3 703 L434 479 Q500 446 566 479 L997 703" stroke="#fffdf6" stroke-width="1.6" opacity=".7" fill="none"/>
+          <text class="hint-text" data-hint-text><textPath href="#arc-hint" startOffset="50%" text-anchor="middle">Click to open</textPath></text>
+        </svg>
+        <div class="flap" data-flap>
+          <svg class="flap-face flap-face--front" viewBox="0 0 1000 704" data-flap-front>
+            <path d="M0 0 L1000 0 L500 522 Z" fill="url(#g-flap)" filter="url(#f-flap)"/>
+            <path d="M0 0 L1000 0 L500 522 Z" fill="url(#p-grain)" opacity=".6"/>
+            <g data-lace clip-path="url(#c-env)" filter="url(#f-lace)"></g>
+            <text class="invited" x="500" y="232" text-anchor="middle">You are invited !</text>
+            <g data-seal></g>
+          </svg>
+          <svg class="flap-face flap-face--back" viewBox="0 0 1000 704">
+            <path d="M0 0 L1000 0 L500 522 Z" fill="#ece6d7"/>
+            <path d="M40 0 L960 0 L500 478 Z" fill="url(#p-damask)"/>
+            <path d="M40 0 L960 0 L500 478 Z" fill="none" stroke="#bab7b8" stroke-width="2"/>
+            <path d="M0 0 L1000 0 L500 522 Z" fill="url(#p-grain)" opacity=".45"/>
+            <g data-lace clip-path="url(#c-env)" filter="url(#f-lace)"></g>
+          </svg>
+        </div>
+        <span class="seal-hint" data-seal-hint><span class="seal-glint"></span></span>
       </div>
-      <img class="env-body" src="assets/img/body.webp" alt="">
-      <img class="env-margin" data-margin src="assets/img/margin.webp" alt="">
-      <div class="flap" data-flap>
-        <img class="flap-face flap-face--front" src="assets/img/flap.webp" alt="">
-        <img class="flap-face flap-face--back" src="assets/img/flap-back.webp" alt="">
-      </div>
-      <span class="seal-hint" data-seal-hint><span class="seal-glint"></span></span>
+
+      <h1 class="cover-names">
+        <span class="cn cn--1">Melvet</span>
+        <span class="cn cn--amp">&amp;</span>
+        <span class="cn cn--2">Rockson</span>
+      </h1>
     </div>
-
     <button type="button" class="open-btn" data-open aria-label="Open the invitation"></button>
   </div>
 
@@ -51,8 +139,100 @@
   <section class="reveal" data-reveal aria-label="Invitation" hidden>
     <div class="reveal-inner">
       <figure class="invite" data-invite>
-        <img src="assets/img/invite.webp" width="432" height="764" alt="I have found the one whom my soul loves, Song of Solomon 3:4. In the presence of our family, friends and relatives, we, Melvet Gonsalves and Rockson D'souza. Saturday 28 November, 7 PM. Holy Mass 4:30 PM, Infant Jesus Church, Dombivli. Join us in celebrating our love!">
-        <a class="invite-map" data-map target="_blank" rel="noopener" aria-label="Open Infant Jesus Church, Dombivli in Google Maps"></a>
+        <article class="card" data-card>
+          <div class="card-panel">
+            <p class="c-verse">I have found the one whom my soul loves</p>
+            <p class="c-ref">Song of Solomon <span>3:4</span></p>
+            <p class="c-presence">In the presence of our family, friends &amp; relatives</p>
+            <p class="c-we">We</p>
+            <h2 class="c-names"><span>Melvet Gonsalves</span><span class="c-amp">&amp;</span><span>Rockson D'souza</span></h2>
+            <div class="c-date" aria-label="Saturday 28 November, 7 PM">
+              <span class="c-side">Sat</span>
+              <span class="c-pill"><b>28</b><i>Nov</i></span>
+              <span class="c-side">7 PM</span>
+            </div>
+            <p class="c-caps c-mass">Holy Mass 4:30 PM</p>
+            <p class="c-caps">Infant Jesus Church, Dombivli</p>
+            <a class="c-loc" data-map target="_blank" rel="noopener">Click <b>HERE</b> for location</a>
+            <div class="c-foot">
+              <p class="c-caps c-palette">Palette</p>
+              <div class="c-swatches" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+              <p class="c-closing">Join us in celebrating our love!</p>
+            </div>
+          </div>
+          <svg class="c-couple" viewBox="0 0 240 420" aria-hidden="true">
+            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <g stroke-width="1.15">
+                <path d="M74 33 C73 22 80 15 89 16 C97 17 101 25 100 34 C99 43 95 49 89 51 C83 52 78 48 76 42"/>
+                <path d="M74 31 C78 22 88 19 98 26" stroke-width=".8"/>
+                <path d="M75 26 C80 19 89 18 96 21" stroke-width=".6"/>
+                <path d="M76 38 C73 37 72 41 75 43" stroke-width=".8"/>
+                <path d="M81 50 C81 55 80 58 78 60"/>
+                <path d="M95 48 C95 53 96 56 98 58"/>
+                <path d="M77 60 C83 64 92 63 99 58" stroke-width=".9"/>
+                <path d="M78 61 C68 61 58 63 51 67 C46 70 44 78 44 92"/>
+                <path d="M98 59 C108 59 117 61 122 65 C127 69 128 78 128 90"/>
+                <path d="M44 92 C42 116 42 140 44 162 C45 175 46 186 48 194"/>
+                <path d="M52 100 C52 124 52 146 53 168" stroke-width=".8"/>
+                <path d="M48 194 C47 201 50 206 54 205 C56 202 55 196 53 190" stroke-width=".9"/>
+                <path d="M128 90 C131 112 135 134 140 152 C143 163 147 172 151 178"/>
+                <path d="M120 98 C123 120 127 140 132 156" stroke-width=".8"/>
+                <path d="M53 106 C56 128 59 146 60 160 C60 176 58 192 57 210"/>
+                <path d="M120 104 C117 126 114 144 113 158 C113 174 115 190 117 208"/>
+                <path d="M57 210 C74 215 100 214 117 208"/>
+                <path d="M87 64 C87 100 87 140 87 182" stroke-width=".55"/>
+                <path d="M87 182 L87 212" stroke-width=".8"/>
+                <path d="M60 212 C61 258 63 304 65 352 C66 362 66 370 66 376"/>
+                <path d="M85 220 C84 262 83 304 83 346 C83 360 83 370 83 376" stroke-width=".9"/>
+                <path d="M90 220 C92 262 94 304 95 346 C95 360 95 370 95 376" stroke-width=".9"/>
+                <path d="M114 212 C113 258 112 304 111 350 C111 362 111 370 112 376"/>
+                <path d="M64 376 C62 383 66 387 74 387 C81 387 85 383 83 377" stroke-width="1"/>
+                <path d="M95 377 C95 384 100 387 107 387 C114 387 116 382 112 376" stroke-width="1"/>
+              </g>
+              <g stroke-width="1.05">
+                <path d="M150 42 C150 31 157 25 165 26 C173 27 177 35 176 44 C175 53 171 59 164 60 C158 60 153 56 151 50"/>
+                <path d="M152 37 C157 29 166 27 175 33" stroke-width=".7"/>
+                <path d="M154 48 C160 43 168 43 176 46" stroke-width=".6"/>
+                <path d="M168 55 C173 52 179 54 180 59 C181 64 176 67 171 65 C167 63 166 58 168 55" stroke-width=".9"/>
+                <path d="M171 58 C173 57 176 58 176 61" stroke-width=".6"/>
+                <path d="M178 54 C192 72 200 104 203 146 C206 196 210 250 220 300 C226 330 232 356 238 380" stroke-width=".8"/>
+                <path d="M176 60 C186 86 190 120 191 160 C192 210 196 256 204 300 C208 320 212 338 218 352" stroke-width=".5" opacity=".75"/>
+                <path d="M180 58 C196 84 206 124 210 170" stroke-width=".45" opacity=".6"/>
+                <path d="M157 59 C157 64 156 67 154 70"/>
+                <path d="M170 61 C170 65 171 68 173 70"/>
+                <path d="M154 70 C147 71 141 74 138 79 C136 84 136 90 136 96"/>
+                <path d="M173 70 C180 71 186 74 188 80 C190 85 190 91 190 97"/>
+                <path d="M136 96 C135 118 136 140 139 158 C141 168 145 175 150 179"/>
+                <path d="M143 102 C142 122 143 140 145 156" stroke-width=".7"/>
+                <path d="M150 179 C154 182 156 180 155 176 C154 173 151 171 148 172" stroke-width=".8"/>
+                <path d="M190 97 C192 118 193 140 192 160 C191 170 190 178 188 184"/>
+                <path d="M183 102 C185 122 186 142 185 160" stroke-width=".7"/>
+                <path d="M145 92 C150 112 157 126 163 132 C169 126 176 112 181 92" stroke-width=".9"/>
+                <path d="M163 74 C163 90 163 104 163 116" stroke-width=".5" opacity=".7"/>
+                <path d="M145 92 C146 116 148 134 151 148"/>
+                <path d="M181 92 C180 116 178 134 175 148"/>
+                <path d="M151 148 C158 151 168 151 175 148"/>
+                <path d="M151 148 C146 196 136 250 124 300 C116 334 106 362 94 386"/>
+                <path d="M175 148 C184 196 194 246 206 292 C214 324 226 354 238 378"/>
+                <path d="M94 386 C112 398 140 404 170 404 C198 404 222 396 238 378"/>
+                <path d="M94 386 C90 390 90 396 95 398 C100 399 103 395 100 392" stroke-width=".7"/>
+                <path d="M157 152 C152 210 144 270 132 330 C128 352 124 372 120 394" stroke-width=".6"/>
+                <path d="M163 153 C163 220 162 290 160 360 C160 378 160 392 160 403" stroke-width=".6"/>
+                <path d="M169 152 C176 214 186 280 196 340 C200 362 204 380 206 398" stroke-width=".6"/>
+                <path d="M154 160 C146 220 134 286 116 360" stroke-width=".4" opacity=".7"/>
+                <path d="M172 160 C184 226 200 296 222 366" stroke-width=".4" opacity=".7"/>
+                <g stroke-width=".8">
+                  <path d="M190 182 C186 182 184 186 186 189 C189 192 194 190 194 186 C194 183 192 181 190 182 C189 184 190 186 192 186"/>
+                  <path d="M198 190 C195 190 193 193 195 196 C197 199 202 198 202 194 C202 191 200 189 198 190 C197 192 198 194 200 194"/>
+                  <path d="M184 193 C181 193 179 196 181 199 C183 202 188 201 188 197 C188 194 186 192 184 193"/>
+                  <path d="M192 198 C189 198 188 201 190 203 C192 206 196 204 196 201"/>
+                  <path d="M180 188 C175 185 171 188 172 193 C176 193 179 191 180 188 M202 186 C207 183 211 186 210 191 C206 191 203 189 202 186 M198 201 C203 202 205 207 202 210 C199 208 198 205 198 201" stroke-width=".7"/>
+                  <path d="M189 204 C188 222 186 238 184 252 M193 204 C196 220 199 234 203 246" stroke-width=".55"/>
+                </g>
+              </g>
+            </g>
+          </svg>
+        </article>
       </figure>
 
       <div class="details">
@@ -83,12 +263,7 @@
 </main>
 
 <canvas class="sparkle" data-sparkle aria-hidden="true"></canvas>
-
-<noscript>
-  <style>.scene,.sparkle{display:none}</style>
-  <div class="noscript"><img src="assets/img/cover.webp" alt=""><img src="assets/img/invite.webp" alt=""></div>
-</noscript>
-
+<!--CONTENT-END-->
 <script src="assets/js/card.js" defer></script>
 </body>
 </html>

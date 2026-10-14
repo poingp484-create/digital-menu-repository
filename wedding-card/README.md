@@ -1,8 +1,8 @@
 # Melvet & Rockson · animated wedding invitation
 
-A single-page invitation built from the two Canva pages: the sealed envelope (cover) and the invitation card. Tapping the envelope lifts the wax-sealed flap, the card slides out and pops forward, and a live countdown to the wedding appears beside it.
+A single-page invitation in the same format and palette as the original Canva pages, redrawn entirely in code so it stays sharp on every screen. Tapping the envelope lifts the wax-sealed flap, the card slides out and pops forward, and a live countdown to the wedding appears beside it.
 
-Static files only, no build step. Open `index.html`, or serve the folder:
+Static files only: no images, no build step. Open `index.html`, or serve the folder:
 
 ```
 cd wedding-card
@@ -12,22 +12,22 @@ python3 -m http.server 8000
 
 Any static host works (GitHub Pages, Netlify, Vercel). Upload the `wedding-card` folder as is.
 
-## What happens
+## What's on the page
 
-1. **Closed:** the cover exactly as designed. A soft ring pulses around the seal and a glint passes over it. On desktop the card tilts slightly with the mouse.
-2. **Tap:** sparkles at the seal, then the lace flap swings open in 3D, seal and all. Its back shows the paper inside with the lace edge.
-3. The invitation slides up out of the envelope, then pops forward to the centre while the envelope sinks away.
-4. **Inside:** the card, plus a countdown (days, hours, minutes, seconds) styled like the card's "28 NOV" pill, "Get directions", "Save the date" (Google Calendar) and "Open the envelope again".
-
-"Click HERE for location" on the card is a real link to Google Maps.
+- **Cover:** draped ivory silk with a tulle weave and lace rosettes, a powder-blue damask ribbon edged in lace, and an ivory envelope with a lace-trimmed flap reading "You are invited !". A navy wax seal carries a silver RM monogram. The names are set below in a flourished script.
+- **Opening:** the seal sparkles, the flap swings open in 3D to show a damask lining, and the card rises out of the envelope, then pops forward while the envelope sinks away.
+- **Card:** the verse, names, the SAT · 28 NOV · 7 PM date pill, Holy Mass and church details, the palette swatches and a line drawing of the couple, all as live text. "Click HERE for location" opens Google Maps.
+- **Countdown:** days, hours, minutes and seconds, styled like the date pill, with "Get directions", "Save the date" (Google Calendar) and "Open the envelope again".
 
 With *reduce motion* turned on, the page skips the 3D and fades straight to the card.
 
-## The artwork is unchanged
+## How it's drawn
 
-`cover.webp` and `invite.webp` are pixel-exact crops of the Canva pages, saved lossless. Nothing was recoloured, retouched or upscaled.
-
-To animate the envelope, `tools/make_layers.py` cuts the cover into layers (`flap`, `body`, `margin`, `interior`, `flap-back`). The closed envelope is always the untouched cover image. The layers only appear once it's tapped. The only new pixels are ones that are never visible in the original: the inside of the envelope, the back of the flap, and the patch of envelope under the seal.
+- Silk: a height field of soft folds, lit and painted onto a canvas at load (`paintSatin` in `card.js`).
+- Lace: generated SVG paths with pierced eyelets (`laceEdge`), used on the flap, the ribbon edges and the rosettes.
+- Wax seal: an irregular SVG blob with layered gradients and an engraved silver monogram (`seal`).
+- Damask: one SVG tile in `card.css` (`--damask`), reused for the ribbon, the card, the backdrop and the envelope lining.
+- The couple drawing is inline SVG in `index.html`.
 
 ## Settings
 
@@ -39,18 +39,12 @@ At the top of `assets/js/card.js`:
 
 After the target time passes, the countdown shows zeros and the title changes to "Today we say I do", then "Happily ever after".
 
-## Image quality
-
-The pages came from screenshots at about 460 px wide, so they look soft on high-density phone screens. For sharper results, download both pages from Canva as PNG and replace `assets/img/cover.webp` and `assets/img/invite.webp`. The envelope layers are measured from the current cover, so they need regenerating with the scripts in `tools/` (the coordinates there would need re-measuring for a new export).
+Colours are tokens at the top of `assets/css/card.css`. Fonts are Monsieur La Doulaise, Pinyon Script, Italianno and Cormorant Garamond from Google Fonts.
 
 ## Files
 
 ```
-index.html             page structure
-assets/css/card.css    styles (palette tokens at the top)
-assets/js/card.js      opening sequence, countdown, sparkles, replay
-assets/img/            cover and card (pixel-exact) + envelope layers
-tools/                 scripts that produced the layers (Python, OpenCV)
+index.html             page structure, envelope SVG, card and couple drawing
+assets/css/card.css    styles, palette tokens and the damask and tulle tiles
+assets/js/card.js      silk, lace and seal drawing; opening sequence; countdown; sparkles
 ```
-
-Fonts: Pinyon Script and Cormorant Garamond from Google Fonts.
