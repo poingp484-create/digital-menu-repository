@@ -426,6 +426,7 @@ img { display: block; max-width: 100%; }
 }
 
 @media (max-width: 360px) {
+  .eyebrow { font-size: 11px; letter-spacing: .16em; }
   .unit { width: 58px; height: 84px; }
   .num { font-size: 30px; }
   .lbl { font-size: 9px; letter-spacing: .16em; }
