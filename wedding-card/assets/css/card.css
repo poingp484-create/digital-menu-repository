@@ -234,12 +234,15 @@ img { display: block; max-width: 100%; }
   align-items: center;
   justify-content: center;
   gap: 22px;
-  padding: max(20px, env(safe-area-inset-top)) 16px max(28px, env(safe-area-inset-bottom));
+  padding-block: max(20px, env(safe-area-inset-top, 0px)) max(28px, env(safe-area-inset-bottom, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
 
 .invite {
   position: relative;
   margin: 0;
+  max-width: 100%;
   flex: none;
   width: clamp(230px, min(100vw - 40px, (100svh - 250px) * 432 / 764), 430px);
   aspect-ratio: 432 / 764;
@@ -410,7 +413,7 @@ img { display: block; max-width: 100%; }
 
 /* Wide screens: card and countdown side by side */
 @media (min-width: 860px) and (min-aspect-ratio: 1 / 1) {
-  .reveal-inner { flex-direction: row; gap: clamp(40px, 6vw, 88px); padding: 32px; }
+  .reveal-inner { flex-direction: row; gap: clamp(40px, 6vw, 88px); padding-block: 32px; padding-left: max(32px, env(safe-area-inset-left, 0px)); padding-right: max(32px, env(safe-area-inset-right, 0px)); }
   .invite { width: auto; height: min(88vh, 88svh, 900px); }
   .details { width: 380px; padding: 34px 30px 28px; }
   .script { font-size: 48px; }
