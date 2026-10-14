@@ -1,0 +1,447 @@
+/* Melvet & Rockson · wedding invitation
+   Palette is taken from the card's own "Palette" swatches. */
+:root {
+  --sky: #bed3de;
+  --steel: #174975;
+  --navy: #0c2c61;
+  --silver: #bab7b8;
+  --mist: #dbe2e0;
+  --ivory: #f3f1e8;
+
+  --script: "Pinyon Script", "Snell Roundhand", "Apple Chancery", cursive;
+  --serif: "Cormorant Garamond", "Cormorant", Garamond, "Times New Roman", serif;
+
+  /* Cover artwork is 461 × 790; the envelope sits inside it at these fractions */
+  --cover-ratio: 461 / 790;
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --ease-in-out: cubic-bezier(.65, 0, .35, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background: var(--sky);
+  color: var(--navy);
+  font-family: var(--serif);
+  font-variant-numeric: lining-nums;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+img { display: block; max-width: 100%; }
+
+/* ---------- Backdrop ---------- */
+
+.backdrop { position: fixed; inset: 0; overflow: hidden; }
+
+.backdrop-layer {
+  position: absolute;
+  inset: -12%;
+  background-position: center;
+  background-size: cover;
+  filter: blur(38px) saturate(1.05);
+  transform: scale(1.1);
+  transition: opacity 1.4s var(--ease-in-out);
+}
+.backdrop-layer--cover { background-image: url("../img/cover.webp"); }
+.backdrop-layer--invite { background-image: url("../img/invite.webp"); opacity: 0; }
+.is-revealed .backdrop-layer--cover { opacity: 0; }
+.is-revealed .backdrop-layer--invite { opacity: 1; }
+
+.backdrop-tint {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 80% at 50% 45%, rgba(255, 255, 255, .28), rgba(255, 255, 255, 0) 60%),
+    radial-gradient(140% 100% at 50% 50%, rgba(12, 44, 97, 0) 55%, rgba(12, 44, 97, .22) 100%),
+    linear-gradient(rgba(190, 211, 222, .35), rgba(190, 211, 222, .35));
+}
+
+/* ---------- Scene and stage ---------- */
+
+.scene { position: fixed; inset: 0; }
+
+.stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(100vw, 100vh * 461 / 790);
+  width: min(100vw, 100svh * 461 / 790);
+  aspect-ratio: var(--cover-ratio);
+  translate: -50% -50%;
+  transform: perspective(1600px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition: opacity 1.4s var(--ease-out), scale 1.4s var(--ease-out);
+}
+.is-loading .stage { opacity: 0; scale: 1.025; }
+
+.cover-img {
+  width: 100%;
+  height: 100%;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+@media (min-aspect-ratio: 461 / 790) {
+  .cover-img { box-shadow: 0 30px 80px -30px rgba(12, 44, 97, .45), 0 8px 24px -12px rgba(12, 44, 97, .25); }
+}
+
+.open-btn {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  width: 100%;
+  border: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+.open-btn:focus-visible { outline: 2px solid var(--navy); outline-offset: 4px; }
+.is-opening .open-btn, .is-revealed .open-btn { pointer-events: none; }
+
+/* ---------- Envelope layers (cut from the cover, aligned to it) ---------- */
+
+.env {
+  position: absolute;
+  left: calc(63 / 461 * 100%);
+  top: calc(203 / 790 * 100%);
+  width: calc(359 / 461 * 100%);
+  height: calc(255 / 790 * 100%);
+}
+
+.env > img { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* Hidden until opened, so the closed envelope is exactly the cover image */
+.env > img, .pocket, .flap { visibility: hidden; }
+.is-opening .env > img, .is-opening .pocket, .is-opening .flap,
+.is-revealed .env > img, .is-revealed .pocket, .is-revealed .flap { visibility: visible; }
+
+.env-interior { z-index: 0; }
+
+.pocket {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  /* lets the card rise above the envelope but hides whatever is still below its bottom edge */
+  clip-path: inset(-600% -40% 1.5% -40%);
+}
+.pocket-card {
+  position: absolute;
+  left: 7%;
+  top: 3.9%;
+  width: 86%;
+  aspect-ratio: 432 / 764;
+  box-shadow: 0 -2px 10px rgba(40, 40, 30, .16), 0 1px 3px rgba(40, 40, 30, .2);
+  will-change: transform;
+}
+
+.env-body, .env-margin { z-index: 3; }
+.flap-open .env-body { filter: drop-shadow(0 -1px 1.5px rgba(60, 52, 30, .28)); }
+
+.flap {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  transform-origin: 50% calc(2 / 255 * 100%);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.flap-open .flap { z-index: 1; }
+
+.flap-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.flap-face--back { transform: rotateY(180deg); }
+
+/* Invitation to tap: a soft ring and a glint on the wax seal */
+.seal-hint {
+  position: absolute;
+  z-index: 6;
+  left: calc((239.5 - 63) / 359 * 100%);
+  top: calc((382 - 203) / 255 * 100%);
+  width: calc(77 / 359 * 100%);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  pointer-events: none;
+  transition: opacity .4s ease;
+}
+.seal-hint::before, .seal-hint::after {
+  content: "";
+  position: absolute;
+  inset: -6%;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, .85);
+  box-shadow: 0 0 14px rgba(255, 255, 255, .5);
+  animation: ring 3.2s var(--ease-out) infinite;
+  opacity: 0;
+}
+.seal-hint::after { animation-delay: 1.6s; }
+.seal-glint {
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  overflow: hidden;
+  mix-blend-mode: screen;
+}
+.seal-glint::before {
+  content: "";
+  position: absolute;
+  inset: -40% -120%;
+  background: linear-gradient(105deg, transparent 42%, rgba(255, 255, 255, .55) 50%, transparent 58%);
+  animation: glint 4.2s ease-in-out infinite;
+  transform: translateX(-60%);
+}
+.is-loading .seal-hint, .is-opening .seal-hint, .is-revealed .seal-hint { opacity: 0; }
+@media (hover: hover) {
+  .stage:hover .seal-hint::before, .stage:hover .seal-hint::after { animation-duration: 2.2s; }
+}
+
+@keyframes ring {
+  0% { transform: scale(.92); opacity: 0; }
+  20% { opacity: .9; }
+  100% { transform: scale(1.75); opacity: 0; }
+}
+@keyframes glint {
+  0%, 55% { transform: translateX(-60%); }
+  85%, 100% { transform: translateX(60%); }
+}
+
+/* ---------- Reveal: the card and the countdown ---------- */
+
+.reveal {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+.reveal[hidden] { display: block; visibility: hidden; }
+
+.reveal-inner {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  padding: max(20px, env(safe-area-inset-top)) 16px max(28px, env(safe-area-inset-bottom));
+}
+
+.invite {
+  position: relative;
+  margin: 0;
+  flex: none;
+  width: clamp(230px, min(100vw - 40px, (100svh - 250px) * 432 / 764), 430px);
+  aspect-ratio: 432 / 764;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+/* The shadow waits until the card has fully left the envelope */
+.invite::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow:
+    0 40px 90px -36px rgba(12, 44, 97, .55),
+    0 14px 32px -16px rgba(12, 44, 97, .35);
+  opacity: 0;
+  transition: opacity 1s ease .35s;
+}
+.is-revealed .invite::before { opacity: 1; }
+.invite img { position: relative; width: 100%; height: 100%; }
+
+/* Invisible tap target over "Click HERE for location" */
+.invite-map {
+  position: absolute;
+  left: 28%;
+  top: 64.2%;
+  width: 44%;
+  height: 5%;
+  border-radius: 999px;
+}
+.invite-map:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
+
+.details {
+  width: min(100%, 400px);
+  padding: 26px 22px 22px;
+  text-align: center;
+  border-radius: 26px;
+  background: rgba(219, 226, 224, .62);
+  border: 1px solid rgba(255, 255, 255, .7);
+  box-shadow: 0 24px 60px -34px rgba(12, 44, 97, .5), inset 0 1px 0 rgba(255, 255, 255, .8);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  backdrop-filter: blur(14px) saturate(1.1);
+}
+
+[data-step] {
+  opacity: 0;
+  translate: 0 14px;
+  transition: opacity .9s var(--ease-out), translate .9s var(--ease-out);
+  transition-delay: calc(var(--d) * 110ms + 150ms);
+}
+.details { opacity: 0; transition: opacity .8s var(--ease-out); }
+.is-revealed .details, .is-revealed [data-step] { opacity: 1; translate: 0 0; }
+
+.eyebrow {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--steel);
+}
+
+.script {
+  margin: 6px 0 14px;
+  font-family: var(--script);
+  font-weight: 400;
+  font-size: clamp(34px, 9vw, 44px);
+  line-height: 1.15;
+  color: var(--navy);
+}
+
+.countdown {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.unit {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 66px;
+  height: 92px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(190, 211, 222, .95), rgba(190, 211, 222, .75));
+  border: 1px solid rgba(23, 73, 117, .45);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .7), 0 8px 18px -12px rgba(12, 44, 97, .55);
+}
+.num {
+  display: block;
+  font-size: 34px;
+  line-height: 1;
+  font-weight: 500;
+  font-variant-numeric: lining-nums tabular-nums;
+  color: var(--navy);
+}
+.num.tick { animation: tick .6s var(--ease-out); }
+.lbl {
+  margin-top: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--steel);
+  padding-left: .22em;
+}
+.rule {
+  flex: 1 1 0;
+  min-width: 4px;
+  max-width: 16px;
+  height: 1px;
+  background: rgba(23, 73, 117, .45);
+}
+@keyframes tick {
+  0% { opacity: 0; transform: translateY(40%); filter: blur(2px); }
+  100% { opacity: 1; transform: none; filter: none; }
+}
+
+.when {
+  margin: 18px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .2em;
+  line-height: 1.8;
+  text-transform: uppercase;
+  color: var(--steel);
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 18px;
+}
+.btn {
+  flex: 1 1 0;
+  max-width: 170px;
+  padding: 13px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  border: 1px solid var(--navy);
+  background: var(--navy);
+  color: var(--ivory);
+  font: 600 13px/1 var(--serif);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background .3s ease, color .3s ease, translate .3s var(--ease-out);
+}
+.btn--ghost { background: transparent; color: var(--navy); }
+.btn:hover { translate: 0 -1px; }
+.btn--ghost:hover { background: rgba(12, 44, 97, .08); }
+.btn:focus-visible, .replay:focus-visible { outline: 2px solid var(--navy); outline-offset: 3px; }
+
+.replay {
+  margin-top: 14px;
+  padding: 6px 4px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font: italic 400 16px/1.2 var(--serif);
+  color: var(--steel);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  text-decoration-color: rgba(23, 73, 117, .4);
+}
+
+/* Wide screens: card and countdown side by side */
+@media (min-width: 860px) and (min-aspect-ratio: 1 / 1) {
+  .reveal-inner { flex-direction: row; gap: clamp(40px, 6vw, 88px); padding: 32px; }
+  .invite { width: auto; height: min(88vh, 88svh, 900px); }
+  .details { width: 380px; padding: 34px 30px 28px; }
+  .script { font-size: 48px; }
+  .unit { width: 72px; height: 100px; }
+  .num { font-size: 38px; }
+}
+
+@media (max-width: 360px) {
+  .unit { width: 58px; height: 84px; }
+  .num { font-size: 30px; }
+  .lbl { font-size: 9px; letter-spacing: .16em; }
+  .details { padding: 22px 14px 18px; }
+  .btn { font-size: 12px; letter-spacing: .08em; }
+}
+
+/* ---------- Sparkle canvas ---------- */
+
+.sparkle {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.noscript { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; padding: 16px; }
+.noscript img { width: min(100%, 432px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .seal-hint::before, .seal-hint::after, .seal-glint::before { animation: none; }
+  [data-step] { translate: none; transition-delay: 0s; }
+  .num.tick { animation: none; }
+}

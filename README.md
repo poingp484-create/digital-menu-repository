@@ -2,6 +2,8 @@
 
 A premium, experimental storefront for nine niche pairs: airbrushed customs, metallic boots, chained heels, collage lace-ups and more. It's a static site with no build step and no dependencies.
 
+Also in this repo: [`wedding-card/`](wedding-card/), an animated wedding invitation (envelope opens, card pops out, countdown). See its README.
+
 ## Run it
 
 Open `index.html` in a browser, or serve the folder (recommended, so fonts preload properly):
