@@ -210,16 +210,18 @@
     links.forEach(function (a) { byId[a.getAttribute("href").slice(1)] = a; });
     var secIO = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
-        var a = byId[en.target.id];
-        if (!a) return;
-        if (en.isIntersecting) {
-          links.forEach(function (l) { l.classList.remove("is-active"); l.removeAttribute("aria-current"); });
+        if (!en.isIntersecting) return;
+        // Back on the hero, no section link is highlighted
+        var a = byId[en.target.id] || null;
+        links.forEach(function (l) { l.classList.remove("is-active"); l.removeAttribute("aria-current"); });
+        if (a) {
           a.classList.add("is-active");
           a.setAttribute("aria-current", "true");
         }
       });
     }, { rootMargin: "-45% 0px -50% 0px" });
     Object.keys(byId).forEach(function (id) { var s = document.getElementById(id); if (s) secIO.observe(s); });
+    if (hero) secIO.observe(hero);
   }
 
   /* ---------- Mobile menu ---------- */
