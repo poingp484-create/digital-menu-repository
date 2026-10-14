@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>St. Anthony's Bakery · Thane · Since 1940</title>
+<meta name="description" content="St. Anthony's Bakery on Kolbad Road, Thane West: fresh bakes, pastries, bamboloni, tiramisu, puffs, cheesecakes and authentic Goan food since 1940.">
+<meta name="theme-color" content="#0d1714">
+<meta property="og:type" content="website">
+<meta property="og:title" content="St. Anthony's Bakery · Since 1940">
+<meta property="og:description" content="Fresh bakes, pastries and authentic Goan food on Kolbad Road, Thane West.">
+<meta property="og:image" content="img/og-storefront.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 56'%3E%3Cpath d='M24 4 44 40H4Z' fill='%230d1714' stroke='%23c9a86a' stroke-width='3' stroke-linejoin='round'/%3E%3Cpath d='M24 40v12M17 52h14' stroke='%23c9a86a' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<script>
+  // Mark JS on before first paint so reveal states never flash.
+  document.documentElement.classList.add("js");
+  if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("calm");
+  try { if ("scrollRestoration" in history) history.scrollRestoration = "manual"; } catch (e) {}
+  // Failsafe: if the main script never finishes, show the page without motion.
+  setTimeout(function () {
+    if (window.__saReady) return;
+    var c = document.documentElement.classList;
+    c.remove("js", "is-loading", "menu-open"); c.add("calm");
+  }, 7000);
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@300;400;500;600&display=swap">
+<link rel="preload" as="image" href="img/cafe-interior.webp" imagesrcset="img/cafe-interior-800.webp 800w, img/cafe-interior.webp 1360w" imagesizes="100vw" type="image/webp">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="progress" aria-hidden="true"><span></span></div>
+
+<!-- Opening curtain -->
+<div class="loader" aria-hidden="true">
+  <div class="loader-panel loader-panel--a"></div>
+  <div class="loader-panel loader-panel--b"></div>
+  <div class="loader-in">
+    <svg class="loader-mark" viewBox="0 0 48 56">
+      <path class="draw" d="M24 4 44 40H4Z"/>
+      <path class="draw draw--2" d="M24 40v12M17 52h14"/>
+      <text x="24" y="33" text-anchor="middle">Sa</text>
+    </svg>
+    <p class="loader-word"><span>St.</span> <span>Anthony's</span></p>
+    <p class="loader-since"><span>Since</span> <span class="loader-year">1940</span></p>
+    <span class="loader-line"><i></i></span>
+  </div>
+</div>
+
+<div class="cursor" aria-hidden="true"><span class="cursor-ring"></span><span class="cursor-dot"></span></div>
+
+<header class="nav" data-nav>
+  <a class="brand" href="#top" aria-label="St. Anthony's Bakery, back to top">
+    <svg class="brand-mark" viewBox="0 0 48 56" aria-hidden="true">
+      <path d="M24 4 44 40H4Z"/>
+      <path d="M24 40v12M17 52h14"/>
+      <text x="24" y="33" text-anchor="middle">Sa</text>
+    </svg>
+    <span class="brand-text"><span class="brand-name">St. Anthony's</span><span class="brand-sub">Bakery · Since 1940</span></span>
+  </a>
+  <nav class="nav-links" aria-label="Main">
+    <a href="#story">Story</a>
+    <a href="#bakes">Bakes</a>
+    <a href="#kitchen">Kitchen</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#visit">Visit</a>
+  </nav>
+  <div class="nav-end">
+    <a class="btn btn--brass btn--sm" href="#reserve" data-magnetic><span>Reserve a table</span></a>
+    <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="menu" id="menu" hidden>
+  <nav aria-label="Mobile">
+    <a href="#story" style="--i:0"><small>01</small>Story</a>
+    <a href="#bakes" style="--i:1"><small>02</small>Bakes</a>
+    <a href="#kitchen" style="--i:2"><small>03</small>Kitchen</a>
+    <a href="#reviews" style="--i:3"><small>04</small>Reviews</a>
+    <a href="#visit" style="--i:4"><small>05</small>Visit</a>
+  </nav>
+  <a class="btn btn--brass menu-cta" href="#reserve" style="--i:5"><span>Reserve a table</span></a>
+  <div class="menu-foot" style="--i:6">
+    <a href="tel:+919167045526">091670 45526</a>
+    <span>Kolbad Road, Thane West</span>
+  </div>
+</div>
+
+<main id="main" tabindex="-1">
+  <span id="top"></span>
+
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-media">
+      <img src="img/cafe-interior.webp" srcset="img/cafe-interior-800.webp 800w, img/cafe-interior.webp 1360w" sizes="100vw" width="1360" height="1020" alt="Inside St. Anthony's Bakery: polished wooden tables and chairs, a floating wooden staircase and glass frontage onto Kolbad Road." fetchpriority="high">
+    </div>
+    <div class="hero-shade" aria-hidden="true"></div>
+    <canvas class="hero-dust" aria-hidden="true"></canvas>
+
+    <div class="hero-in wrap">
+      <p class="eyebrow hero-eyebrow" data-hero="1"><span class="eyebrow-line"></span>Kolbad Road · Thane West</p>
+      <h1 id="hero-title" class="hero-title" data-split>Baked with care <br>in Thane since <em>1940</em>.</h1>
+      <p class="hero-lede" data-hero="2">Fresh bakes, pastries and authentic Goan food: bamboloni, tiramisu, puffs, cheesecakes and the cakes regulars come back for.</p>
+      <div class="hero-cta" data-hero="3">
+        <a class="btn btn--brass" href="#reserve" data-magnetic><span>Reserve a table</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+        <a class="btn btn--ghost" href="#order" data-magnetic><span>Order online</span></a>
+      </div>
+      <ul class="hero-meta" data-hero="4">
+        <li><strong>4.3 <span class="star" aria-hidden="true">★</span></strong><span>3,076 Google reviews</span></li>
+        <li><strong>₹200–400</strong><span>per person</span></li>
+        <li><strong>Until 11 pm</strong><span>Closing time</span></li>
+      </ul>
+    </div>
+
+    <div class="badge" aria-hidden="true">
+      <svg viewBox="0 0 200 200">
+        <defs><path id="badge-circle" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"/></defs>
+        <text><textPath href="#badge-circle">St. Anthony's Bakery · Since 1940 · Thane · Fresh daily ·</textPath></text>
+      </svg>
+      <span class="badge-core">1940</span>
+    </div>
+
+    <a class="scroll-cue" href="#story" aria-label="Scroll to our story"><span>Scroll</span><i></i></a>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee" aria-label="What we bake: bamboloni, tiramisu, puffs, cheesecakes, pastries, chicken rolls, patties, pizzas and Goan food">
+    <div class="marquee-track" aria-hidden="true">
+      <div class="marquee-group">
+        <span>Bamboloni</span><i>✦</i><span><em>Tiramisu</em></span><i>✦</i><span>Puffs</span><i>✦</i><span><em>Cheesecakes</em></span><i>✦</i><span>Pastries</span><i>✦</i><span><em>Chicken rolls</em></span><i>✦</i><span>Patties</span><i>✦</i><span><em>Pizzas</em></span><i>✦</i><span>Goan food</span><i>✦</i>
+      </div>
+    </div>
+  </div>
+
+  <!-- STORY -->
+  <section class="story section section--cream" id="story" aria-labelledby="story-title">
+    <div class="wrap story-grid">
+      <figure class="story-figure">
+        <div class="frame" data-reveal="clip">
+          <img data-parallax="0.08" src="img/storefront.webp" srcset="img/storefront-800.webp 800w, img/storefront.webp 1360w" sizes="(max-width: 900px) 100vw, 55vw" width="1360" height="603" alt="The St. Anthony shopfront on Kolbad Road: red lettering reading 'St. Anthony, Since 1940' above a glass entrance." loading="lazy">
+        </div>
+        <figcaption data-reveal>Shop No. 1, St. Anthony Annex, Kolbad Road</figcaption>
+        <span class="stamp" aria-hidden="true" data-reveal="pop"><b>Est.</b>1940</span>
+      </figure>
+
+      <div class="story-copy">
+        <p class="eyebrow" data-reveal><span class="eyebrow-line"></span>Our story</p>
+        <h2 id="story-title" class="h2" data-split>A Thane bakery, <em>eight decades</em> in the making.</h2>
+        <p class="lede" data-reveal>St. Anthony's has been baking on Kolbad Road since 1940. We keep to traditional recipes and quality ingredients, and our experienced bakers take pride in their craft, so each bake is made with care and attention to detail.</p>
+        <p data-reveal>Whether you're after a sweet indulgence or a savoury snack, there's a seat waiting for you. We're committed to serving the local community with baked goods that reflect our love for the art of baking, and in our kitchen we cook authentic Goan food.</p>
+
+        <dl class="stats">
+          <div data-reveal><dt>Baking since</dt><dd><span data-count="1940" data-from="1900" data-plain>1940</span></dd></div>
+          <div data-reveal><dt>Google rating</dt><dd><span data-count="4.3" data-decimals="1">4.3</span><small>/5</small></dd></div>
+          <div data-reveal><dt>Google reviews</dt><dd><span data-count="3076">3,076</span></dd></div>
+          <div data-reveal><dt>Zomato rating</dt><dd><span data-count="4.1" data-decimals="1">4.1</span><small>/5</small></dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- BAKES -->
+  <section class="bakes section section--pine" id="bakes" aria-labelledby="bakes-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow" data-reveal><span class="eyebrow-line"></span>From the oven</p>
+        <h2 id="bakes-title" class="h2" data-split>Fresh bakes, <em>made the old way</em>.</h2>
+      </div>
+
+      <div class="bakes-grid">
+        <figure class="cake" data-tilt>
+          <div class="frame frame--tall" data-reveal="clip">
+            <img src="img/celebration-cake.webp" width="459" height="1020" alt="A two-tier white cake with piped lace on the top tier, lavender ruffles below and lavender sugar roses." loading="lazy">
+          </div>
+          <figcaption>
+            <span class="cap-k">Celebration cakes</span>
+            <span class="cap-v">Two tiers, sugar roses, lavender ruffles</span>
+          </figcaption>
+          <span class="cake-ring" aria-hidden="true"></span>
+        </figure>
+
+        <ol class="bake-list">
+          <li data-reveal><span class="n">01</span><div><h3>Bamboloni</h3><p>Soft, sugar-dusted Italian doughnuts.</p></div><span class="arrow" aria-hidden="true">→</span></li>
+          <li data-reveal><span class="n">02</span><div><h3>Tiramisu</h3><p>Layers of coffee-soaked sponge and mascarpone cream.</p></div><span class="arrow" aria-hidden="true">→</span></li>
+          <li data-reveal><span class="n">03</span><div><h3>Cheesecakes</h3><p>Rich, smooth and creamy.</p></div><span class="arrow" aria-hidden="true">→</span></li>
+          <li data-reveal><span class="n">04</span><div><h3>Puffs</h3><p>Flaky, golden pastry, baked fresh.</p></div><span class="arrow" aria-hidden="true">→</span></li>
+          <li data-reveal><span class="n">05</span><div><h3>Cakes &amp; pastries</h3><p>The ones that made us famous in Thane.</p></div><span class="arrow" aria-hidden="true">→</span></li>
+          <li data-reveal><span class="n">06</span><div><h3>Chicken rolls &amp; patties</h3><p>Savoury classics for a quick bite.</p></div><span class="arrow" aria-hidden="true">→</span></li>
+        </ol>
+      </div>
+      <p class="bakes-note" data-reveal>For today's selection and prices, call us on <a href="tel:+919167045526">091670 45526</a>.</p>
+    </div>
+  </section>
+
+  <!-- KITCHEN -->
+  <section class="kitchen section section--deep" id="kitchen" aria-labelledby="kitchen-title">
+    <div class="wrap kitchen-grid">
+      <div class="kitchen-copy">
+        <p class="eyebrow" data-reveal><span class="eyebrow-line"></span>The kitchen</p>
+        <h2 id="kitchen-title" class="h2" data-split>Authentic Goan food, <em>and a little of everything</em>.</h2>
+        <p class="lede" data-reveal>Beyond the bakery counter, our kitchen cooks authentic Goan food alongside Continental and Chinese dishes, plus budget-friendly pizzas, all at prices that stay easy on the pocket.</p>
+        <ul class="chips" aria-label="Cuisines">
+          <li data-reveal>Goan</li>
+          <li data-reveal>Continental</li>
+          <li data-reveal>Chinese</li>
+          <li data-reveal>Pizzas</li>
+          <li data-reveal>Bakery</li>
+        </ul>
+        <div class="kitchen-cta" data-reveal>
+          <a class="btn btn--brass" href="#order" data-magnetic><span>Order online</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+        </div>
+      </div>
+
+      <div class="polaroids" aria-label="Photos">
+        <figure class="polaroid polaroid--a" data-reveal="pop" data-tilt>
+          <img src="img/fruit-cake.webp" width="141" height="101" alt="Slices of dark fruit cake studded with raisins, behind golden cupcakes." loading="lazy">
+          <figcaption>Fresh from the oven</figcaption>
+        </figure>
+        <figure class="polaroid polaroid--b" data-reveal="pop" data-tilt>
+          <img src="img/from-the-kitchen.webp" width="160" height="160" alt="Illustration: grilled paneer skewers with green chutney and sliced onion salad." loading="lazy">
+          <figcaption>From the kitchen <small>(illustration)</small></figcaption>
+        </figure>
+        <svg class="steam" viewBox="0 0 120 160" aria-hidden="true">
+          <path d="M30 150c-14-22 14-34 0-58s14-36 0-60"/>
+          <path d="M60 150c-14-22 14-34 0-58s14-36 0-60"/>
+          <path d="M90 150c-14-22 14-34 0-58s14-36 0-60"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section class="reviews section section--pine" id="reviews" aria-labelledby="reviews-title">
+    <div class="wrap">
+      <div class="section-head section-head--center">
+        <p class="eyebrow" data-reveal><span class="eyebrow-line"></span>Loved in Thane<span class="eyebrow-line"></span></p>
+        <h2 id="reviews-title" class="h2" data-split>What our <em>guests</em> say.</h2>
+      </div>
+
+      <div class="scores">
+        <div class="score" data-reveal>
+          <p class="score-src">Google</p>
+          <p class="score-num"><span data-count="4.3" data-decimals="1">4.3</span><small>/5</small></p>
+          <span class="stars" style="--fill:86%" role="img" aria-label="4.3 out of 5 stars"><span class="stars-bg">★★★★★</span><span class="stars-fg">★★★★★</span></span>
+          <p class="score-n">3,076 reviews</p>
+        </div>
+        <div class="score" data-reveal>
+          <p class="score-src">Zomato</p>
+          <p class="score-num"><span data-count="4.1" data-decimals="1">4.1</span><small>/5</small></p>
+          <span class="stars" style="--fill:82%" role="img" aria-label="4.1 out of 5 stars"><span class="stars-bg">★★★★★</span><span class="stars-fg">★★★★★</span></span>
+          <p class="score-n">1,168 votes</p>
+        </div>
+      </div>
+
+      <div class="quotes" data-reveal role="region" aria-roledescription="carousel" aria-label="Guest reviews">
+        <span class="quote-mark" aria-hidden="true">“</span>
+        <div class="quote-stage">
+          <figure class="quote is-active" aria-roledescription="slide" aria-label="1 of 3">
+            <blockquote>Famous for its cakes, pastries, puffs, chicken rolls, Patties etc.</blockquote>
+            <figcaption>Shraddha Mandrekar <span>· Google review</span></figcaption>
+          </figure>
+          <figure class="quote" aria-roledescription="slide" aria-label="2 of 3">
+            <blockquote>Good small place for Continental, Chinese and Goan food at reasonable prices.</blockquote>
+            <figcaption>Bharet Ahuja <span>· Google review</span></figcaption>
+          </figure>
+          <figure class="quote" aria-roledescription="slide" aria-label="3 of 3">
+            <blockquote>Must visit here to have tasty baked food and budget yummy pizza's</blockquote>
+            <figcaption>Ankur Parte <span>· Google review</span></figcaption>
+          </figure>
+        </div>
+        <div class="quote-ctrl">
+          <button type="button" class="qbtn" data-q="prev" aria-label="Previous review"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3M7 4 3 8l4 4"/></svg></button>
+          <div class="qdots">
+            <button type="button" aria-current="true" aria-label="Show review 1"><i></i></button>
+            <button type="button" aria-label="Show review 2"><i></i></button>
+            <button type="button" aria-label="Show review 3"><i></i></button>
+          </div>
+          <button type="button" class="qbtn" data-q="next" aria-label="Next review"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+        </div>
+        <a class="link-line" href="https://www.google.com/maps/search/?api=1&amp;query=St.%20Anthony%27s%20Bakery%2C%20Kolbad%20Road%2C%20Thane%20West" target="_blank" rel="noopener">Read all reviews on Google ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISIT -->
+  <section class="visit section section--cream" id="visit" aria-labelledby="visit-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow" data-reveal><span class="eyebrow-line"></span>Visit us</p>
+        <h2 id="visit-title" class="h2" data-split>Pull up a chair on <em>Kolbad Road</em>.</h2>
+      </div>
+
+      <div class="visit-grid">
+        <div class="visit-info">
+          <dl class="info">
+            <div data-reveal>
+              <dt>Address</dt>
+              <dd><address>Shop No. 1, St. Anthony Annex,<br>Kolbad Road, Kolbad, Uthalsar,<br>Thane West, Thane,<br>Maharashtra 400601</address></dd>
+            </div>
+            <div data-reveal>
+              <dt>Phone</dt>
+              <dd><a class="big-link" href="tel:+919167045526">091670 45526</a></dd>
+            </div>
+            <div data-reveal>
+              <dt>Hours</dt>
+              <dd>Closes at 11 pm<br><span class="muted">Hours can vary, so call ahead to check today's opening time.</span></dd>
+            </div>
+            <div data-reveal>
+              <dt>Price</dt>
+              <dd>₹200–400 per person</dd>
+            </div>
+          </dl>
+
+          <div class="visit-cta" data-reveal>
+            <a class="btn btn--ink" href="https://www.google.com/maps/dir/?api=1&amp;destination=St.%20Anthony%27s%20Bakery%2C%20Kolbad%20Road%2C%20Thane%20West%2C%20Maharashtra%20400601" target="_blank" rel="noopener" data-magnetic><span>Get directions</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M6 4h6v6"/></svg></a>
+            <a class="btn btn--line" href="tel:+919167045526" data-magnetic><span>Call now</span></a>
+          </div>
+        </div>
+
+        <div class="map" data-reveal="clip">
+          <iframe title="Map showing St. Anthony's Bakery on Kolbad Road, Thane West" src="https://maps.google.com/maps?q=St.%20Anthony%27s%20Bakery%2C%20Kolbad%20Road%2C%20Thane%20West&amp;z=16&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+
+      <div class="book">
+        <div class="book-card" id="reserve" data-reveal>
+          <p class="eyebrow"><span class="eyebrow-line"></span>Reserve a table</p>
+          <h3>Book your table online</h3>
+          <p>Reservations are taken through these partners, or call us directly.</p>
+          <ul class="partners">
+            <li><a href="https://www.eazydiner.com/" target="_blank" rel="noopener" data-link="eazydiner">EazyDiner <span aria-hidden="true">↗</span></a></li>
+            <li><a href="https://www.zomato.com/" target="_blank" rel="noopener" data-link="zomato">Zomato <span aria-hidden="true">↗</span></a></li>
+            <li><a href="https://www.swiggy.com/" target="_blank" rel="noopener" data-link="swiggy">Swiggy <span aria-hidden="true">↗</span></a></li>
+          </ul>
+        </div>
+        <div class="book-card book-card--dark" id="order" data-reveal>
+          <p class="eyebrow"><span class="eyebrow-line"></span>Order online</p>
+          <h3>Bakes, delivered</h3>
+          <p>Order through your favourite delivery app, or give us a call.</p>
+          <ul class="partners">
+            <li><a href="https://www.swiggy.com/" target="_blank" rel="noopener" data-link="swiggy">Swiggy <span aria-hidden="true">↗</span></a></li>
+            <li><a href="https://www.zomato.com/" target="_blank" rel="noopener" data-link="zomato">Zomato <span aria-hidden="true">↗</span></a></li>
+            <li><a href="tel:+919167045526">Call 091670 45526</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p class="foot-big" aria-hidden="true"><span>St.</span> <span>Anthony's</span></p>
+    <div class="foot-cols">
+      <div>
+        <p class="foot-k">Find us</p>
+        <p>Shop No. 1, St. Anthony Annex, Kolbad Road, Thane West 400601</p>
+      </div>
+      <div>
+        <p class="foot-k">Call</p>
+        <p><a href="tel:+919167045526">091670 45526</a></p>
+      </div>
+      <div>
+        <p class="foot-k">Hours</p>
+        <p>Closes at 11 pm</p>
+      </div>
+      <div>
+        <p class="foot-k">Explore</p>
+        <p class="foot-links"><a href="#story">Story</a><a href="#bakes">Bakes</a><a href="#kitchen">Kitchen</a><a href="#visit">Visit</a></p>
+      </div>
+    </div>
+    <div class="foot-base">
+      <span>© <span data-year>2026</span> St. Anthony's Bakery · Since 1940</span>
+      <a href="#top" class="totop">Back to top <span aria-hidden="true">↑</span></a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
