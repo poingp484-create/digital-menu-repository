@@ -2,7 +2,7 @@
 
 A premium, experimental storefront for nine niche pairs: airbrushed customs, metallic boots, chained heels, collage lace-ups and more. It's a static site with no build step and no dependencies.
 
-Also in this repo: [`wedding-card/`](wedding-card/), an animated wedding invitation (envelope opens, card pops out, countdown). See its README.
+Also in this repo: two animated wedding invitations (envelope opens, card pops out, countdown). [`wedding-card-hd/`](wedding-card-hd/) is built from the Canva PDF; [`wedding-card/`](wedding-card/) is redrawn entirely in code. See each folder's README.
 
 ## Run it
 
